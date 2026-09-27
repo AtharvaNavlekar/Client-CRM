@@ -146,13 +146,13 @@ export function evaluateCompliance(input: ComplianceEvaluationInput): Compliance
     return {
       allowed: false,
       statusCode: 403,
-      code: 'DNC',
-      reason: `Outreach blocked: Contact is on do-not-contact list.`,
+      code: 'LEAD_BLOCKED',
+      reason: `Outreach blocked: Contact is blocked. Reason: ${blockedReason}`,
       details: {
         channel,
         leadId: lead.id,
         leadName: lead.name,
-        ruleViolated: 'DNC'
+        ruleViolated: 'LEAD_BLOCKED'
       }
     };
   }

@@ -63,11 +63,13 @@ export function globalErrorHandler(err: any, req: express.Request, res: express.
     message = 'An unexpected internal error occurred';
   }
 
+  const requestId = (req as any).requestId || req.securityContext?.requestId || (req.headers['x-request-id'] as string) || ('req-' + Math.random().toString(36).substring(2, 12));
+
   const errorResponse = {
     error: {
       code: category,
       message,
-      requestId: req.securityContext?.requestId || 'unknown'
+      requestId
     }
   };
 

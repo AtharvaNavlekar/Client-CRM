@@ -9,7 +9,7 @@ export const healthRouter = express.Router();
 // LIVENESS: "Is the process alive?"
 // Fails only if the event loop is blocked or process is dead.
 healthRouter.get('/live', (req, res) => {
-  res.status(200).json({ status: 'UP' });
+  res.status(200).json({ status: 'ok' });
 });
 
 // READINESS: "Can this instance safely serve traffic?"
@@ -27,20 +27,22 @@ healthRouter.get('/ready', async (req, res) => {
     isReady = false;
   }
 
-  // Check Redis
-  const redis = redisService.getClient();
-  if (redis && redis.status === 'ready') {
+  // Check Redis (optional infrastructure with in-memory fallback)
+  if (redisService.isAvailable()) {
     checks.redis = 'UP';
+  } else if (redisService.isDegraded()) {
+    checks.redis = 'IN_MEMORY_FALLBACK';
   } else {
     checks.redis = 'DOWN';
     isReady = false;
   }
 
-  const status = isReady ? 'READY' : 'NOT_READY';
+  const status = isReady ? 'ok' : 'error';
   const statusCode = isReady ? 200 : 503;
 
   res.status(statusCode).json({
     status,
+    database: checks.database === 'UP',
     checks
   });
 });

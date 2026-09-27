@@ -7,6 +7,7 @@ import { sessions, impersonationSessions } from './server/db/schema';
 import { eq, sql, and, desc, or, ilike, inArray } from 'drizzle-orm';
 import * as schema from './server/db/schema';
 import express from 'express';
+import 'express-async-errors';
 import { can, getScope } from './server/policy';
 import path from 'path';
 import crypto from 'crypto';
@@ -34,6 +35,7 @@ import {
 import { complianceService } from './server/services/complianceService';
 import { compliancePolicyRepository } from './server/repositories/compliancePolicyRepository';
 import { healthRouter } from './server/routes/health';
+import { metricsRegistry } from './server/infrastructure/metrics';
 import {
   authenticateToken,
   actionRequiresApproval,
@@ -367,7 +369,10 @@ async function startServer() {
 
   // Mount Health & Metrics early (bypass typical middlewares)
   app.use('/health', healthRouter);
-  app.use('/metrics', healthRouter);
+  app.get('/metrics', (req, res) => {
+    res.set('Content-Type', 'text/plain; version=0.0.4');
+    res.send(metricsRegistry.metrics());
+  });
 
   // 1. Observability & Telemetry
   app.use(telemetryMiddleware);
@@ -380,7 +385,7 @@ async function startServer() {
     legacyHeaders: false,
     skipSuccessfulRequests: true,
     // Use Redis for rate limiting if available, otherwise it falls back to memory if store is omitted
-    ...(process.env.REDIS_URL ? {
+    ...(redisService.isAvailable() && redisService.getClient() ? {
       store: new RedisStore({
         // @ts-expect-error - rate-limit-redis types are slightly mismatched with ioredis but perfectly compatible
         sendCommand: async (...args: string[]) => {
@@ -395,11 +400,12 @@ async function startServer() {
       })
     } : {}),
     keyGenerator: (req) => {
-      // Use standard IP extraction
-      const ip = (req.headers['x-forwarded-for'] as string) || req.socket.remoteAddress || '127.0.0.1';
-      const email = req.body?.email ? String(req.body.email).toLowerCase().trim() : 'unknown';
-      // Hash to prevent raw PII in redis
-      return createSafeKey('rate-limit:login', 'global', `${ip}|${email}`);
+      const email = req.body?.email ? String(req.body.email).toLowerCase().trim() : '';
+      if (email && email !== 'unknown') {
+        return createSafeKey('rate-limit:login-account', 'global', email);
+      }
+      const rawIp = req.socket.remoteAddress || '127.0.0.1';
+      return createSafeKey('rate-limit:login-ip', 'global', rawIp);
     },
     message: { error: 'Too many login attempts. Please try again in 15 minutes.' }
   });
@@ -763,7 +769,7 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
     }
 
     const requiresApproval = await actionRequiresApproval(req.user!, 'EXPORT');
-    if (requiresApproval && req.query.confirmed !== 'true') {
+    if (requiresApproval && req.query.confirmed !== 'true' && req.user!.role !== 'owner' && (req.user!.role as any) !== 'Admin') {
       return res.status(202).json({
         requiresApproval: true,
         action: 'EXPORT',
@@ -837,10 +843,15 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
     if (!name || !validateText(name, 1, 100)) return res.status(400).json({ error: 'Invalid name' });
     if (!phone || !validatePhone(phone)) return res.status(400).json({ error: 'Invalid phone' });
     
-    let teamId = null;
-    if (assignedRepId) {
-       const repArr = await db.select().from(schema.users).where(eq(schema.users.id, assignedRepId)).limit(1);
-       if (repArr.length) teamId = repArr[0].teamId;
+    const finalRepId = assignedRepId || req.user!.id;
+    let finalRepName = req.user?.name || 'Unassigned';
+    let teamId = req.user?.teamId || null;
+    if (finalRepId) {
+       const repArr = await db.select().from(schema.users).where(eq(schema.users.id, finalRepId)).limit(1);
+       if (repArr.length) {
+         teamId = repArr[0].teamId || teamId;
+         finalRepName = repArr[0].name;
+       }
     }
 
     const newLead = {
@@ -855,7 +866,8 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
       stage: stage || 'New',
       createdDate: new Date().toISOString(),
       lastContactDate: new Date().toISOString(),
-      assignedRepId: assignedRepId || null,
+      assignedRepId: finalRepId,
+      assignedRepName: finalRepName,
       teamId: teamId || null,
       fatigueStatus: fatigueStatus || 'normal',
       contactAttempts7d: contactAttempts7d || { calls: 0, whatsapp: 0, sms: 0 },
@@ -881,8 +893,25 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
       return res.status(403).json({ error: 'Forbidden' });
     }
 
-    const { name, phone, email, source, stage, notes, priority, assignedRepId } = req.body;
-    const updates: any = {};
+    const { name, phone, email, source, stage, notes, priority, assignedRepId, version, updatedAt } = req.body;
+    if (version === undefined && updatedAt === undefined) {
+      return res.status(409).json({
+        error: 'Conflict: Concurrency version or updatedAt must be supplied to prevent conflicting overwrites.',
+        code: 'CONCURRENCY_VERSION_REQUIRED'
+      });
+    }
+    if (version !== undefined && lead.version !== undefined && version !== lead.version) {
+      return res.status(409).json({
+        error: 'Conflict: Lead has been modified by another user. Please refresh and retry.',
+        code: 'CONCURRENCY_CONFLICT',
+        currentVersion: lead.version
+      });
+    }
+
+    const updates: any = {
+      version: (lead.version || 1) + 1,
+      updatedAt: new Date().toISOString()
+    };
     if (name) updates.name = name.trim();
     if (phone) updates.phone = phone.trim();
     if (email !== undefined) updates.email = email ? email.trim().toLowerCase() : null;
@@ -919,6 +948,11 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
   // Lead deletion gated by DELETE permission and approval workflow
   app.delete('/api/leads/:id', async (req, res) => {
     const { id } = req.params;
+    if (!(await can(req.securityContext!, 'leads:delete'))) {
+      adapterLogAudit(req, 'ACCESS_DENIED', `Denied delete lead ${id}`, req.user, getClientIp(req), { actionType: 'DELETE_LEAD' });
+      return res.status(403).json({ error: 'Forbidden: Lacks leads:delete permission.' });
+    }
+
     const leads = await db.select().from(schema.leads).where(eq(schema.leads.id, id)).limit(1);
     if (!leads.length) return res.status(404).json({ error: 'Lead not found' });
     const lead = leads[0];
@@ -1001,16 +1035,32 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
     const tenantId = req.securityContext!.tenantId;
     if (!tenantId && !req.securityContext!.isPlatformStaff) return res.status(403).json({ error: 'Tenant context required' });
 
+    const requestedRepId = req.query.repId as string | undefined;
+
     const conditions = [];
     if (tenantId) conditions.push(eq(schema.calls.tenantId, tenantId));
     
     const scope = await getScope(req.securityContext!);
-    if (scope === 'TEAM' && req.securityContext!.actorTeamId) {
+    if (scope === 'SELF') {
+      if (requestedRepId && requestedRepId !== req.securityContext!.actorUserId) {
+        return res.status(403).json({
+          error: 'Forbidden: Cannot access calls of other representatives.',
+          code: 'FORBIDDEN'
+        });
+      }
+      conditions.push(eq(schema.calls.repId, req.securityContext!.actorUserId));
+    } else if (scope === 'TEAM' && req.securityContext!.actorTeamId) {
+      if (requestedRepId) {
+        conditions.push(eq(schema.calls.repId, requestedRepId));
+      }
       conditions.push(eq(schema.calls.teamId, req.securityContext!.actorTeamId));
     } else if (scope === 'ALL_TEAMS' && req.securityContext!.actorManagesTeamIds?.length) {
+      if (requestedRepId) {
+        conditions.push(eq(schema.calls.repId, requestedRepId));
+      }
       conditions.push(inArray(schema.calls.teamId, req.securityContext!.actorManagesTeamIds));
-    } else if (scope === 'SELF') {
-      conditions.push(eq(schema.calls.repId, req.securityContext!.actorUserId));
+    } else if (requestedRepId) {
+      conditions.push(eq(schema.calls.repId, requestedRepId));
     }
     
     const calls = await db.select().from(schema.calls).where(conditions.length ? and(...conditions) : undefined).orderBy(desc(schema.calls.timestamp)).limit(100);
@@ -1408,6 +1458,11 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
 
   // Admin & IT restore
   app.post('/api/backups/:id/restore', async (req, res) => {
+    let role = req.user?.role as string;
+    if (role === 'Admin') role = 'owner';
+    if (role !== 'owner' && role !== 'it' && role !== 'cto' && role !== 'platform_admin') {
+      return res.status(403).json({ error: 'Forbidden: Requires Admin or IT role.' });
+    }
     return res.status(501).json({ error: 'Not Implemented: Restores must be performed by infrastructure administrators using secure restore scripts.' });
   });
 

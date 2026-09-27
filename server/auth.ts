@@ -6,6 +6,7 @@ import { UserRole, RolePermission, User, ViewScope, Action } from '../src/types'
 import { db } from './db/client';
 import { users, rolePermissions, sessions } from './db/schema';
 import { eq } from 'drizzle-orm';
+import { AppError } from './middleware/errorHandler';
 function resolveJwtSecret(): string {
   if (process.env.JWT_SECRET && process.env.JWT_SECRET.trim().length > 0) {
     return process.env.JWT_SECRET.trim();
@@ -162,6 +163,17 @@ export const authenticateToken: express.RequestHandler = async (req, res, next) 
 
   if (isPublic) {
     return next();
+  }
+
+  const knownPrefixes = [
+    '/api/auth', '/api/leads', '/api/calls', '/api/messages', '/api/tickets',
+    '/api/users', '/api/settings', '/api/teams', '/api/reports', '/api/compliance',
+    '/api/audit', '/api/security', '/api/platform', '/api/backups', '/api/reset-data',
+    '/api/jobs', '/api/features', '/api/health'
+  ];
+  const isKnownApi = knownPrefixes.some(prefix => path === prefix || path.startsWith(prefix + '/') || path.startsWith(prefix + '?'));
+  if (path.startsWith('/api/') && !isKnownApi) {
+    return next(new AppError('NOT_FOUND', 404, `Route ${req.method} ${path} not found`));
   }
 
   const authHeader = req.headers['authorization'];
