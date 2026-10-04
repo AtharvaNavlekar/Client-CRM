@@ -146,15 +146,15 @@ const LoginForm: React.FC<{ setView: (v: AuthView) => void }> = ({ setView }) =>
             <button
               type="button"
               onClick={() => { setEmail('rahul@telecrm.in'); setPassword('password123'); }}
-              className="text-left px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 hover:border-[#2E6E5C] text-xs transition-colors shadow-xs"
+              className="text-left px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 hover:border-[#00695C] text-xs transition-colors shadow-xs"
             >
               <div className="font-semibold text-slate-800 text-[11px]">Rahul Sharma</div>
-              <div className="text-[10px] text-[#2E6E5C] font-medium">Owner (All Scopes)</div>
+              <div className="text-[10px] text-[#00695C] font-medium">Owner (All Scopes)</div>
             </button>
             <button
               type="button"
               onClick={() => { setEmail('priya@telecrm.in'); setPassword('password123'); }}
-              className="text-left px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 hover:border-[#2E6E5C] text-xs transition-colors shadow-xs"
+              className="text-left px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 hover:border-[#00695C] text-xs transition-colors shadow-xs"
             >
               <div className="font-semibold text-slate-800 text-[11px]">Priya Iyer</div>
               <div className="text-[10px] text-blue-600 font-medium">Team Lead (Mumbai)</div>
@@ -162,7 +162,7 @@ const LoginForm: React.FC<{ setView: (v: AuthView) => void }> = ({ setView }) =>
             <button
               type="button"
               onClick={() => { setEmail('amit@telecrm.in'); setPassword('password123'); }}
-              className="text-left px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 hover:border-[#2E6E5C] text-xs transition-colors shadow-xs"
+              className="text-left px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 hover:border-[#00695C] text-xs transition-colors shadow-xs"
             >
               <div className="font-semibold text-slate-800 text-[11px]">Amit Verma</div>
               <div className="text-[10px] text-emerald-600 font-medium">Telecaller (Mumbai)</div>
@@ -170,7 +170,7 @@ const LoginForm: React.FC<{ setView: (v: AuthView) => void }> = ({ setView }) =>
             <button
               type="button"
               onClick={() => { setEmail('karan@telecrm.in'); setPassword('password123'); }}
-              className="text-left px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 hover:border-[#2E6E5C] text-xs transition-colors shadow-xs"
+              className="text-left px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 hover:border-[#00695C] text-xs transition-colors shadow-xs"
             >
               <div className="font-semibold text-slate-800 text-[11px]">Karan Patel</div>
               <div className="text-[10px] text-cyan-600 font-medium">IT Admin</div>
@@ -191,7 +191,7 @@ const LoginForm: React.FC<{ setView: (v: AuthView) => void }> = ({ setView }) =>
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Email"
-              className="w-full pl-4 pr-10 py-3 text-sm rounded-full border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2E6E5C]/20 focus:border-[#2E6E5C] transition-colors"
+              className="w-full pl-4 pr-10 py-3 text-sm rounded-full border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#00695C]/20 focus:border-[#00695C] transition-colors"
               required
             />
             <Mail className="w-5 h-5 text-slate-300 absolute right-4 pointer-events-none" />
@@ -203,7 +203,7 @@ const LoginForm: React.FC<{ setView: (v: AuthView) => void }> = ({ setView }) =>
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Password"
-              className="w-full pl-4 pr-10 py-3 text-sm rounded-full border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2E6E5C]/20 focus:border-[#2E6E5C] transition-colors"
+              className="w-full pl-4 pr-10 py-3 text-sm rounded-full border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#00695C]/20 focus:border-[#00695C] transition-colors"
               required
             />
             <button
@@ -219,7 +219,7 @@ const LoginForm: React.FC<{ setView: (v: AuthView) => void }> = ({ setView }) =>
 
         <div className="flex items-center justify-between pt-1 pb-1">
           <label className="flex items-center space-x-2 cursor-pointer group">
-            <div className="relative flex items-center justify-center w-4 h-4 rounded border border-slate-300 bg-white group-hover:border-[#2E6E5C] transition-colors">
+            <div className="relative flex items-center justify-center w-4 h-4 rounded border border-slate-300 bg-white group-hover:border-[#00695C] transition-colors">
               <input
                 type="checkbox"
                 checked={rememberMe}
@@ -227,7 +227,7 @@ const LoginForm: React.FC<{ setView: (v: AuthView) => void }> = ({ setView }) =>
                 className="sr-only"
               />
               {rememberMe && (
-                <svg viewBox="0 0 14 14" fill="none" className="w-3 h-3 text-[#2E6E5C]">
+                <svg viewBox="0 0 14 14" fill="none" className="w-3 h-3 text-[#00695C]">
                   <path d="M3 7.5L5.5 10L11 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               )}
@@ -237,7 +237,7 @@ const LoginForm: React.FC<{ setView: (v: AuthView) => void }> = ({ setView }) =>
           <button 
             type="button" 
             onClick={() => setView('forgot')}
-            className="text-xs text-[#2E6E5C] font-semibold hover:text-[#25594b] transition-colors"
+            className="text-xs text-[#00695C] font-semibold hover:text-[#25594b] transition-colors"
           >
             Forgot password?
           </button>
@@ -246,7 +246,7 @@ const LoginForm: React.FC<{ setView: (v: AuthView) => void }> = ({ setView }) =>
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full flex items-center justify-center py-3 px-4 rounded-full bg-[#2E6E5C] hover:bg-[#25594b] active:scale-[0.99] text-white font-medium text-sm focus:outline-none focus:ring-2 focus:ring-[#2E6E5C]/50 transition-all disabled:opacity-70 shadow-lg shadow-emerald-900/20"
+          className="w-full flex items-center justify-center py-3 px-4 rounded-full bg-[#00695C] hover:bg-[#25594b] active:scale-[0.99] text-white font-medium text-sm focus:outline-none focus:ring-2 focus:ring-[#00695C]/50 transition-all disabled:opacity-70 shadow-lg shadow-emerald-900/20"
         >
           {isSubmitting ? 'Logging In...' : 'Log In'}
         </button>
@@ -257,7 +257,7 @@ const LoginForm: React.FC<{ setView: (v: AuthView) => void }> = ({ setView }) =>
             <button 
               type="button" 
               onClick={() => setView('signup')}
-              className="text-slate-900 font-semibold hover:text-[#2E6E5C] transition-colors"
+              className="text-slate-900 font-semibold hover:text-[#00695C] transition-colors"
             >
               Sign Up
             </button>
@@ -279,7 +279,7 @@ const SignUpForm: React.FC<{ setView: (v: AuthView) => void }> = ({ setView }) =
       </div>
 
       <div className="flex items-start space-x-2.5 p-3 mb-6 rounded-xl bg-slate-50 border border-slate-200 text-slate-600 text-[11px] text-left leading-relaxed">
-        <Shield className="w-4 h-4 mt-0.5 shrink-0 text-[#2E6E5C]" />
+        <Shield className="w-4 h-4 mt-0.5 shrink-0 text-[#00695C]" />
         <span>
           <strong>Restricted Access:</strong> Registration is currently available only to authorized NBFC owners and IT department staff.
         </span>
@@ -290,23 +290,23 @@ const SignUpForm: React.FC<{ setView: (v: AuthView) => void }> = ({ setView }) =
           <input
             type="text"
             placeholder="Full Name"
-            className="w-full px-4 py-3 text-sm rounded-full border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2E6E5C]/20 focus:border-[#2E6E5C] transition-colors"
+            className="w-full px-4 py-3 text-sm rounded-full border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#00695C]/20 focus:border-[#00695C] transition-colors"
           />
           <input
             type="email"
             placeholder="Work Email"
-            className="w-full px-4 py-3 text-sm rounded-full border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2E6E5C]/20 focus:border-[#2E6E5C] transition-colors"
+            className="w-full px-4 py-3 text-sm rounded-full border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#00695C]/20 focus:border-[#00695C] transition-colors"
           />
           <input
             type="password"
             placeholder="Create Password"
-            className="w-full px-4 py-3 text-sm rounded-full border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2E6E5C]/20 focus:border-[#2E6E5C] transition-colors"
+            className="w-full px-4 py-3 text-sm rounded-full border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#00695C]/20 focus:border-[#00695C] transition-colors"
           />
         </div>
 
         <button
           type="submit"
-          className="w-full flex items-center justify-center py-3 px-4 rounded-full bg-[#2E6E5C] hover:bg-[#25594b] active:scale-[0.99] text-white font-medium text-sm focus:outline-none focus:ring-2 focus:ring-[#2E6E5C]/50 transition-all shadow-lg shadow-emerald-900/20 mt-6"
+          className="w-full flex items-center justify-center py-3 px-4 rounded-full bg-[#00695C] hover:bg-[#25594b] active:scale-[0.99] text-white font-medium text-sm focus:outline-none focus:ring-2 focus:ring-[#00695C]/50 transition-all shadow-lg shadow-emerald-900/20 mt-6"
         >
           Sign Up
         </button>
@@ -337,7 +337,7 @@ const ForgotForm: React.FC<{ setView: (v: AuthView) => void }> = ({ setView }) =
       </div>
 
       <div className="flex items-start space-x-2.5 p-3 mb-6 rounded-xl bg-slate-50 border border-slate-200 text-slate-600 text-[11px] text-left leading-relaxed">
-        <Shield className="w-4 h-4 mt-0.5 shrink-0 text-[#2E6E5C]" />
+        <Shield className="w-4 h-4 mt-0.5 shrink-0 text-[#00695C]" />
         <span>
           <strong>Note:</strong> Password recovery is handled by your IT department. An alert will be sent to administrators.
         </span>
@@ -347,12 +347,12 @@ const ForgotForm: React.FC<{ setView: (v: AuthView) => void }> = ({ setView }) =
         <input
           type="email"
           placeholder="Enter your email"
-          className="w-full px-4 py-3 text-sm rounded-full border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2E6E5C]/20 focus:border-[#2E6E5C] transition-colors"
+          className="w-full px-4 py-3 text-sm rounded-full border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#00695C]/20 focus:border-[#00695C] transition-colors"
         />
 
         <button
           type="submit"
-          className="w-full flex items-center justify-center py-3 px-4 rounded-full bg-[#2E6E5C] hover:bg-[#25594b] active:scale-[0.99] text-white font-medium text-sm focus:outline-none focus:ring-2 focus:ring-[#2E6E5C]/50 transition-all shadow-lg shadow-emerald-900/20 mt-6"
+          className="w-full flex items-center justify-center py-3 px-4 rounded-full bg-[#00695C] hover:bg-[#25594b] active:scale-[0.99] text-white font-medium text-sm focus:outline-none focus:ring-2 focus:ring-[#00695C]/50 transition-all shadow-lg shadow-emerald-900/20 mt-6"
         >
           Send Reset Link
         </button>

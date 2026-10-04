@@ -428,12 +428,12 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         <div className="p-4 sm:p-6 space-y-6 max-w-7xl mx-auto w-full">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
             {[1, 2, 3, 4, 5].map((i) => (
-              <div key={i} className="h-28 bg-[#ECEFEC] dark:bg-[#1D201F] rounded-2xl animate-pulse" />
+              <div key={i} className="h-28 bg-[#F1F5F4] dark:bg-[#161A19] rounded-2xl animate-pulse" />
             ))}
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            <div className="lg:col-span-5 h-72 bg-[#ECEFEC] dark:bg-[#1D201F] rounded-2xl animate-pulse" />
-            <div className="lg:col-span-7 h-72 bg-[#ECEFEC] dark:bg-[#1D201F] rounded-2xl animate-pulse" />
+            <div className="lg:col-span-5 h-72 bg-[#F1F5F4] dark:bg-[#161A19] rounded-2xl animate-pulse" />
+            <div className="lg:col-span-7 h-72 bg-[#F1F5F4] dark:bg-[#161A19] rounded-2xl animate-pulse" />
           </div>
         </div>
       )}

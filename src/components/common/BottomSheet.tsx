@@ -98,29 +98,29 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
         role="dialog"
         aria-modal="true"
         aria-label={title || 'Bottom sheet'}
-        className={`fixed bottom-0 left-0 right-0 z-50 bg-[#F8FAF8] dark:bg-[#1D201F] rounded-t-[28px] shadow-2xl transform transition-transform duration-300 ease-[cubic-bezier(0.2,0,0,1)] ${
+        className={`fixed bottom-0 left-0 right-0 z-50 bg-[#F8FAF9] dark:bg-[#161A19] rounded-t-[28px] shadow-2xl transform transition-transform duration-300 ease-[cubic-bezier(0.2,0,0,1)] ${
           isAnimating ? 'translate-y-0' : 'translate-y-full'
         } ${className}`}
         style={{ maxHeight: `${maxHeightVh}vh` }}
       >
         {/* Drag Handle + Header */}
-        <div className="sticky top-0 bg-[#F8FAF8] dark:bg-[#1D201F] rounded-t-[28px] z-10">
+        <div className="sticky top-0 bg-[#F8FAF9] dark:bg-[#161A19] rounded-t-[28px] z-10">
           {showDragHandle && (
             <div className="flex justify-center pt-3 pb-1">
-              <div className="w-10 h-1 rounded-full bg-[#BEC9C5] dark:bg-[#3F4946]" />
+              <div className="w-10 h-1 rounded-full bg-[#E2E8F0] dark:bg-[#475569]" />
             </div>
           )}
 
           {title && (
-            <div className="flex items-center justify-between px-5 py-3 border-b border-[#BEC9C5]/30 dark:border-[#3F4946]/30">
-              <h2 className="text-sm font-semibold text-[#191C1B] dark:text-[#E1E3E0] m3-title-small">
+            <div className="flex items-center justify-between px-5 py-3 border-b border-[#E2E8F0]/30 dark:border-[#334155]/30">
+              <h2 className="text-sm font-semibold text-[#0F172A] dark:text-[#F1F5F9] m3-title-small">
                 {title}
               </h2>
               <button
                 type="button"
                 onClick={onClose}
                 aria-label="Close bottom sheet"
-                className="w-10 h-10 rounded-full flex items-center justify-center text-[#6F7976] hover:text-[#191C1B] dark:hover:text-[#E1E3E0] hover:bg-[#ECEFEC] dark:hover:bg-[#272B2A] transition-colors"
+                className="w-10 h-10 rounded-full flex items-center justify-center text-[#475569] hover:text-[#0F172A] dark:hover:text-[#F1F5F9] hover:bg-[#F1F5F4] dark:hover:bg-[#1E293B] transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>

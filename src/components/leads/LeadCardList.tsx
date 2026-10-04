@@ -39,15 +39,15 @@ export const LeadCardList: React.FC<LeadCardListProps> = ({
   if (leads.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
-        <div className="w-16 h-16 rounded-full bg-[#ECEFEC] dark:bg-[#272B2A] flex items-center justify-center mb-4">
-          <svg className="w-8 h-8 text-[#6F7976]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div className="w-16 h-16 rounded-full bg-[#F1F5F4] dark:bg-[#1E293B] flex items-center justify-center mb-4">
+          <svg className="w-8 h-8 text-[#475569]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
         </div>
-        <p className="text-sm font-medium text-[#191C1B] dark:text-[#E1E3E0] m3-title-small">
+        <p className="text-sm font-medium text-[#0F172A] dark:text-[#F1F5F9] m3-title-small">
           No leads found
         </p>
-        <p className="text-xs text-[#6F7976] dark:text-[#89938F] mt-1 max-w-[240px]">
+        <p className="text-xs text-[#475569] dark:text-[#94A3B8] mt-1 max-w-[240px]">
           Try adjusting your filters or search query to find matching leads.
         </p>
       </div>

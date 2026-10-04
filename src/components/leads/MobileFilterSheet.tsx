@@ -75,7 +75,7 @@ export const MobileFilterSheet: React.FC<MobileFilterSheetProps> = ({
 
         {/* Lead Stage */}
         <div>
-          <label className="block text-xs font-medium text-[#6F7976] dark:text-[#89938F] mb-2 uppercase tracking-wider">
+          <label className="block text-xs font-medium text-[#475569] dark:text-[#94A3B8] mb-2 uppercase tracking-wider">
             Lead Stage
           </label>
           <MaterialDropdown
@@ -92,7 +92,7 @@ export const MobileFilterSheet: React.FC<MobileFilterSheetProps> = ({
 
         {/* Assignee */}
         <div>
-          <label className="block text-xs font-medium text-[#6F7976] dark:text-[#89938F] mb-2 uppercase tracking-wider">
+          <label className="block text-xs font-medium text-[#475569] dark:text-[#94A3B8] mb-2 uppercase tracking-wider">
             Assignee
           </label>
           <MaterialDropdown
@@ -109,7 +109,7 @@ export const MobileFilterSheet: React.FC<MobileFilterSheetProps> = ({
 
         {/* Source */}
         <div>
-          <label className="block text-xs font-medium text-[#6F7976] dark:text-[#89938F] mb-2 uppercase tracking-wider">
+          <label className="block text-xs font-medium text-[#475569] dark:text-[#94A3B8] mb-2 uppercase tracking-wider">
             Source
           </label>
           <MaterialDropdown
@@ -126,7 +126,7 @@ export const MobileFilterSheet: React.FC<MobileFilterSheetProps> = ({
 
         {/* Compliance */}
         <div>
-          <label className="block text-xs font-medium text-[#6F7976] dark:text-[#89938F] mb-2 uppercase tracking-wider">
+          <label className="block text-xs font-medium text-[#475569] dark:text-[#94A3B8] mb-2 uppercase tracking-wider">
             Compliance
           </label>
           <MaterialDropdown
@@ -146,7 +146,7 @@ export const MobileFilterSheet: React.FC<MobileFilterSheetProps> = ({
 
         {/* Date Range */}
         <div>
-          <label className="block text-xs font-medium text-[#6F7976] dark:text-[#89938F] mb-2 uppercase tracking-wider">
+          <label className="block text-xs font-medium text-[#475569] dark:text-[#94A3B8] mb-2 uppercase tracking-wider">
             Created
           </label>
           <MaterialDropdown

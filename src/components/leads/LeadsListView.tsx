@@ -402,19 +402,19 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
   };
 
   return (
-    <div className="flex-1 flex flex-col h-full bg-[#F8FAF8] dark:bg-[#111413] overflow-hidden">
+    <div className="flex-1 flex flex-col h-full bg-[#F8FAF9] dark:bg-[#111514] overflow-hidden">
       {/* Top Toolbar */}
-      <div className={`bg-[#F8FAF8] dark:bg-[#111413] border-b border-[#BEC9C5]/40 dark:border-[#3F4946]/40 shrink-0 ${isMobile ? 'p-3 space-y-2.5' : 'p-4 space-y-3.5'}`}>
+      <div className={`bg-[#F8FAF9] dark:bg-[#111514] border-b border-[#E2E8F0]/40 dark:border-[#334155]/40 shrink-0 ${isMobile ? 'p-3 space-y-2.5' : 'p-4 space-y-3.5'}`}>
         <div className="flex flex-wrap items-center justify-between gap-3">
           {/* Left: Search with Field-Picker - Material Design 3 Pill Bar */}
           <div className={`flex items-center space-x-2 flex-1 ${isMobile ? 'min-w-0' : 'min-w-[280px] max-w-lg'}`}>
-            <div className="relative flex-1 flex items-center bg-[#ECEFEC] dark:bg-[#1D201F] rounded-full border border-transparent hover:border-[#BEC9C5] dark:hover:border-[#3F4946] focus-within:border-[#00695C] focus-within:ring-2 focus-within:ring-[#00695C]/20 transition-all min-h-[46px] px-2">
+            <div className="relative flex-1 flex items-center bg-[#F1F5F4] dark:bg-[#161A19] rounded-full border border-transparent hover:border-[#E2E8F0] dark:hover:border-[#475569] focus-within:border-[#00695C] focus-within:ring-2 focus-within:ring-[#00695C]/20 transition-all min-h-[46px] px-2">
               <MaterialDropdown
                 value={searchField}
                 onChange={(val) => setSearchField(val as any)}
                 ariaLabel="Filter search by field"
                 variant="chip"
-                triggerClassName="h-8 pl-2 pr-1 border-r border-[#BEC9C5]/60 dark:border-[#3F4946]/60"
+                triggerClassName="h-8 pl-2 pr-1 border-r border-[#E2E8F0]/60 dark:border-[#334155]/60"
                 options={[
                   { value: 'name', label: 'Name' },
                   { value: 'phone', label: 'Phone' },
@@ -423,7 +423,7 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
                 ]}
               />
               <div className="relative flex-1 flex items-center">
-                <Search className="w-4 h-4 text-[#6F7976] dark:text-[#89938F] ml-2.5 shrink-0" />
+                <Search className="w-4 h-4 text-[#475569] dark:text-[#94A3B8] ml-2.5 shrink-0" />
                 <input
                   type="text"
                   placeholder={`Search leads by ${searchField}...`}
@@ -432,7 +432,7 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
                     setSearchQuery(e.target.value);
                     setCurrentPage(1);
                   }}
-                  className="w-full h-9 pl-2 pr-3 text-xs bg-transparent text-[#191C1B] dark:text-[#E1E3E0] placeholder-[#6F7976] dark:placeholder-[#89938F] focus:outline-none font-sans"
+                  className="w-full h-9 pl-2 pr-3 text-xs bg-transparent text-[#0F172A] dark:text-[#F1F5F9] placeholder-[#475569] dark:placeholder-[#94A3B8] focus:outline-none font-sans"
                 />
               </div>
               {searchQuery && (
@@ -440,7 +440,7 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
                   type="button"
                   onClick={() => setSearchQuery('')}
                   aria-label="Clear search text"
-                  className="p-1 text-[#6F7976] hover:text-[#191C1B] dark:hover:text-[#E1E3E0] rounded-full"
+                  className="p-1 text-[#475569] hover:text-[#0F172A] dark:hover:text-[#F1F5F9] rounded-full"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -458,8 +458,8 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
               onClick={() => setIsBulkEditOpen(true)}
               className={`min-h-[44px] px-4 text-xs font-medium rounded-full flex items-center space-x-2 transition-all ${
                 selectedIds.size > 0
-                  ? 'bg-[#1F3A5F] text-white hover:bg-[#162c4a] shadow-sm'
-                  : 'bg-[#ECEFEC] dark:bg-[#1D201F] text-[#6F7976] dark:text-[#89938F] cursor-not-allowed border border-transparent'
+                  ? 'bg-[#1E293B] text-white hover:bg-[#0F172A] shadow-sm'
+                  : 'bg-[#F1F5F4] dark:bg-[#161A19] text-[#475569] dark:text-[#94A3B8] cursor-not-allowed border border-transparent'
               }`}
             >
               <Edit3 className="w-4 h-4" />
@@ -480,7 +480,7 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
               className={`min-h-[44px] px-4 text-xs font-medium rounded-full flex items-center space-x-2 transition-all ${
                 selectedIds.size > 0
                   ? 'bg-[#00695C] text-white hover:bg-[#005449] shadow-sm'
-                  : 'bg-[#ECEFEC] dark:bg-[#1D201F] text-[#6F7976] dark:text-[#89938F] cursor-not-allowed border border-transparent'
+                  : 'bg-[#F1F5F4] dark:bg-[#161A19] text-[#475569] dark:text-[#94A3B8] cursor-not-allowed border border-transparent'
               }`}
             >
               <MessageSquare className="w-4 h-4" />
@@ -494,7 +494,7 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
                   type="button"
                   id="btn-columns"
                   onClick={() => setIsColumnDropdownOpen(!isColumnDropdownOpen)}
-                  className="min-h-[44px] px-3 rounded-full border border-[#BEC9C5]/60 dark:border-[#3F4946]/60 bg-[#ECEFEC] dark:bg-[#1D201F] text-[#3F4946] dark:text-[#BEC9C5] hover:text-[#191C1B] dark:hover:text-white hover:bg-[#E6EAE6] dark:hover:bg-[#272B2A] text-xs flex items-center space-x-1.5 transition-colors"
+                  className="min-h-[44px] px-3 rounded-full border border-[#E2E8F0]/60 dark:border-[#334155]/60 bg-[#F1F5F4] dark:bg-[#161A19] text-[#475569] dark:text-[#94A3B8] hover:text-[#0F172A] dark:hover:text-white hover:bg-[#E2E8F0] dark:hover:bg-[#1E293B] text-xs flex items-center space-x-1.5 transition-colors"
                   title="Show/Hide Table Columns"
                 >
                   <Columns className="w-4 h-4" />
@@ -502,14 +502,14 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
                 </button>
 
                 {isColumnDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-52 bg-[#F8FAF8] dark:bg-[#1D201F] rounded-2xl shadow-xl border border-[#BEC9C5]/60 dark:border-[#3F4946]/60 p-3 z-30 space-y-2">
-                    <p className="text-xs font-semibold text-[#191C1B] dark:text-[#E1E3E0] px-1 mb-1">
+                  <div className="absolute right-0 mt-2 w-52 bg-[#F8FAF9] dark:bg-[#161A19] rounded-2xl shadow-xl border border-[#E2E8F0]/60 dark:border-[#334155]/60 p-3 z-30 space-y-2">
+                    <p className="text-xs font-semibold text-[#0F172A] dark:text-[#F1F5F9] px-1 mb-1">
                       Toggle Columns
                     </p>
                     {Object.keys(visibleColumns).map((colKey) => (
                       <label
                         key={colKey}
-                        className="flex items-center space-x-2.5 text-xs text-[#3F4946] dark:text-[#BEC9C5] hover:text-[#191C1B] dark:hover:text-[#E1E3E0] cursor-pointer px-1 py-1 rounded-lg hover:bg-[#ECEFEC] dark:hover:bg-[#272B2A]"
+                        className="flex items-center space-x-2.5 text-xs text-[#475569] dark:text-[#94A3B8] hover:text-[#0F172A] dark:hover:text-[#F1F5F9] cursor-pointer px-1 py-1 rounded-lg hover:bg-[#F1F5F4] dark:hover:bg-[#1E293B]"
                       >
                         <input
                           type="checkbox"
@@ -520,7 +520,7 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
                               [colKey]: e.target.checked
                             })
                           }
-                          className="rounded border-[#BEC9C5] text-[#00695C] focus:ring-[#00695C] w-4 h-4"
+                          className="rounded border-[#E2E8F0] text-[#00695C] focus:ring-[#00695C] w-4 h-4"
                         />
                         <span className="capitalize">{colKey.replace(/([A-Z])/g, ' $1')}</span>
                       </label>
@@ -535,7 +535,7 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
               <button
                 type="button"
                 onClick={() => setIsMobileFilterOpen(true)}
-                className="min-h-[44px] px-3 rounded-full border border-[#BEC9C5]/60 dark:border-[#3F4946]/60 bg-[#ECEFEC] dark:bg-[#1D201F] text-[#3F4946] dark:text-[#BEC9C5] hover:text-[#191C1B] dark:hover:text-white text-xs flex items-center space-x-1.5 transition-colors relative"
+                className="min-h-[44px] px-3 rounded-full border border-[#E2E8F0]/60 dark:border-[#334155]/60 bg-[#F1F5F4] dark:bg-[#161A19] text-[#475569] dark:text-[#94A3B8] hover:text-[#0F172A] dark:hover:text-white text-xs flex items-center space-x-1.5 transition-colors relative"
                 aria-label="Open filter controls"
               >
                 <Filter className="w-4 h-4" />
@@ -554,18 +554,18 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
                 type="button"
                 id="btn-more-actions"
                 onClick={() => setIsMoreMenuOpen(!isMoreMenuOpen)}
-                className="min-h-[44px] w-11 rounded-full border border-[#BEC9C5]/60 dark:border-[#3F4946]/60 bg-[#ECEFEC] dark:bg-[#1D201F] text-[#3F4946] dark:text-[#BEC9C5] hover:text-[#191C1B] dark:hover:text-white hover:bg-[#E6EAE6] dark:hover:bg-[#272B2A] flex items-center justify-center transition-colors"
+                className="min-h-[44px] w-11 rounded-full border border-[#E2E8F0]/60 dark:border-[#334155]/60 bg-[#F1F5F4] dark:bg-[#161A19] text-[#475569] dark:text-[#94A3B8] hover:text-[#0F172A] dark:hover:text-white hover:bg-[#E2E8F0] dark:hover:bg-[#1E293B] flex items-center justify-center transition-colors"
                 title="More Actions"
               >
                 <MoreHorizontal className="w-5 h-5" />
               </button>
 
               {isMoreMenuOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-[#F8FAF8] dark:bg-[#1D201F] rounded-2xl shadow-xl border border-[#BEC9C5]/60 dark:border-[#3F4946]/60 p-2 z-30 space-y-1">
+                <div className="absolute right-0 mt-2 w-48 bg-[#F8FAF9] dark:bg-[#161A19] rounded-2xl shadow-xl border border-[#E2E8F0]/60 dark:border-[#334155]/60 p-2 z-30 space-y-1">
                   <button
                     type="button"
                     onClick={handleExportCsv}
-                    className="w-full text-left px-3 py-2 text-xs rounded-xl flex items-center space-x-2 text-[#3F4946] dark:text-[#BEC9C5] hover:bg-[#ECEFEC] dark:hover:bg-[#272B2A] transition-colors"
+                    className="w-full text-left px-3 py-2 text-xs rounded-xl flex items-center space-x-2 text-[#475569] dark:text-[#94A3B8] hover:bg-[#F1F5F4] dark:hover:bg-[#1E293B] transition-colors"
                   >
                     <Download className="w-4 h-4 text-[#00695C] dark:text-[#80D5C4]" />
                     <span>Export Filtered CSV</span>
@@ -573,7 +573,7 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
                   <button
                     type="button"
                     onClick={handleOpenImportModal}
-                    className="w-full text-left px-3 py-2 text-xs rounded-xl flex items-center space-x-2 text-[#3F4946] dark:text-[#BEC9C5] hover:bg-[#ECEFEC] dark:hover:bg-[#272B2A] transition-colors"
+                    className="w-full text-left px-3 py-2 text-xs rounded-xl flex items-center space-x-2 text-[#475569] dark:text-[#94A3B8] hover:bg-[#F1F5F4] dark:hover:bg-[#1E293B] transition-colors"
                   >
                     <Upload className="w-4 h-4 text-[#00695C] dark:text-[#80D5C4]" />
                     <span>Import Leads CSV</span>
@@ -585,7 +585,7 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
                         setIsMoreMenuOpen(false);
                         onRefresh();
                       }}
-                      className="w-full text-left px-3 py-2 text-xs rounded-xl flex items-center space-x-2 text-[#3F4946] dark:text-[#BEC9C5] hover:bg-[#ECEFEC] dark:hover:bg-[#272B2A] transition-colors"
+                      className="w-full text-left px-3 py-2 text-xs rounded-xl flex items-center space-x-2 text-[#475569] dark:text-[#94A3B8] hover:bg-[#F1F5F4] dark:hover:bg-[#1E293B] transition-colors"
                     >
                       <RefreshCw className="w-4 h-4 text-[#00695C] dark:text-[#80D5C4]" />
                       <span>Refresh Leads</span>
@@ -601,7 +601,7 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
         {!isMobile && (
           <div className="flex flex-wrap items-center gap-2.5 pt-1">
             {/* Stage Filter Chip */}
-            <div className="inline-flex items-center rounded-full border border-[#BEC9C5]/60 dark:border-[#3F4946]/60 bg-[#ECEFEC] dark:bg-[#1D201F] hover:bg-[#E6EAE6] dark:hover:bg-[#272B2A] px-3.5 py-1.5 min-h-[38px] transition-colors">
+            <div className="inline-flex items-center rounded-full border border-[#E2E8F0]/60 dark:border-[#334155]/60 bg-[#F1F5F4] dark:bg-[#161A19] hover:bg-[#E2E8F0] dark:hover:bg-[#1E293B] px-3.5 py-1.5 min-h-[38px] transition-colors">
               <MaterialDropdown
                 id="filter-stage"
                 label="Stage:"
@@ -619,7 +619,7 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
             </div>
 
             {/* Assignee Filter Chip */}
-            <div className="inline-flex items-center rounded-full border border-[#BEC9C5]/60 dark:border-[#3F4946]/60 bg-[#ECEFEC] dark:bg-[#1D201F] hover:bg-[#E6EAE6] dark:hover:bg-[#272B2A] px-3.5 py-1.5 min-h-[38px] transition-colors">
+            <div className="inline-flex items-center rounded-full border border-[#E2E8F0]/60 dark:border-[#334155]/60 bg-[#F1F5F4] dark:bg-[#161A19] hover:bg-[#E2E8F0] dark:hover:bg-[#1E293B] px-3.5 py-1.5 min-h-[38px] transition-colors">
               <MaterialDropdown
                 id="filter-assignee"
                 label="Assignee:"
@@ -637,7 +637,7 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
             </div>
 
             {/* Source Filter Chip */}
-            <div className="inline-flex items-center rounded-full border border-[#BEC9C5]/60 dark:border-[#3F4946]/60 bg-[#ECEFEC] dark:bg-[#1D201F] hover:bg-[#E6EAE6] dark:hover:bg-[#272B2A] px-3.5 py-1.5 min-h-[38px] transition-colors">
+            <div className="inline-flex items-center rounded-full border border-[#E2E8F0]/60 dark:border-[#334155]/60 bg-[#F1F5F4] dark:bg-[#161A19] hover:bg-[#E2E8F0] dark:hover:bg-[#1E293B] px-3.5 py-1.5 min-h-[38px] transition-colors">
               <MaterialDropdown
                 id="filter-source"
                 label="Source:"
@@ -655,7 +655,7 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
             </div>
 
             {/* Compliance Filter Chip */}
-            <div className="inline-flex items-center rounded-full border border-[#BEC9C5]/60 dark:border-[#3F4946]/60 bg-[#ECEFEC] dark:bg-[#1D201F] hover:bg-[#E6EAE6] dark:hover:bg-[#272B2A] px-3.5 py-1.5 min-h-[38px] transition-colors">
+            <div className="inline-flex items-center rounded-full border border-[#E2E8F0]/60 dark:border-[#334155]/60 bg-[#F1F5F4] dark:bg-[#161A19] hover:bg-[#E2E8F0] dark:hover:bg-[#1E293B] px-3.5 py-1.5 min-h-[38px] transition-colors">
               <MaterialDropdown
                 id="filter-compliance"
                 label="Compliance:"
@@ -676,7 +676,7 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
             </div>
 
             {/* Creation Date Filter Chip */}
-            <div className="inline-flex items-center rounded-full border border-[#BEC9C5]/60 dark:border-[#3F4946]/60 bg-[#ECEFEC] dark:bg-[#1D201F] hover:bg-[#E6EAE6] dark:hover:bg-[#272B2A] px-3.5 py-1.5 min-h-[38px] transition-colors">
+            <div className="inline-flex items-center rounded-full border border-[#E2E8F0]/60 dark:border-[#334155]/60 bg-[#F1F5F4] dark:bg-[#161A19] hover:bg-[#E2E8F0] dark:hover:bg-[#1E293B] px-3.5 py-1.5 min-h-[38px] transition-colors">
               <MaterialDropdown
                 id="filter-date"
                 label="Created:"
@@ -711,15 +711,15 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
 
         {/* Row 2: Material Design 3 Segmented Button for Sorting (Desktop) */}
         {!isMobile && (
-          <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-[#BEC9C5]/30 dark:border-[#3F4946]/30">
+          <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-[#E2E8F0]/30 dark:border-[#334155]/30">
             <div className="flex items-center space-x-3">
-              <div className="flex items-center space-x-1.5 text-[#6F7976] dark:text-[#89938F] text-xs font-medium">
+              <div className="flex items-center space-x-1.5 text-[#475569] dark:text-[#94A3B8] text-xs font-medium">
                 <ArrowUpDown className="w-3.5 h-3.5 text-[#00695C] dark:text-[#80D5C4]" />
                 <span>Sort by:</span>
               </div>
 
               {/* M3 Segmented Button Group */}
-              <div className="inline-flex items-center p-1 rounded-full bg-[#ECEFEC] dark:bg-[#1D201F] border border-[#BEC9C5]/50 dark:border-[#3F4946]/50">
+              <div className="inline-flex items-center p-1 rounded-full bg-[#F1F5F4] dark:bg-[#161A19] border border-[#E2E8F0]/50 dark:border-[#334155]/50">
                 {[
                   { id: 'stage' as SortField, label: 'Stage' },
                   { id: 'assignee' as SortField, label: 'Assignee' },
@@ -737,7 +737,7 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
                       className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all flex items-center space-x-1.5 min-h-[32px] ${
                         isCur
                           ? 'bg-[#00695C] text-white shadow-xs'
-                          : 'text-[#3F4946] dark:text-[#BEC9C5] hover:text-[#191C1B] dark:hover:text-white'
+                          : 'text-[#475569] dark:text-[#94A3B8] hover:text-[#0F172A] dark:hover:text-white'
                       }`}
                     >
                       <span>{s.label}</span>
@@ -751,8 +751,8 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
             </div>
 
             {/* Real Filtered Records Count */}
-            <div className="text-xs text-[#6F7976] dark:text-[#89938F] font-medium">
-              Showing <span className="font-semibold text-[#191C1B] dark:text-[#E1E3E0]">{totalCount > 0 ? startIndex + 1 : 0}</span> to <span className="font-semibold text-[#191C1B] dark:text-[#E1E3E0]">{endIndex}</span> of <span className="font-semibold text-[#191C1B] dark:text-[#E1E3E0]">{totalCount}</span> filtered leads
+            <div className="text-xs text-[#475569] dark:text-[#94A3B8] font-medium">
+              Showing <span className="font-semibold text-[#0F172A] dark:text-[#F1F5F9]">{totalCount > 0 ? startIndex + 1 : 0}</span> to <span className="font-semibold text-[#0F172A] dark:text-[#F1F5F9]">{endIndex}</span> of <span className="font-semibold text-[#0F172A] dark:text-[#F1F5F9]">{totalCount}</span> filtered leads
             </div>
           </div>
         )}
@@ -780,11 +780,11 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
       {/* Initial Loading Skeleton */}
       {isLoading && (
         <div className="flex-1 p-6 space-y-3">
-          <div className="h-10 bg-[#ECEFEC] dark:bg-[#1D201F] rounded-2xl animate-pulse" />
-          <div className="h-14 bg-[#ECEFEC] dark:bg-[#1D201F] rounded-2xl animate-pulse" />
-          <div className="h-14 bg-[#ECEFEC] dark:bg-[#1D201F] rounded-2xl animate-pulse" />
-          <div className="h-14 bg-[#ECEFEC] dark:bg-[#1D201F] rounded-2xl animate-pulse" />
-          <div className="h-14 bg-[#ECEFEC] dark:bg-[#1D201F] rounded-2xl animate-pulse" />
+          <div className="h-10 bg-[#F1F5F4] dark:bg-[#161A19] rounded-2xl animate-pulse" />
+          <div className="h-14 bg-[#F1F5F4] dark:bg-[#161A19] rounded-2xl animate-pulse" />
+          <div className="h-14 bg-[#F1F5F4] dark:bg-[#161A19] rounded-2xl animate-pulse" />
+          <div className="h-14 bg-[#F1F5F4] dark:bg-[#161A19] rounded-2xl animate-pulse" />
+          <div className="h-14 bg-[#F1F5F4] dark:bg-[#161A19] rounded-2xl animate-pulse" />
         </div>
       )}
 
@@ -794,10 +794,10 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
           <div className="w-16 h-16 rounded-full bg-[#CCE8E1] dark:bg-[#004F46] flex items-center justify-center mb-4">
             <Plus className="w-8 h-8 text-[#00695C] dark:text-[#80D5C4]" />
           </div>
-          <h3 className="text-base font-semibold text-[#191C1B] dark:text-[#E1E3E0] m3-title-medium">
+          <h3 className="text-base font-semibold text-[#0F172A] dark:text-[#F1F5F9] m3-title-medium">
             No leads in workspace
           </h3>
-          <p className="text-xs text-[#6F7976] dark:text-[#89938F] mt-1 max-w-sm mb-6">
+          <p className="text-xs text-[#475569] dark:text-[#94A3B8] mt-1 max-w-sm mb-6">
             Get started by adding your first lead manually or uploading a bulk CSV list.
           </p>
           <div className="flex items-center gap-3">
@@ -814,7 +814,7 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
               <button
                 type="button"
                 onClick={onOpenImport}
-                className="px-5 py-2.5 rounded-full bg-[#ECEFEC] dark:bg-[#1D201F] text-[#191C1B] dark:text-[#E1E3E0] text-xs font-semibold hover:bg-[#E6EAE6] dark:hover:bg-[#272B2A] border border-[#BEC9C5]/50 transition-all"
+                className="px-5 py-2.5 rounded-full bg-[#F1F5F4] dark:bg-[#161A19] text-[#0F172A] dark:text-[#F1F5F9] text-xs font-semibold hover:bg-[#E2E8F0] dark:hover:bg-[#1E293B] border border-[#E2E8F0]/50 transition-all"
               >
                 Import CSV
               </button>
@@ -840,19 +840,19 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
             /* Desktop Data Table */
             <table className="w-full text-left border-collapse">
               {/* Table Header */}
-              <thead className="sticky top-0 z-10 bg-[#F8FAF8] dark:bg-[#111413] border-b border-[#BEC9C5]/50 dark:border-[#3F4946]/50 text-[#3F4946] dark:text-[#BEC9C5] text-xs font-semibold uppercase tracking-wider select-none shadow-xs">
+              <thead className="sticky top-0 z-10 bg-[#F8FAF9] dark:bg-[#111514] border-b border-[#E2E8F0]/50 dark:border-[#334155]/50 text-[#475569] dark:text-[#94A3B8] text-xs font-semibold uppercase tracking-wider select-none shadow-xs">
                 <tr>
                   <th className="w-12 px-3 py-3.5 text-center">
                     <button
                       type="button"
                       aria-label="Select all leads on this page"
                       onClick={handleSelectAllOnPage}
-                      className="w-10 h-10 rounded-full inline-flex items-center justify-center text-[#6F7976] hover:text-[#191C1B]"
+                      className="w-10 h-10 rounded-full inline-flex items-center justify-center text-[#475569] hover:text-[#0F172A]"
                     >
                       {isAllCurrentSelected ? (
                         <CheckSquare className="w-5 h-5 text-[#00695C] dark:text-[#80D5C4]" />
                       ) : (
-                        <Square className="w-5 h-5 text-[#BEC9C5] dark:text-[#6F7976]" />
+                        <Square className="w-5 h-5 text-[#E2E8F0] dark:text-[#475569]" />
                       )}
                     </button>
                   </th>
@@ -860,14 +860,14 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
                   {visibleColumns.name && (
                     <th
                       onClick={() => handleSort('name')}
-                      className="px-4 py-3.5 cursor-pointer hover:text-[#191C1B] dark:hover:text-white transition-colors min-w-[200px]"
+                      className="px-4 py-3.5 cursor-pointer hover:text-[#0F172A] dark:hover:text-white transition-colors min-w-[200px]"
                     >
                       <div className="flex items-center space-x-1.5">
                         <span className="m3-label-medium">Lead Name</span>
                         {sortField === 'name' ? (
                           sortOrder === 'asc' ? <ArrowUp className="w-3.5 h-3.5 text-[#00695C] dark:text-[#80D5C4]" /> : <ArrowDown className="w-3.5 h-3.5 text-[#00695C] dark:text-[#80D5C4]" />
                         ) : (
-                          <ArrowUpDown className="w-3.5 h-3.5 text-[#6F7976] opacity-60" />
+                          <ArrowUpDown className="w-3.5 h-3.5 text-[#475569] opacity-60" />
                         )}
                       </div>
                     </th>
@@ -876,14 +876,14 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
                   {visibleColumns.status && (
                     <th
                       onClick={() => handleSort('stage')}
-                      className="px-4 py-3.5 cursor-pointer hover:text-[#191C1B] dark:hover:text-white transition-colors min-w-[170px]"
+                      className="px-4 py-3.5 cursor-pointer hover:text-[#0F172A] dark:hover:text-white transition-colors min-w-[170px]"
                     >
                       <div className="flex items-center space-x-1.5">
                         <span className="m3-label-medium">Stage & Status</span>
                         {sortField === 'stage' ? (
                           sortOrder === 'asc' ? <ArrowUp className="w-3.5 h-3.5 text-[#00695C] dark:text-[#80D5C4]" /> : <ArrowDown className="w-3.5 h-3.5 text-[#00695C] dark:text-[#80D5C4]" />
                         ) : (
-                          <ArrowUpDown className="w-3.5 h-3.5 text-[#6F7976] opacity-60" />
+                          <ArrowUpDown className="w-3.5 h-3.5 text-[#475569] opacity-60" />
                         )}
                       </div>
                     </th>
@@ -892,14 +892,14 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
                   {visibleColumns.rating && (
                     <th
                       onClick={() => handleSort('rating')}
-                      className="px-4 py-3.5 cursor-pointer hover:text-[#191C1B] dark:hover:text-white transition-colors min-w-[130px]"
+                      className="px-4 py-3.5 cursor-pointer hover:text-[#0F172A] dark:hover:text-white transition-colors min-w-[130px]"
                     >
                       <div className="flex items-center space-x-1.5">
                         <span className="m3-label-medium">Priority</span>
                         {sortField === 'rating' ? (
                           sortOrder === 'asc' ? <ArrowUp className="w-3.5 h-3.5 text-[#00695C] dark:text-[#80D5C4]" /> : <ArrowDown className="w-3.5 h-3.5 text-[#00695C] dark:text-[#80D5C4]" />
                         ) : (
-                          <ArrowUpDown className="w-3.5 h-3.5 text-[#6F7976] opacity-60" />
+                          <ArrowUpDown className="w-3.5 h-3.5 text-[#475569] opacity-60" />
                         )}
                       </div>
                     </th>
@@ -908,14 +908,14 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
                   {visibleColumns.assignee && (
                     <th
                       onClick={() => handleSort('assignee')}
-                      className="px-4 py-3.5 cursor-pointer hover:text-[#191C1B] dark:hover:text-white transition-colors min-w-[160px]"
+                      className="px-4 py-3.5 cursor-pointer hover:text-[#0F172A] dark:hover:text-white transition-colors min-w-[160px]"
                     >
                       <div className="flex items-center space-x-1.5">
                         <span className="m3-label-medium">Owner</span>
                         {sortField === 'assignee' ? (
                           sortOrder === 'asc' ? <ArrowUp className="w-3.5 h-3.5 text-[#00695C] dark:text-[#80D5C4]" /> : <ArrowDown className="w-3.5 h-3.5 text-[#00695C] dark:text-[#80D5C4]" />
                         ) : (
-                          <ArrowUpDown className="w-3.5 h-3.5 text-[#6F7976] opacity-60" />
+                          <ArrowUpDown className="w-3.5 h-3.5 text-[#475569] opacity-60" />
                         )}
                       </div>
                     </th>
@@ -924,14 +924,14 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
                   {visibleColumns.source && (
                     <th
                       onClick={() => handleSort('source')}
-                      className="px-4 py-3.5 cursor-pointer hover:text-[#191C1B] dark:hover:text-white transition-colors min-w-[120px]"
+                      className="px-4 py-3.5 cursor-pointer hover:text-[#0F172A] dark:hover:text-white transition-colors min-w-[120px]"
                     >
                       <div className="flex items-center space-x-1.5">
                         <span className="m3-label-medium">Source</span>
                         {sortField === 'source' ? (
                           sortOrder === 'asc' ? <ArrowUp className="w-3.5 h-3.5 text-[#00695C] dark:text-[#80D5C4]" /> : <ArrowDown className="w-3.5 h-3.5 text-[#00695C] dark:text-[#80D5C4]" />
                         ) : (
-                          <ArrowUpDown className="w-3.5 h-3.5 text-[#6F7976] opacity-60" />
+                          <ArrowUpDown className="w-3.5 h-3.5 text-[#475569] opacity-60" />
                         )}
                       </div>
                     </th>
@@ -940,14 +940,14 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
                   {visibleColumns.createdOn && (
                     <th
                       onClick={() => handleSort('createdDate')}
-                      className="px-4 py-3.5 cursor-pointer hover:text-[#191C1B] dark:hover:text-white transition-colors min-w-[110px]"
+                      className="px-4 py-3.5 cursor-pointer hover:text-[#0F172A] dark:hover:text-white transition-colors min-w-[110px]"
                     >
                       <div className="flex items-center space-x-1.5">
                         <span className="m3-label-medium">Created</span>
                         {sortField === 'createdDate' ? (
                           sortOrder === 'asc' ? <ArrowUp className="w-3.5 h-3.5 text-[#00695C] dark:text-[#80D5C4]" /> : <ArrowDown className="w-3.5 h-3.5 text-[#00695C] dark:text-[#80D5C4]" />
                         ) : (
-                          <ArrowUpDown className="w-3.5 h-3.5 text-[#6F7976] opacity-60" />
+                          <ArrowUpDown className="w-3.5 h-3.5 text-[#475569] opacity-60" />
                         )}
                       </div>
                     </th>
@@ -964,14 +964,14 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
                   {visibleColumns.value && (
                     <th
                       onClick={() => handleSort('value')}
-                      className="px-4 py-3.5 cursor-pointer hover:text-[#191C1B] dark:hover:text-white transition-colors min-w-[120px]"
+                      className="px-4 py-3.5 cursor-pointer hover:text-[#0F172A] dark:hover:text-white transition-colors min-w-[120px]"
                     >
                       <div className="flex items-center space-x-1.5">
                         <span className="m3-label-medium">Value</span>
                         {sortField === 'value' ? (
                           sortOrder === 'asc' ? <ArrowUp className="w-3.5 h-3.5 text-[#00695C] dark:text-[#80D5C4]" /> : <ArrowDown className="w-3.5 h-3.5 text-[#00695C] dark:text-[#80D5C4]" />
                         ) : (
-                          <ArrowUpDown className="w-3.5 h-3.5 text-[#6F7976] opacity-60" />
+                          <ArrowUpDown className="w-3.5 h-3.5 text-[#475569] opacity-60" />
                         )}
                       </div>
                     </th>
@@ -982,10 +982,10 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
               </thead>
 
               {/* Table Body */}
-              <tbody className="divide-y divide-[#BEC9C5]/30 dark:divide-[#3F4946]/30 text-xs">
+              <tbody className="divide-y divide-[#E2E8F0]/30 dark:divide-[#475569]/30 text-xs">
                 {currentLeads.length === 0 ? (
                   <tr>
-                    <td colSpan={10} className="py-16 text-center text-[#6F7976]">
+                    <td colSpan={10} className="py-16 text-center text-[#475569]">
                       <p className="font-medium text-sm">No leads match your current search or filters.</p>
                       <button
                         type="button"
@@ -1015,7 +1015,7 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
                         className={`group cursor-pointer transition-colors ${
                           isSelected
                             ? 'bg-[#CCE8E1]/35 dark:bg-[#004F46]/30 border-l-4 border-l-[#00695C]'
-                            : 'hover:bg-[#ECEFEC]/60 dark:hover:bg-[#1D201F]/70'
+                            : 'hover:bg-[#F1F5F4]/60 dark:hover:bg-[#161A19]/70'
                         }`}
                       >
                         {/* Checkbox */}
@@ -1026,21 +1026,21 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
                             handleToggleRow(lead.id);
                           }}
                         >
-                          <button type="button" aria-label={`Select lead ${lead.name}`} className="w-10 h-10 rounded-full inline-flex items-center justify-center text-[#6F7976] hover:text-[#191C1B]">
+                          <button type="button" aria-label={`Select lead ${lead.name}`} className="w-10 h-10 rounded-full inline-flex items-center justify-center text-[#475569] hover:text-[#0F172A]">
                             {isSelected ? (
                               <CheckSquare className="w-5 h-5 text-[#00695C] dark:text-[#80D5C4]" />
                             ) : (
-                              <Square className="w-5 h-5 text-[#BEC9C5] dark:text-[#6F7976]" />
+                              <Square className="w-5 h-5 text-[#E2E8F0] dark:text-[#475569]" />
                             )}
                           </button>
                         </td>
 
                         {/* Name */}
                         {visibleColumns.name && (
-                          <td className="px-4 py-3.5 text-[#191C1B] dark:text-[#E1E3E0]">
+                          <td className="px-4 py-3.5 text-[#0F172A] dark:text-[#F1F5F9]">
                             <div className="flex flex-col">
                               <span className="font-medium text-sm tracking-tight m3-title-small">{lead.name}</span>
-                              <span className="text-xs text-[#6F7976] dark:text-[#89938F] font-normal font-mono mt-0.5">
+                              <span className="text-xs text-[#475569] dark:text-[#94A3B8] font-normal font-mono mt-0.5">
                                 {lead.phone} {company ? `• ${company}` : ''}
                               </span>
                             </div>
@@ -1089,13 +1089,13 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
                                   type="button"
                                   aria-label={`Set rating to ${star} stars`}
                                   onClick={(e) => handleRatingClick(e, lead, star)}
-                                  className="w-7 h-7 rounded-full flex items-center justify-center hover:bg-[#DAE5E1] dark:hover:bg-[#272B2A] transition-colors"
+                                  className="w-7 h-7 rounded-full flex items-center justify-center hover:bg-[#DAE5E1] dark:hover:bg-[#1E293B] transition-colors"
                                 >
                                   <Star
                                     className={`w-4 h-4 ${
                                       star <= rating
                                         ? 'text-amber-500 fill-amber-500'
-                                        : 'text-[#BEC9C5] dark:text-[#6F7976]'
+                                        : 'text-[#E2E8F0] dark:text-[#475569]'
                                     }`}
                                   />
                                 </button>
@@ -1109,7 +1109,7 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
                           <td className="px-4 py-3.5">
                             <div className="flex items-center space-x-2.5 min-w-0">
                               <AvatarBadge name={assignee} size="sm" />
-                              <span className="text-xs font-medium text-[#191C1B] dark:text-[#E1E3E0] truncate">
+                              <span className="text-xs font-medium text-[#0F172A] dark:text-[#F1F5F9] truncate">
                                 {assignee}
                               </span>
                             </div>
@@ -1118,8 +1118,8 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
 
                         {/* Source */}
                         {visibleColumns.source && (
-                          <td className="px-4 py-3.5 text-[#6F7976] dark:text-[#89938F]">
-                            <span className="inline-flex items-center px-2 py-1 rounded-full bg-[#ECEFEC] dark:bg-[#1D201F] text-[11px] font-medium">
+                          <td className="px-4 py-3.5 text-[#475569] dark:text-[#94A3B8]">
+                            <span className="inline-flex items-center px-2 py-1 rounded-full bg-[#F1F5F4] dark:bg-[#161A19] text-[11px] font-medium">
                               {lead.source}
                             </span>
                           </td>
@@ -1127,28 +1127,28 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
 
                         {/* Created Date */}
                         {visibleColumns.createdOn && (
-                          <td className="px-4 py-3.5 text-[#6F7976] dark:text-[#89938F] font-mono text-[11px]">
+                          <td className="px-4 py-3.5 text-[#475569] dark:text-[#94A3B8] font-mono text-[11px]">
                             {dateFormatted}
                           </td>
                         )}
 
                         {/* Phone */}
                         {visibleColumns.phone && (
-                          <td className="px-4 py-3.5 font-mono text-[#191C1B] dark:text-[#E1E3E0]">
+                          <td className="px-4 py-3.5 font-mono text-[#0F172A] dark:text-[#F1F5F9]">
                             {lead.phone}
                           </td>
                         )}
 
                         {/* Company */}
                         {visibleColumns.company && (
-                          <td className="px-4 py-3.5 text-[#3F4946] dark:text-[#BEC9C5] truncate max-w-[180px]">
+                          <td className="px-4 py-3.5 text-[#475569] dark:text-[#94A3B8] truncate max-w-[180px]">
                             {company || '—'}
                           </td>
                         )}
 
                         {/* Value */}
                         {visibleColumns.value && (
-                          <td className="px-4 py-3.5 font-mono font-medium text-[#191C1B] dark:text-[#E1E3E0]">
+                          <td className="px-4 py-3.5 font-mono font-medium text-[#0F172A] dark:text-[#F1F5F9]">
                             {formattedValue}
                           </td>
                         )}
@@ -1190,7 +1190,7 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
                                   }
                                   className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${
                                     isBlocked
-                                      ? 'text-[#BEC9C5] dark:text-[#6F7976] cursor-not-allowed'
+                                      ? 'text-[#E2E8F0] dark:text-[#475569] cursor-not-allowed'
                                       : 'text-[#00695C] dark:text-[#80D5C4] hover:bg-[#CCE8E1] dark:hover:bg-[#005046]'
                                   }`}
                                 >
@@ -1223,8 +1223,8 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
 
       {/* Pagination Footer */}
       {!isLoading && leads.length > 0 && (
-        <div className="bg-[#F8FAF8] dark:bg-[#111413] border-t border-[#BEC9C5]/40 dark:border-[#3F4946]/40 px-4 py-2.5 flex items-center justify-between shrink-0">
-          <div className="flex items-center space-x-2 text-xs text-[#6F7976] dark:text-[#89938F]">
+        <div className="bg-[#F8FAF9] dark:bg-[#111514] border-t border-[#E2E8F0]/40 dark:border-[#334155]/40 px-4 py-2.5 flex items-center justify-between shrink-0">
+          <div className="flex items-center space-x-2 text-xs text-[#475569] dark:text-[#94A3B8]">
             <span>Page {currentPage} of {totalPages}</span>
             <span>•</span>
             <span>{pageSize} rows per page</span>
@@ -1237,8 +1237,8 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               className={`w-9 h-9 rounded-full flex items-center justify-center transition-colors ${
                 currentPage <= 1
-                  ? 'text-[#BEC9C5] dark:text-[#3F4946] cursor-not-allowed'
-                  : 'text-[#3F4946] dark:text-[#BEC9C5] hover:bg-[#ECEFEC] dark:hover:bg-[#1D201F]'
+                  ? 'text-[#E2E8F0] dark:text-[#475569] cursor-not-allowed'
+                  : 'text-[#475569] dark:text-[#94A3B8] hover:bg-[#F1F5F4] dark:hover:bg-[#161A19]'
               }`}
             >
               <ChevronLeft className="w-4 h-4" />
@@ -1257,7 +1257,7 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
                   className={`w-8 h-8 rounded-full text-xs font-medium transition-all ${
                     currentPage === p
                       ? 'bg-[#00695C] text-white shadow-xs'
-                      : 'text-[#3F4946] dark:text-[#BEC9C5] hover:bg-[#ECEFEC] dark:hover:bg-[#1D201F]'
+                      : 'text-[#475569] dark:text-[#94A3B8] hover:bg-[#F1F5F4] dark:hover:bg-[#161A19]'
                   }`}
                 >
                   {p}
@@ -1271,8 +1271,8 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
               className={`w-9 h-9 rounded-full flex items-center justify-center transition-colors ${
                 currentPage >= totalPages
-                  ? 'text-[#BEC9C5] dark:text-[#3F4946] cursor-not-allowed'
-                  : 'text-[#3F4946] dark:text-[#BEC9C5] hover:bg-[#ECEFEC] dark:hover:bg-[#1D201F]'
+                  ? 'text-[#E2E8F0] dark:text-[#475569] cursor-not-allowed'
+                  : 'text-[#475569] dark:text-[#94A3B8] hover:bg-[#F1F5F4] dark:hover:bg-[#161A19]'
               }`}
             >
               <ChevronRight className="w-4 h-4" />
@@ -1324,17 +1324,17 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
             role="dialog"
             aria-modal="true"
             aria-labelledby="bulk-edit-title"
-            className="bg-[#F8FAF8] dark:bg-[#1D201F] rounded-3xl p-6 max-w-md w-full border border-[#BEC9C5]/60 dark:border-[#3F4946]/60 shadow-2xl space-y-4"
+            className="bg-[#F8FAF9] dark:bg-[#161A19] rounded-3xl p-6 max-w-md w-full border border-[#E2E8F0]/60 dark:border-[#334155]/60 shadow-2xl space-y-4"
           >
-            <div className="flex items-center justify-between pb-2 border-b border-[#BEC9C5]/30">
-              <h3 id="bulk-edit-title" className="text-base font-semibold text-[#191C1B] dark:text-[#E1E3E0] flex items-center gap-2 m3-title-medium">
+            <div className="flex items-center justify-between pb-2 border-b border-[#E2E8F0]/30">
+              <h3 id="bulk-edit-title" className="text-base font-semibold text-[#0F172A] dark:text-[#F1F5F9] flex items-center gap-2 m3-title-medium">
                 <Edit3 className="w-5 h-5 text-[#00695C] dark:text-[#80D5C4]" />
                 <span>Bulk Update {selectedIds.size} Leads</span>
               </h3>
               <button
                 type="button"
                 onClick={() => setIsBulkEditOpen(false)}
-                className="w-8 h-8 rounded-full flex items-center justify-center text-[#6F7976] hover:bg-[#ECEFEC] dark:hover:bg-[#272B2A]"
+                className="w-8 h-8 rounded-full flex items-center justify-center text-[#475569] hover:bg-[#F1F5F4] dark:hover:bg-[#1E293B]"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -1342,7 +1342,7 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
 
             <div className="space-y-4 pt-1">
               <div>
-                <label className="block text-xs font-medium text-[#3F4946] dark:text-[#BEC9C5] mb-1.5 uppercase tracking-wider">
+                <label className="block text-xs font-medium text-[#475569] dark:text-[#94A3B8] mb-1.5 uppercase tracking-wider">
                   Update Lead Stage
                 </label>
                 <MaterialDropdown
@@ -1358,7 +1358,7 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-[#3F4946] dark:text-[#BEC9C5] mb-1.5 uppercase tracking-wider">
+                <label className="block text-xs font-medium text-[#475569] dark:text-[#94A3B8] mb-1.5 uppercase tracking-wider">
                   Reassign Lead Owner
                 </label>
                 <MaterialDropdown
@@ -1374,7 +1374,7 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-[#3F4946] dark:text-[#BEC9C5] mb-1.5 uppercase tracking-wider">
+                <label className="block text-xs font-medium text-[#475569] dark:text-[#94A3B8] mb-1.5 uppercase tracking-wider">
                   Update Priority Stars
                 </label>
                 <div className="flex items-center space-x-2 pt-1">
@@ -1389,7 +1389,7 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
                         className={`w-6 h-6 ${
                           star <= bulkRating
                             ? 'text-amber-500 fill-amber-500'
-                            : 'text-[#BEC9C5] dark:text-[#6F7976]'
+                            : 'text-[#E2E8F0] dark:text-[#475569]'
                         }`}
                       />
                     </button>
@@ -1398,7 +1398,7 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
                     <button
                       type="button"
                       onClick={() => setBulkRating(0)}
-                      className="text-xs text-[#6F7976] hover:underline ml-2"
+                      className="text-xs text-[#475569] hover:underline ml-2"
                     >
                       Clear
                     </button>
@@ -1407,11 +1407,11 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
               </div>
             </div>
 
-            <div className="flex items-center justify-end space-x-2 pt-4 border-t border-[#BEC9C5]/30">
+            <div className="flex items-center justify-end space-x-2 pt-4 border-t border-[#E2E8F0]/30">
               <button
                 type="button"
                 onClick={() => setIsBulkEditOpen(false)}
-                className="px-4 py-2 text-xs font-medium rounded-full text-[#3F4946] dark:text-[#BEC9C5] hover:bg-[#ECEFEC] dark:hover:bg-[#272B2A]"
+                className="px-4 py-2 text-xs font-medium rounded-full text-[#475569] dark:text-[#94A3B8] hover:bg-[#F1F5F4] dark:hover:bg-[#1E293B]"
               >
                 Cancel
               </button>
@@ -1435,29 +1435,29 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
             role="dialog"
             aria-modal="true"
             aria-labelledby="bulk-waca-title"
-            className="bg-[#F8FAF8] dark:bg-[#1D201F] rounded-3xl p-6 max-w-md w-full border border-[#BEC9C5]/60 dark:border-[#3F4946]/60 shadow-2xl space-y-4"
+            className="bg-[#F8FAF9] dark:bg-[#161A19] rounded-3xl p-6 max-w-md w-full border border-[#E2E8F0]/60 dark:border-[#334155]/60 shadow-2xl space-y-4"
           >
-            <div className="flex items-center justify-between pb-2 border-b border-[#BEC9C5]/30">
-              <h3 id="bulk-waca-title" className="text-base font-semibold text-[#191C1B] dark:text-[#E1E3E0] flex items-center gap-2 m3-title-medium">
+            <div className="flex items-center justify-between pb-2 border-b border-[#E2E8F0]/30">
+              <h3 id="bulk-waca-title" className="text-base font-semibold text-[#0F172A] dark:text-[#F1F5F9] flex items-center gap-2 m3-title-medium">
                 <MessageSquare className="w-5 h-5 text-[#00695C] dark:text-[#80D5C4]" />
                 <span>WhatsApp Cloud Broadcast</span>
               </h3>
               <button
                 type="button"
                 onClick={() => setIsBulkWacaOpen(false)}
-                className="w-8 h-8 rounded-full flex items-center justify-center text-[#6F7976] hover:bg-[#ECEFEC] dark:hover:bg-[#272B2A]"
+                className="w-8 h-8 rounded-full flex items-center justify-center text-[#475569] hover:bg-[#F1F5F4] dark:hover:bg-[#1E293B]"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            <p className="text-xs text-[#6F7976] dark:text-[#89938F]">
-              Dispatches Meta-approved HSM template broadcast to <span className="font-semibold text-[#191C1B] dark:text-[#E1E3E0]">{selectedIds.size}</span> selected phone numbers.
+            <p className="text-xs text-[#475569] dark:text-[#94A3B8]">
+              Dispatches Meta-approved HSM template broadcast to <span className="font-semibold text-[#0F172A] dark:text-[#F1F5F9]">{selectedIds.size}</span> selected phone numbers.
             </p>
 
             <div className="space-y-3 pt-1">
               <div>
-                <label className="block text-xs font-medium text-[#3F4946] dark:text-[#BEC9C5] mb-1.5 uppercase tracking-wider">
+                <label className="block text-xs font-medium text-[#475569] dark:text-[#94A3B8] mb-1.5 uppercase tracking-wider">
                   Template Selection
                 </label>
                 <MaterialDropdown
@@ -1491,12 +1491,12 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
               )}
             </div>
 
-            <div className="flex items-center justify-end space-x-2 pt-4 border-t border-[#BEC9C5]/30">
+            <div className="flex items-center justify-end space-x-2 pt-4 border-t border-[#E2E8F0]/30">
               <button
                 type="button"
                 disabled={wacaSending}
                 onClick={() => setIsBulkWacaOpen(false)}
-                className="px-4 py-2 text-xs font-medium rounded-full text-[#3F4946] dark:text-[#BEC9C5] hover:bg-[#ECEFEC] dark:hover:bg-[#272B2A]"
+                className="px-4 py-2 text-xs font-medium rounded-full text-[#475569] dark:text-[#94A3B8] hover:bg-[#F1F5F4] dark:hover:bg-[#1E293B]"
               >
                 Close
               </button>

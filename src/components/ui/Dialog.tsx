@@ -61,7 +61,7 @@ export const Dialog: React.FC<DialogProps> = ({
     >
       <div
         ref={modalRef}
-        className={`w-full ${maxWidthClass} bg-[#FFFFFF] dark:bg-[#161A19] border border-[#E2E8F0] dark:border-[#334155] rounded-2xl shadow-xl flex flex-col max-h-[90vh] overflow-hidden font-body ${className}`}
+        className={`w-full ${maxWidthClass} bg-[#FFFFFF] dark:bg-[#161A19] border border-[#E2E8F0] dark:border-[#334155] rounded-[28px] shadow-2xl flex flex-col max-h-[90vh] overflow-hidden font-body ${className}`}
       >
         {/* Dialog Header */}
         <div className="flex items-start justify-between px-6 py-4 border-b border-[#F1F5F4] dark:border-[#202726] shrink-0">
@@ -73,7 +73,7 @@ export const Dialog: React.FC<DialogProps> = ({
               {title}
             </h2>
             {description && (
-              <p className="text-xs text-[#64748B] dark:text-[#94A3B8] mt-0.5">
+              <p className="text-xs text-[#475569] dark:text-[#94A3B8] mt-0.5">
                 {description}
               </p>
             )}
@@ -82,7 +82,7 @@ export const Dialog: React.FC<DialogProps> = ({
             type="button"
             onClick={onClose}
             aria-label="Close dialog"
-            className="w-8 h-8 rounded-lg flex items-center justify-center text-[#64748B] hover:text-[#0F172A] dark:text-[#94A3B8] dark:hover:text-[#F1F5F9] hover:bg-[#F1F5F4] dark:hover:bg-[#1F2423] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00695C]"
+            className="w-8 h-8 rounded-full flex items-center justify-center text-[#475569] hover:text-[#0F172A] dark:text-[#94A3B8] dark:hover:text-[#F1F5F9] hover:bg-[#F1F5F4] dark:hover:bg-[#1F2423] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00695C]"
           >
             <X className="w-4 h-4" />
           </button>

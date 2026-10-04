@@ -58,7 +58,7 @@ export const CallsView: React.FC<CallsViewProps> = ({
         return 'bg-amber-100 dark:bg-amber-950/80 text-amber-900 dark:text-amber-200 border-transparent';
       case 'Not interested':
       default:
-        return 'bg-[#ECEFEC] dark:bg-[#272B2A] text-[#191C1B] dark:text-[#E1E3E0] border-transparent';
+        return 'bg-[#F1F5F4] dark:bg-[#1E293B] text-[#0F172A] dark:text-[#F1F5F9] border-transparent';
     }
   };
 
@@ -67,17 +67,17 @@ export const CallsView: React.FC<CallsViewProps> = ({
   return (
     <div className="space-y-6">
       {/* Top Header & Stats */}
-      <div className="flex flex-wrap items-center justify-between gap-4 bg-[#F8FAF8] dark:bg-[#1D201F] p-4 sm:p-5 rounded-[24px] border border-[#BEC9C5]/40 dark:border-[#3F4946]/40 shadow-xs">
+      <div className="flex flex-wrap items-center justify-between gap-4 bg-[#F8FAF9] dark:bg-[#161A19] p-4 sm:p-5 rounded-[24px] border border-[#E2E8F0]/40 dark:border-[#334155]/40 shadow-xs">
         <div>
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 rounded-full bg-[#00695C] text-white flex items-center justify-center font-bold shadow-xs">
               <PhoneCall className="w-5 h-5 text-[#80D5C4]" />
             </div>
             <div>
-              <h2 className="text-base font-semibold text-[#191C1B] dark:text-[#E1E3E0] tracking-tight m3-title-medium">
+              <h2 className="text-base font-semibold text-[#0F172A] dark:text-[#F1F5F9] tracking-tight m3-title-medium">
                 Telecalling Console &amp; Logs
               </h2>
-              <p className="text-xs text-[#6F7976] m3-body-small">
+              <p className="text-xs text-[#475569] m3-body-small">
                 Outbound shifts, talktime analytics, and scheduled customer callbacks
               </p>
             </div>
@@ -86,12 +86,12 @@ export const CallsView: React.FC<CallsViewProps> = ({
 
         <div className="flex items-center space-x-4">
           <div className="text-right">
-            <p className="text-[10px] font-medium text-[#6F7976] uppercase tracking-wider">Total Calls</p>
-            <p className="text-lg font-bold text-[#191C1B] dark:text-[#E1E3E0] font-mono">{calls.length}</p>
+            <p className="text-[10px] font-medium text-[#475569] uppercase tracking-wider">Total Calls</p>
+            <p className="text-lg font-bold text-[#0F172A] dark:text-[#F1F5F9] font-mono">{calls.length}</p>
           </div>
-          <div className="h-8 w-px bg-[#BEC9C5]/40 dark:bg-[#3F4946]/40" />
+          <div className="h-8 w-px bg-[#E2E8F0]/40 dark:bg-[#475569]/40" />
           <div className="text-right">
-            <p className="text-[10px] font-medium text-[#6F7976] uppercase tracking-wider">Total Talktime</p>
+            <p className="text-[10px] font-medium text-[#475569] uppercase tracking-wider">Total Talktime</p>
             <p className="text-lg font-bold text-[#00695C] dark:text-[#80D5C4] font-mono">{totalMinutes} mins</p>
           </div>
         </div>
@@ -112,7 +112,7 @@ export const CallsView: React.FC<CallsViewProps> = ({
         </div>
 
         {leadsWithCallback.length === 0 ? (
-          <div className="p-4 bg-[#F8FAF8]/90 dark:bg-[#1D201F]/90 rounded-[18px] border border-amber-500/20 text-xs text-[#6F7976] text-center">
+          <div className="p-4 bg-[#F8FAF9]/90 dark:bg-[#161A19]/90 rounded-[18px] border border-amber-500/20 text-xs text-[#475569] text-center">
             No pending callbacks scheduled. When you log a call with a callback reminder, it will appear here.
           </div>
         ) : (
@@ -125,13 +125,13 @@ export const CallsView: React.FC<CallsViewProps> = ({
               return (
                 <div
                   key={l.id}
-                  className="bg-[#F8FAF8] dark:bg-[#1D201F] p-4 rounded-[20px] border border-[#BEC9C5]/40 dark:border-[#3F4946]/40 shadow-xs flex flex-col justify-between"
+                  className="bg-[#F8FAF9] dark:bg-[#161A19] p-4 rounded-[20px] border border-[#E2E8F0]/40 dark:border-[#334155]/40 shadow-xs flex flex-col justify-between"
                 >
                   <div>
                     <div className="flex items-start justify-between gap-1 mb-1.5">
                       <button
                         onClick={() => onOpenDetail(l)}
-                        className="text-xs font-semibold text-[#191C1B] dark:text-[#E1E3E0] hover:text-[#00695C] dark:hover:text-[#80D5C4] text-left line-clamp-1 transition-colors"
+                        className="text-xs font-semibold text-[#0F172A] dark:text-[#F1F5F9] hover:text-[#00695C] dark:hover:text-[#80D5C4] text-left line-clamp-1 transition-colors"
                       >
                         {l.name}
                       </button>
@@ -141,7 +141,7 @@ export const CallsView: React.FC<CallsViewProps> = ({
                             ? 'bg-[#FFDAD6] text-[#410002] dark:bg-[#93000A] dark:text-[#FFB4AB]'
                             : isDueSoon
                             ? 'bg-amber-100 text-amber-900 dark:bg-amber-950/80 dark:text-amber-200'
-                            : 'bg-[#ECEFEC] text-[#191C1B] dark:bg-[#272B2A] dark:text-[#E1E3E0]'
+                            : 'bg-[#F1F5F4] text-[#0F172A] dark:bg-[#1E293B] dark:text-[#F1F5F9]'
                         }`}
                       >
                         {isOverdue ? 'Overdue' : 'Due'}{' '}
@@ -152,14 +152,14 @@ export const CallsView: React.FC<CallsViewProps> = ({
                       </span>
                     </div>
 
-                    <p className="text-xs font-mono text-[#6F7976] mb-1.5">{l.phone}</p>
-                    <p className="text-[11px] text-[#3F4946] dark:text-[#C4C7C5] line-clamp-2 italic mb-2">
+                    <p className="text-xs font-mono text-[#475569] mb-1.5">{l.phone}</p>
+                    <p className="text-[11px] text-[#475569] dark:text-[#94A3B8] line-clamp-2 italic mb-2">
                       "{l.notes || 'Scheduled callback'}"
                     </p>
                   </div>
 
-                  <div className="pt-2.5 border-t border-[#BEC9C5]/30 dark:border-[#3F4946]/30 flex items-center justify-between">
-                    <span className="text-[10px] text-[#6F7976]">Rep: {l.assignedRepName}</span>
+                  <div className="pt-2.5 border-t border-[#E2E8F0]/30 dark:border-[#334155]/30 flex items-center justify-between">
+                    <span className="text-[10px] text-[#475569]">Rep: {l.assignedRepName}</span>
                     <button
                       onClick={() => onStartCall(l)}
                       className="px-3.5 py-1.5 rounded-full text-xs font-medium bg-[#00695C] hover:bg-[#005449] text-white flex items-center space-x-1.5 shadow-xs transition-colors min-h-[36px]"
@@ -176,15 +176,15 @@ export const CallsView: React.FC<CallsViewProps> = ({
       </div>
 
       {/* Call History Table & Filters */}
-      <div className="bg-[#F8FAF8] dark:bg-[#1D201F] rounded-[24px] border border-[#BEC9C5]/40 dark:border-[#3F4946]/40 shadow-xs overflow-hidden">
+      <div className="bg-[#F8FAF9] dark:bg-[#161A19] rounded-[24px] border border-[#E2E8F0]/40 dark:border-[#334155]/40 shadow-xs overflow-hidden">
         {/* Table Filters */}
-        <div className="p-4 border-b border-[#BEC9C5]/30 dark:border-[#3F4946]/30 flex flex-wrap items-center justify-between gap-3">
+        <div className="p-4 border-b border-[#E2E8F0]/30 dark:border-[#334155]/30 flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-2.5">
-            <span className="text-xs font-medium text-[#191C1B] dark:text-[#E1E3E0]">Filter Calls:</span>
+            <span className="text-xs font-medium text-[#0F172A] dark:text-[#F1F5F9]">Filter Calls:</span>
 
             {/* Rep filter */}
-            <div className="flex items-center space-x-2 bg-[#ECEFEC] dark:bg-[#272B2A] px-3.5 py-1.5 rounded-full text-xs">
-              <User className="w-3.5 h-3.5 text-[#6F7976]" />
+            <div className="flex items-center space-x-2 bg-[#F1F5F4] dark:bg-[#1E293B] px-3.5 py-1.5 rounded-full text-xs">
+              <User className="w-3.5 h-3.5 text-[#475569]" />
               <select
                 value={selectedRep}
                 onChange={(e) => setSelectedRep(e.target.value)}
@@ -200,8 +200,8 @@ export const CallsView: React.FC<CallsViewProps> = ({
             </div>
 
             {/* Outcome filter */}
-            <div className="flex items-center space-x-2 bg-[#ECEFEC] dark:bg-[#272B2A] px-3.5 py-1.5 rounded-full text-xs">
-              <Filter className="w-3.5 h-3.5 text-[#6F7976]" />
+            <div className="flex items-center space-x-2 bg-[#F1F5F4] dark:bg-[#1E293B] px-3.5 py-1.5 rounded-full text-xs">
+              <Filter className="w-3.5 h-3.5 text-[#475569]" />
               <select
                 value={selectedOutcome}
                 onChange={(e) => setSelectedOutcome(e.target.value)}
@@ -216,7 +216,7 @@ export const CallsView: React.FC<CallsViewProps> = ({
             </div>
           </div>
 
-          <span className="text-xs text-[#6F7976] font-normal">
+          <span className="text-xs text-[#475569] font-normal">
             Showing {filteredCalls.length} of {calls.length} calls
           </span>
         </div>
@@ -224,7 +224,7 @@ export const CallsView: React.FC<CallsViewProps> = ({
         {/* Table */}
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-[#ECEFEC]/60 dark:bg-[#272B2A]/60 text-[#6F7976] font-medium border-b border-[#BEC9C5]/30 dark:border-[#3F4946]/30">
+            <thead className="bg-[#F1F5F4]/60 dark:bg-[#1E293B]/60 text-[#475569] font-medium border-b border-[#E2E8F0]/30 dark:border-[#334155]/30">
               <tr>
                 <th className="p-3.5">Lead / Phone</th>
                 <th className="p-3.5">Date &amp; Time</th>
@@ -235,21 +235,21 @@ export const CallsView: React.FC<CallsViewProps> = ({
                 <th className="p-3.5 text-right">Quick Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#BEC9C5]/20 dark:divide-[#3F4946]/20 text-[#191C1B] dark:text-[#E1E3E0]">
+            <tbody className="divide-y divide-[#E2E8F0]/20 dark:divide-[#475569]/20 text-[#0F172A] dark:text-[#F1F5F9]">
               {filteredCalls.map((call) => {
                 const lead = leads.find((l) => l.id === call.leadId);
                 return (
-                  <tr key={call.id} className="hover:bg-[#ECEFEC]/60 dark:hover:bg-[#272B2A]/40 transition-colors">
+                  <tr key={call.id} className="hover:bg-[#F1F5F4]/60 dark:hover:bg-[#1E293B]/40 transition-colors">
                     <td className="p-3.5 font-medium">
                       <button
                         onClick={() => lead && onOpenDetail(lead)}
-                        className="font-semibold text-[#191C1B] dark:text-[#E1E3E0] hover:text-[#00695C] dark:hover:text-[#80D5C4] text-left block"
+                        className="font-semibold text-[#0F172A] dark:text-[#F1F5F9] hover:text-[#00695C] dark:hover:text-[#80D5C4] text-left block"
                       >
                         {call.leadName}
                       </button>
-                      <span className="font-mono text-[11px] text-[#6F7976]">{call.leadPhone}</span>
+                      <span className="font-mono text-[11px] text-[#475569]">{call.leadPhone}</span>
                     </td>
-                    <td className="p-3.5 text-[#6F7976] whitespace-nowrap">
+                    <td className="p-3.5 text-[#475569] whitespace-nowrap">
                       {new Date(call.timestamp).toLocaleString('en-IN', {
                         month: 'short',
                         day: 'numeric',
@@ -257,7 +257,7 @@ export const CallsView: React.FC<CallsViewProps> = ({
                         minute: '2-digit'
                       })}
                     </td>
-                    <td className="p-3.5 font-mono font-semibold text-[#191C1B] dark:text-[#E1E3E0]">
+                    <td className="p-3.5 font-mono font-semibold text-[#0F172A] dark:text-[#F1F5F9]">
                       {Math.floor(call.duration / 60)}m {call.duration % 60}s
                     </td>
                     <td className="p-3.5">
@@ -265,10 +265,10 @@ export const CallsView: React.FC<CallsViewProps> = ({
                         {call.outcome}
                       </span>
                     </td>
-                    <td className="p-3.5 font-medium text-[#191C1B] dark:text-[#E1E3E0] whitespace-nowrap">
+                    <td className="p-3.5 font-medium text-[#0F172A] dark:text-[#F1F5F9] whitespace-nowrap">
                       {call.repName}
                     </td>
-                    <td className="p-3.5 text-[#6F7976] max-w-xs truncate">
+                    <td className="p-3.5 text-[#475569] max-w-xs truncate">
                       {call.notes}
                     </td>
                     <td className="p-3.5 text-right whitespace-nowrap">
@@ -297,7 +297,7 @@ export const CallsView: React.FC<CallsViewProps> = ({
 
               {filteredCalls.length === 0 && (
                 <tr>
-                  <td colSpan={7} className="p-8 text-center text-[#6F7976]">
+                  <td colSpan={7} className="p-8 text-center text-[#475569]">
                     No call logs matching the current filter.
                   </td>
                 </tr>

@@ -37,6 +37,17 @@ A telecalling- and WhatsApp-first sales CRM prototype built to unify lead manage
 
 For an in-depth architectural deep-dive, see the [BRAIN.md](BRAIN.md) document.
 
+## Engineering Software Development Life Cycle (SDLC)
+
+DialPulse Client CRM adheres to a formal, auditable 12-phase SDLC framework:
+
+*   **[Master SDLC Playbook](BRAIN/SDLC-PLAYBOOK.md)** — Operational lifecycle standard (Requirements → Design → Testing → Security → Release → Maintenance).
+*   **[SDLC Baseline Assessment](docs/SDLC-BASELINE.md)** — Current engineering baseline, architecture profile, and maturity rating.
+*   **[Requirement Traceability Matrix](docs/REQUIREMENT-TRACEABILITY.md)** — Real requirement IDs (`CRM-REQ-*`, `CRM-SEC-*`, etc.) and technical truth mappings.
+*   **[Multi-Tier Test Strategy](docs/TEST-STRATEGY.md)** — Unit, integration, and 38-check adversarial security harness.
+*   **[Production Release Checklist](docs/RELEASE-CHECKLIST.md)** — Mandatory pre-flight verification gate for deployments.
+*   **[GitHub & PR Workflow](docs/GITHUB-WORKFLOW.md)** — Branch naming, conventional commits, and pull request policies.
+
 ## Prerequisites
 
 *   **Node.js:** v18+ (required for native `fetch` support and Vite compatibility)

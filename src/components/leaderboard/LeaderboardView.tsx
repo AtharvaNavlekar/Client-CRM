@@ -147,14 +147,14 @@ export const LeaderboardView: React.FC = () => {
   };
 
   return (
-    <div className="flex-1 flex flex-col lg:flex-row h-full bg-[#F8FAF8] dark:bg-[#111413] overflow-hidden rounded-[28px] border border-[#BEC9C5]/40 dark:border-[#3F4946]/40 shadow-xs">
+    <div className="flex-1 flex flex-col lg:flex-row h-full bg-[#F8FAF9] dark:bg-[#111514] overflow-hidden rounded-[28px] border border-[#E2E8F0]/40 dark:border-[#334155]/40 shadow-xs">
       {/* LEFT PANEL: Filters, Summary & Ranked Team Member List */}
-      <div className="w-full lg:w-[58%] border-r border-[#BEC9C5]/30 dark:border-[#3F4946]/30 flex flex-col h-full bg-[#F8FAF8] dark:bg-[#1D201F] shrink-0">
+      <div className="w-full lg:w-[58%] border-r border-[#E2E8F0]/30 dark:border-[#334155]/30 flex flex-col h-full bg-[#F8FAF9] dark:bg-[#161A19] shrink-0">
         {/* Top Controls Toolbar */}
-        <div className="p-4 border-b border-[#BEC9C5]/30 dark:border-[#3F4946]/30 space-y-3 bg-[#F8FAF8] dark:bg-[#1D201F]">
+        <div className="p-4 border-b border-[#E2E8F0]/30 dark:border-[#334155]/30 space-y-3 bg-[#F8FAF9] dark:bg-[#161A19]">
           <div className="flex flex-wrap items-center justify-between gap-2.5">
             {/* Day / Week / Month / Year Segmented Tabs */}
-            <div className="flex items-center p-1 bg-[#ECEFEC] dark:bg-[#272B2A] rounded-full space-x-1">
+            <div className="flex items-center p-1 bg-[#F1F5F4] dark:bg-[#1E293B] rounded-full space-x-1">
               {(['Day', 'Week', 'Month', 'Year'] as const).map((tab) => (
                 <button
                   key={tab}
@@ -163,7 +163,7 @@ export const LeaderboardView: React.FC = () => {
                   className={`px-3.5 py-1 text-xs font-medium rounded-full transition-all ${
                     periodTab === tab
                       ? 'bg-[#00695C] text-white shadow-xs'
-                      : 'text-[#6F7976] hover:text-[#191C1B] dark:hover:text-[#E1E3E0]'
+                      : 'text-[#475569] hover:text-[#0F172A] dark:hover:text-[#F1F5F9]'
                   }`}
                 >
                   {tab}
@@ -178,7 +178,7 @@ export const LeaderboardView: React.FC = () => {
                   type="date"
                   value={dateValue}
                   onChange={(e) => setDateValue(e.target.value)}
-                  className="h-8 px-3 text-xs font-medium rounded-full bg-[#ECEFEC] dark:bg-[#272B2A] border-none text-[#191C1B] dark:text-[#E1E3E0] focus:outline-none focus:ring-1 focus:ring-[#00695C]"
+                  className="h-8 px-3 text-xs font-medium rounded-full bg-[#F1F5F4] dark:bg-[#1E293B] border-none text-[#0F172A] dark:text-[#F1F5F9] focus:outline-none focus:ring-1 focus:ring-[#00695C]"
                 />
               </div>
 
@@ -197,13 +197,13 @@ export const LeaderboardView: React.FC = () => {
 
           {/* Search by teammate field */}
           <div className="relative">
-            <Search className="w-4 h-4 text-[#6F7976] absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-[#475569] absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               placeholder="Search teammate by name or role..."
               value={teammateSearch}
               onChange={(e) => setTeammateSearch(e.target.value)}
-              className="w-full h-9 pl-9 pr-3.5 text-xs rounded-full bg-[#ECEFEC] dark:bg-[#272B2A] border-none text-[#191C1B] dark:text-[#E1E3E0] placeholder-[#6F7976] focus:outline-none focus:ring-2 focus:ring-[#00695C]"
+              className="w-full h-9 pl-9 pr-3.5 text-xs rounded-full bg-[#F1F5F4] dark:bg-[#1E293B] border-none text-[#0F172A] dark:text-[#F1F5F9] placeholder-[#475569] focus:outline-none focus:ring-2 focus:ring-[#00695C]"
             />
           </div>
 
@@ -213,7 +213,7 @@ export const LeaderboardView: React.FC = () => {
             className={`p-4 rounded-[22px] border transition-all cursor-pointer ${
               selectedMemberId === null
                 ? 'bg-[#CCE8E1]/60 dark:bg-[#004F46]/30 border-[#00695C] shadow-xs'
-                : 'bg-[#F8FAF8] dark:bg-[#1D201F] border-[#BEC9C5]/40 dark:border-[#3F4946]/40 hover:border-[#00695C]/40'
+                : 'bg-[#F8FAF9] dark:bg-[#161A19] border-[#E2E8F0]/40 dark:border-[#334155]/40 hover:border-[#00695C]/40'
             }`}
           >
             <div className="flex items-center justify-between mb-2">
@@ -222,10 +222,10 @@ export const LeaderboardView: React.FC = () => {
                   <Users className="w-4 h-4" />
                 </div>
                 <div>
-                  <span className="text-xs font-semibold text-[#191C1B] dark:text-[#E1E3E0] m3-title-small">
+                  <span className="text-xs font-semibold text-[#0F172A] dark:text-[#F1F5F9] m3-title-small">
                     Total Team Performance
                   </span>
-                  <span className="text-[10px] text-[#6F7976] ml-2 font-mono">
+                  <span className="text-[10px] text-[#475569] ml-2 font-mono">
                     Team size: {displayedMembers.length} reps
                   </span>
                 </div>
@@ -237,21 +237,21 @@ export const LeaderboardView: React.FC = () => {
               )}
             </div>
 
-            <div className="grid grid-cols-3 gap-2 text-center pt-2 border-t border-[#BEC9C5]/30 dark:border-[#3F4946]/30 font-mono">
+            <div className="grid grid-cols-3 gap-2 text-center pt-2 border-t border-[#E2E8F0]/30 dark:border-[#334155]/30 font-mono">
               <div>
-                <div className="text-[10px] uppercase font-medium text-[#6F7976]">Calls</div>
-                <div className="text-xs font-bold text-[#191C1B] dark:text-[#E1E3E0]">
+                <div className="text-[10px] uppercase font-medium text-[#475569]">Calls</div>
+                <div className="text-xs font-bold text-[#0F172A] dark:text-[#F1F5F9]">
                   {teamStats.totalCalls}
                 </div>
               </div>
               <div>
-                <div className="text-[10px] uppercase font-medium text-[#6F7976]">Duration</div>
-                <div className="text-xs font-bold text-[#191C1B] dark:text-[#E1E3E0]">
+                <div className="text-[10px] uppercase font-medium text-[#475569]">Duration</div>
+                <div className="text-xs font-bold text-[#0F172A] dark:text-[#F1F5F9]">
                   {teamStats.totalDurationFormatted}
                 </div>
               </div>
               <div>
-                <div className="text-[10px] uppercase font-medium text-[#6F7976]">Sales</div>
+                <div className="text-[10px] uppercase font-medium text-[#475569]">Sales</div>
                 <div className="text-xs font-bold text-[#00695C] dark:text-[#80D5C4]">
                   {teamStats.totalSalesFormatted}
                 </div>
@@ -272,8 +272,8 @@ export const LeaderboardView: React.FC = () => {
                 onClick={() => setSelectedMemberId(member.id)}
                 className={`p-3 rounded-[20px] flex items-center justify-between cursor-pointer transition-all ${
                   isSelected
-                    ? 'bg-[#CCE8E1] dark:bg-[#004F46] text-[#00201B] dark:text-[#E1E3E0] shadow-xs'
-                    : 'hover:bg-[#ECEFEC]/60 dark:hover:bg-[#272B2A]/60 text-[#191C1B] dark:text-[#E1E3E0]'
+                    ? 'bg-[#CCE8E1] dark:bg-[#004F46] text-[#00201B] dark:text-[#F1F5F9] shadow-xs'
+                    : 'hover:bg-[#F1F5F4]/60 dark:hover:bg-[#1E293B]/60 text-[#0F172A] dark:text-[#F1F5F9]'
                 }`}
               >
                 {/* Left: Rank Badge + Avatar + Name + Timestamps */}
@@ -333,17 +333,17 @@ export const LeaderboardView: React.FC = () => {
       </div>
 
       {/* RIGHT PANEL: Grouped Detail View */}
-      <div className="w-full lg:w-[42%] flex flex-col h-full bg-[#F8FAF8] dark:bg-[#111413] overflow-y-auto">
+      <div className="w-full lg:w-[42%] flex flex-col h-full bg-[#F8FAF9] dark:bg-[#111514] overflow-y-auto">
         {/* Header with Export/Download Icon */}
-        <div className="p-4 border-b border-[#BEC9C5]/30 dark:border-[#3F4946]/30 flex items-center justify-between bg-[#F8FAF8] dark:bg-[#1D201F]">
+        <div className="p-4 border-b border-[#E2E8F0]/30 dark:border-[#334155]/30 flex items-center justify-between bg-[#F8FAF9] dark:bg-[#161A19]">
           <div>
-            <span className="text-[10px] font-medium uppercase tracking-wider text-[#6F7976]">
+            <span className="text-[10px] font-medium uppercase tracking-wider text-[#475569]">
               Metric Drilldown &amp; Deep Stats
             </span>
-            <h2 className="text-sm font-semibold text-[#191C1B] dark:text-[#E1E3E0] flex items-center space-x-2 mt-0.5 m3-title-medium">
+            <h2 className="text-sm font-semibold text-[#0F172A] dark:text-[#F1F5F9] flex items-center space-x-2 mt-0.5 m3-title-medium">
               <span>{selectedMember ? selectedMember.name : 'Total Team Stats'}</span>
               {selectedMember && (
-                <span className="text-[10px] font-medium px-2.5 py-0.5 rounded-full bg-[#ECEFEC] dark:bg-[#272B2A] text-[#191C1B] dark:text-[#E1E3E0]">
+                <span className="text-[10px] font-medium px-2.5 py-0.5 rounded-full bg-[#F1F5F4] dark:bg-[#1E293B] text-[#0F172A] dark:text-[#F1F5F9]">
                   Rank #{selectedMember.rank}
                 </span>
               )}
@@ -353,7 +353,7 @@ export const LeaderboardView: React.FC = () => {
           <button
             type="button"
             onClick={handleExportData}
-            className="w-9 h-9 rounded-full flex items-center justify-center bg-[#ECEFEC] dark:bg-[#272B2A] hover:bg-[#CCE8E1] text-[#191C1B] dark:text-[#E1E3E0] transition-colors"
+            className="w-9 h-9 rounded-full flex items-center justify-center bg-[#F1F5F4] dark:bg-[#1E293B] hover:bg-[#CCE8E1] text-[#0F172A] dark:text-[#F1F5F9] transition-colors"
             title="Export this data as CSV"
           >
             <Download className="w-4 h-4" />
@@ -362,28 +362,28 @@ export const LeaderboardView: React.FC = () => {
 
         <div className="p-4 space-y-4 text-xs">
           {/* Section 1: Calls */}
-          <div className="bg-[#F8FAF8] dark:bg-[#1D201F] rounded-[24px] border border-[#BEC9C5]/40 dark:border-[#3F4946]/40 p-4 shadow-xs space-y-3">
-            <div className="flex items-center justify-between border-b border-[#BEC9C5]/30 dark:border-[#3F4946]/30 pb-2">
-              <h3 className="font-semibold text-[#191C1B] dark:text-[#E1E3E0] flex items-center space-x-1.5 m3-title-small">
+          <div className="bg-[#F8FAF9] dark:bg-[#161A19] rounded-[24px] border border-[#E2E8F0]/40 dark:border-[#334155]/40 p-4 shadow-xs space-y-3">
+            <div className="flex items-center justify-between border-b border-[#E2E8F0]/30 dark:border-[#334155]/30 pb-2">
+              <h3 className="font-semibold text-[#0F172A] dark:text-[#F1F5F9] flex items-center space-x-1.5 m3-title-small">
                 <PhoneCall className="w-4 h-4 text-[#00695C] dark:text-[#80D5C4]" />
                 <span>Calls Metrics</span>
               </h3>
-              <span className="text-[10px] font-mono text-[#6F7976]">
+              <span className="text-[10px] font-mono text-[#475569]">
                 Duration: {selectedMember ? selectedMember.durationFormatted : teamStats.totalDurationFormatted}
               </span>
             </div>
 
             {/* Timestamps */}
             <div className="grid grid-cols-2 gap-2 text-[11px] font-mono">
-              <div className="p-2.5 rounded-[16px] bg-[#ECEFEC]/60 dark:bg-[#272B2A]/60 border border-transparent">
-                <span className="text-[#6F7976] block text-[10px] uppercase">First Call</span>
-                <span className="font-semibold text-[#191C1B] dark:text-[#E1E3E0]">
+              <div className="p-2.5 rounded-[16px] bg-[#F1F5F4]/60 dark:bg-[#1E293B]/60 border border-transparent">
+                <span className="text-[#475569] block text-[10px] uppercase">First Call</span>
+                <span className="font-semibold text-[#0F172A] dark:text-[#F1F5F9]">
                   {selectedMember ? selectedMember.firstCallTime : teamStats.firstCallTime}
                 </span>
               </div>
-              <div className="p-2.5 rounded-[16px] bg-[#ECEFEC]/60 dark:bg-[#272B2A]/60 border border-transparent">
-                <span className="text-[#6F7976] block text-[10px] uppercase">Last Call</span>
-                <span className="font-semibold text-[#191C1B] dark:text-[#E1E3E0]">
+              <div className="p-2.5 rounded-[16px] bg-[#F1F5F4]/60 dark:bg-[#1E293B]/60 border border-transparent">
+                <span className="text-[#475569] block text-[10px] uppercase">Last Call</span>
+                <span className="font-semibold text-[#0F172A] dark:text-[#F1F5F9]">
                   {selectedMember ? selectedMember.lastCallTime : teamStats.lastCallTime}
                 </span>
               </div>
@@ -392,24 +392,24 @@ export const LeaderboardView: React.FC = () => {
             {/* Calls Breakdown Grid */}
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 font-mono">
               {/* All Calls with secondary distinct reps count */}
-              <div className="p-3 rounded-[16px] bg-[#ECEFEC]/60 dark:bg-[#272B2A]/60">
-                <span className="text-[#6F7976] block text-[10px] uppercase font-medium">All Calls</span>
-                <div className="text-sm font-bold text-[#191C1B] dark:text-[#E1E3E0]">
+              <div className="p-3 rounded-[16px] bg-[#F1F5F4]/60 dark:bg-[#1E293B]/60">
+                <span className="text-[#475569] block text-[10px] uppercase font-medium">All Calls</span>
+                <div className="text-sm font-bold text-[#0F172A] dark:text-[#F1F5F9]">
                   {selectedMember
                     ? `${selectedMember.callsDetail.allCalls} (👤1)`
                     : `${teamStats.totalCalls} (👤${teamStats.distinctRepsCount})`}
                 </div>
               </div>
 
-              <div className="p-3 rounded-[16px] bg-[#ECEFEC]/60 dark:bg-[#272B2A]/60">
-                <span className="text-[#6F7976] block text-[10px] uppercase font-medium">Incoming</span>
+              <div className="p-3 rounded-[16px] bg-[#F1F5F4]/60 dark:bg-[#1E293B]/60">
+                <span className="text-[#475569] block text-[10px] uppercase font-medium">Incoming</span>
                 <div className="text-sm font-bold text-sky-700 dark:text-sky-400">
                   {selectedMember ? selectedMember.callsDetail.incoming : teamStats.incomingCalls}
                 </div>
               </div>
 
-              <div className="p-3 rounded-[16px] bg-[#ECEFEC]/60 dark:bg-[#272B2A]/60">
-                <span className="text-[#6F7976] block text-[10px] uppercase font-medium">Outgoing</span>
+              <div className="p-3 rounded-[16px] bg-[#F1F5F4]/60 dark:bg-[#1E293B]/60">
+                <span className="text-[#475569] block text-[10px] uppercase font-medium">Outgoing</span>
                 <div className="text-sm font-bold text-indigo-700 dark:text-indigo-400">
                   {selectedMember ? selectedMember.callsDetail.outgoing : teamStats.outgoingCalls}
                 </div>
@@ -442,8 +442,8 @@ export const LeaderboardView: React.FC = () => {
           </div>
 
           {/* Section 2: Tasks (Late, Pending, Done, Created) */}
-          <div className="bg-[#F8FAF8] dark:bg-[#1D201F] rounded-[24px] border border-[#BEC9C5]/40 dark:border-[#3F4946]/40 p-4 shadow-xs space-y-3">
-            <h3 className="font-semibold text-[#191C1B] dark:text-[#E1E3E0] flex items-center space-x-1.5 border-b border-[#BEC9C5]/30 dark:border-[#3F4946]/30 pb-2 m3-title-small">
+          <div className="bg-[#F8FAF9] dark:bg-[#161A19] rounded-[24px] border border-[#E2E8F0]/40 dark:border-[#334155]/40 p-4 shadow-xs space-y-3">
+            <h3 className="font-semibold text-[#0F172A] dark:text-[#F1F5F9] flex items-center space-x-1.5 border-b border-[#E2E8F0]/30 dark:border-[#334155]/30 pb-2 m3-title-small">
               <CheckCircle2 className="w-4 h-4 text-[#00695C] dark:text-[#80D5C4]" />
               <span>Tasks &amp; Follow-up Fulfillment</span>
             </h3>
@@ -474,9 +474,9 @@ export const LeaderboardView: React.FC = () => {
               </div>
 
               {/* Created */}
-              <div className="p-2.5 rounded-[16px] bg-[#ECEFEC]/60 dark:bg-[#272B2A]/60">
-                <span className="text-[10px] uppercase font-medium text-[#6F7976]">Created</span>
-                <div className="text-sm font-bold text-[#191C1B] dark:text-[#E1E3E0]">
+              <div className="p-2.5 rounded-[16px] bg-[#F1F5F4]/60 dark:bg-[#1E293B]/60">
+                <span className="text-[10px] uppercase font-medium text-[#475569]">Created</span>
+                <div className="text-sm font-bold text-[#0F172A] dark:text-[#F1F5F9]">
                   {selectedMember ? selectedMember.tasksDetail.created : teamStats.tasks.created}
                 </div>
               </div>
@@ -484,9 +484,9 @@ export const LeaderboardView: React.FC = () => {
           </div>
 
           {/* Section 3: WhatsApp */}
-          <div className="bg-[#F8FAF8] dark:bg-[#1D201F] rounded-[24px] border border-[#BEC9C5]/40 dark:border-[#3F4946]/40 p-4 shadow-xs space-y-3">
-            <div className="flex items-center justify-between border-b border-[#BEC9C5]/30 dark:border-[#3F4946]/30 pb-2">
-              <h3 className="font-semibold text-[#191C1B] dark:text-[#E1E3E0] flex items-center space-x-1.5 m3-title-small">
+          <div className="bg-[#F8FAF9] dark:bg-[#161A19] rounded-[24px] border border-[#E2E8F0]/40 dark:border-[#334155]/40 p-4 shadow-xs space-y-3">
+            <div className="flex items-center justify-between border-b border-[#E2E8F0]/30 dark:border-[#334155]/30 pb-2">
+              <h3 className="font-semibold text-[#0F172A] dark:text-[#F1F5F9] flex items-center space-x-1.5 m3-title-small">
                 <MessageSquare className="w-4 h-4 text-[#00695C] dark:text-[#80D5C4]" />
                 <span>WhatsApp Cloud API Engagement</span>
               </h3>
@@ -496,15 +496,15 @@ export const LeaderboardView: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-2 gap-2 font-mono">
-              <div className="p-3.5 rounded-[16px] bg-[#ECEFEC]/60 dark:bg-[#272B2A]/60">
-                <span className="text-[#6F7976] block text-[10px] uppercase font-medium">Incoming Messages</span>
-                <div className="text-base font-bold text-[#191C1B] dark:text-[#E1E3E0]">
+              <div className="p-3.5 rounded-[16px] bg-[#F1F5F4]/60 dark:bg-[#1E293B]/60">
+                <span className="text-[#475569] block text-[10px] uppercase font-medium">Incoming Messages</span>
+                <div className="text-base font-bold text-[#0F172A] dark:text-[#F1F5F9]">
                   {selectedMember ? selectedMember.whatsAppDetail.incoming : teamStats.whatsApp.incoming}
                 </div>
               </div>
 
-              <div className="p-3.5 rounded-[16px] bg-[#ECEFEC]/60 dark:bg-[#272B2A]/60">
-                <span className="text-[#6F7976] block text-[10px] uppercase font-medium">Outgoing Broadcasts</span>
+              <div className="p-3.5 rounded-[16px] bg-[#F1F5F4]/60 dark:bg-[#1E293B]/60">
+                <span className="text-[#475569] block text-[10px] uppercase font-medium">Outgoing Broadcasts</span>
                 <div className="text-base font-bold text-[#00695C] dark:text-[#80D5C4]">
                   {selectedMember ? selectedMember.whatsAppDetail.outgoing : teamStats.whatsApp.outgoing}
                 </div>

@@ -78,9 +78,9 @@ export const AddLeadModal: React.FC<AddLeadModalProps> = ({
         tabIndex={-1}
       >
         {/* Modal Header */}
-        <div className="px-6 py-4 bg-[#1F3A5F] text-white flex items-center justify-between">
+        <div className="px-6 py-4 bg-[#1E293B] text-white flex items-center justify-between">
           <div className="flex items-center space-x-2.5">
-            <div className="w-8 h-8 rounded-lg bg-[#2E6E5C] flex items-center justify-center text-white">
+            <div className="w-8 h-8 rounded-lg bg-[#00695C] flex items-center justify-center text-white">
               <UserPlus className="w-4 h-4" />
             </div>
             <div>
@@ -121,7 +121,7 @@ export const AddLeadModal: React.FC<AddLeadModalProps> = ({
                   placeholder="e.g. Vikram Malhotra"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#2E6E5C]"
+                  className="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#00695C]"
                 />
               </div>
             </div>
@@ -140,7 +140,7 @@ export const AddLeadModal: React.FC<AddLeadModalProps> = ({
                   placeholder="+91 98201 12345"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  className="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-mono text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#2E6E5C]"
+                  className="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-mono text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#00695C]"
                 />
               </div>
             </div>
@@ -210,7 +210,7 @@ export const AddLeadModal: React.FC<AddLeadModalProps> = ({
                   placeholder="1500000"
                   value={value}
                   onChange={(e) => setValue(e.target.value)}
-                  className="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#2E6E5C]"
+                  className="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#00695C]"
                 />
               </div>
             </div>
@@ -243,7 +243,7 @@ export const AddLeadModal: React.FC<AddLeadModalProps> = ({
                 placeholder="e.g. Inquired about loan eligibility, prefers morning 11 AM calls on WhatsApp..."
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
-                className="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#2E6E5C]"
+                className="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#00695C]"
               />
             </div>
           </div>
@@ -261,7 +261,7 @@ export const AddLeadModal: React.FC<AddLeadModalProps> = ({
               id="btn-submit-lead"
               type="submit"
               disabled={isSubmitting}
-              className="px-5 py-2 rounded-xl text-xs font-bold text-white bg-[#2E6E5C] hover:bg-[#245b4c] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2E6E5C] focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 disabled:opacity-50 transition-all shadow-xs"
+              className="px-5 py-2 rounded-xl text-xs font-bold text-white bg-[#00695C] hover:bg-[#245b4c] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00695C] focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 disabled:opacity-50 transition-all shadow-xs"
             >
               {isSubmitting ? 'Saving Lead...' : 'Create Lead'}
             </button>

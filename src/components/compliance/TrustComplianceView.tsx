@@ -172,7 +172,7 @@ export const TrustComplianceView: React.FC<TrustComplianceViewProps> = () => {
         <div className="flex flex-wrap items-center gap-2.5">
           <button
             onClick={() => setIsPortalModalOpen(true)}
-            className="px-3.5 py-2 rounded-xl text-xs font-bold bg-[#1F3A5F] hover:bg-[#182f4d] text-white flex items-center space-x-2 shadow-xs transition-all"
+            className="px-3.5 py-2 rounded-xl text-xs font-bold bg-[#1E293B] hover:bg-[#182f4d] text-white flex items-center space-x-2 shadow-xs transition-all"
           >
             <Eye className="w-3.5 h-3.5 text-teal-300" />
             <span>Preview Lead Preference Portal</span>
@@ -272,7 +272,7 @@ export const TrustComplianceView: React.FC<TrustComplianceViewProps> = () => {
               onClick={() => setActiveTab(t.id as any)}
               className={`pb-3 px-4 text-xs font-bold flex items-center space-x-2 border-b-2 whitespace-nowrap transition-colors ${
                 isActive
-                  ? 'border-[#2E6E5C] text-[#2E6E5C] dark:text-emerald-400'
+                  ? 'border-[#00695C] text-[#00695C] dark:text-emerald-400'
                   : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
               }`}
             >
@@ -480,7 +480,7 @@ export const TrustComplianceView: React.FC<TrustComplianceViewProps> = () => {
 
               <button
                 onClick={() => setIsAddingReason(true)}
-                className="px-3 py-1.5 rounded-xl text-xs font-bold bg-[#2E6E5C] hover:bg-[#255b4c] text-white flex items-center space-x-1.5 shadow-xs"
+                className="px-3 py-1.5 rounded-xl text-xs font-bold bg-[#00695C] hover:bg-[#255b4c] text-white flex items-center space-x-1.5 shadow-xs"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Add Call Reason Tag</span>
@@ -790,7 +790,7 @@ export const TrustComplianceView: React.FC<TrustComplianceViewProps> = () => {
             <div className="flex justify-end">
               <button
                 type="submit"
-                className="px-5 py-2 rounded-xl text-xs font-bold bg-[#1F3A5F] hover:bg-[#182f4d] text-white flex items-center space-x-2 shadow-xs transition-all"
+                className="px-5 py-2 rounded-xl text-xs font-bold bg-[#1E293B] hover:bg-[#182f4d] text-white flex items-center space-x-2 shadow-xs transition-all"
               >
                 <span>Save Fatigue Guardrail Rules</span>
                 <Check className="w-4 h-4" />
@@ -816,7 +816,7 @@ export const TrustComplianceView: React.FC<TrustComplianceViewProps> = () => {
 
               <button
                 onClick={() => setIsPortalModalOpen(true)}
-                className="px-4 py-2 rounded-xl text-xs font-bold bg-[#2E6E5C] hover:bg-[#255b4c] text-white flex items-center space-x-2 shadow-xs transition-all"
+                className="px-4 py-2 rounded-xl text-xs font-bold bg-[#00695C] hover:bg-[#255b4c] text-white flex items-center space-x-2 shadow-xs transition-all"
               >
                 <Eye className="w-3.5 h-3.5 text-teal-200" />
                 <span>Launch Interactive Lead Portal</span>
@@ -877,7 +877,7 @@ export const TrustComplianceView: React.FC<TrustComplianceViewProps> = () => {
 
               <button
                 onClick={() => setIsAddingRoute(true)}
-                className="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-[#2E6E5C] hover:bg-[#255b4c] text-white flex items-center space-x-1.5 shadow-xs"
+                className="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-[#00695C] hover:bg-[#255b4c] text-white flex items-center space-x-1.5 shadow-xs"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Add Orchestration Flow</span>
@@ -1062,7 +1062,7 @@ export const TrustComplianceView: React.FC<TrustComplianceViewProps> = () => {
 
               <button
                 onClick={handleTriggerAuditExport}
-                className="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-[#1F3A5F] hover:bg-[#182f4d] text-white flex items-center space-x-2 shadow-xs transition-all"
+                className="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-[#1E293B] hover:bg-[#182f4d] text-white flex items-center space-x-2 shadow-xs transition-all"
               >
                 <Download className="w-3.5 h-3.5 text-teal-300" />
                 <span>Export for Audit</span>
@@ -1190,7 +1190,7 @@ export const TrustComplianceView: React.FC<TrustComplianceViewProps> = () => {
                 <div className="pt-3 flex justify-end space-x-2">
                   <button
                     onClick={() => setIsAuditModalOpen(false)}
-                    className="px-4 py-2 rounded-xl text-xs font-bold bg-[#1F3A5F] text-white hover:bg-[#182f4d]"
+                    className="px-4 py-2 rounded-xl text-xs font-bold bg-[#1E293B] text-white hover:bg-[#182f4d]"
                   >
                     Download Archive (Simulated)
                   </button>

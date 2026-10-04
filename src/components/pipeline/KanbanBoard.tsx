@@ -213,11 +213,11 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
   return (
     <div className="flex flex-col h-full space-y-4">
       {/* Top Filter Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 bg-[#F8FAF8] dark:bg-[#1D201F] p-3.5 sm:p-4 rounded-[24px] border border-[#BEC9C5]/40 dark:border-[#3F4946]/40 shadow-xs">
+      <div className="flex flex-wrap items-center justify-between gap-3 bg-[#F8FAF9] dark:bg-[#161A19] p-3.5 sm:p-4 rounded-[24px] border border-[#E2E8F0]/40 dark:border-[#334155]/40 shadow-xs">
         <div className="flex flex-wrap items-center gap-2">
           {/* Source Filter */}
-          <div className="flex items-center space-x-2 bg-[#ECEFEC] dark:bg-[#272B2A] px-3.5 py-1.5 rounded-full border border-transparent">
-            <Filter className="w-3.5 h-3.5 text-[#6F7976]" />
+          <div className="flex items-center space-x-2 bg-[#F1F5F4] dark:bg-[#1E293B] px-3.5 py-1.5 rounded-full border border-transparent">
+            <Filter className="w-3.5 h-3.5 text-[#475569]" />
             <MaterialDropdown
               id="filter-source-select"
               label="Source:"
@@ -233,8 +233,8 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
           </div>
 
           {/* Rep Filter */}
-          <div className="flex items-center space-x-2 bg-[#ECEFEC] dark:bg-[#272B2A] px-3.5 py-1.5 rounded-full border border-transparent">
-            <User className="w-3.5 h-3.5 text-[#6F7976]" />
+          <div className="flex items-center space-x-2 bg-[#F1F5F4] dark:bg-[#1E293B] px-3.5 py-1.5 rounded-full border border-transparent">
+            <User className="w-3.5 h-3.5 text-[#475569]" />
             <MaterialDropdown
               id="filter-rep-select"
               label="Rep:"
@@ -269,11 +269,11 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
             className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-full text-xs font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00695C] transition-all min-h-[36px] ${
               autoAssignmentEnabled
                 ? 'bg-[#CCE8E1] text-[#00201B] dark:bg-[#004F46] dark:text-[#80D5C4]'
-                : 'bg-[#ECEFEC] dark:bg-[#272B2A] text-[#6F7976]'
+                : 'bg-[#F1F5F4] dark:bg-[#1E293B] text-[#475569]'
             }`}
             title="When active, new leads from WhatsApp, Web, and IndiaMART are evenly distributed to sales reps via round-robin"
           >
-            <Zap className={`w-3.5 h-3.5 ${autoAssignmentEnabled ? 'text-amber-500 fill-amber-500' : 'text-[#6F7976]'}`} />
+            <Zap className={`w-3.5 h-3.5 ${autoAssignmentEnabled ? 'text-amber-500 fill-amber-500' : 'text-[#475569]'}`} />
             <span>Auto-Assign: {autoAssignmentEnabled ? 'ON' : 'OFF'}</span>
           </button>
           )}
@@ -293,7 +293,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
             className={`flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00695C] transition-all min-h-[36px] ${
               isBulkMode || selectedLeadIds.size > 0
                 ? 'bg-[#00695C] text-white shadow-xs'
-                : 'bg-[#ECEFEC] dark:bg-[#272B2A] text-[#191C1B] dark:text-[#E1E3E0] hover:bg-[#BEC9C5]/40'
+                : 'bg-[#F1F5F4] dark:bg-[#1E293B] text-[#0F172A] dark:text-[#F1F5F9] hover:bg-[#E2E8F0]/40'
             }`}
           >
             <CheckSquare className="w-3.5 h-3.5" />
@@ -303,13 +303,13 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
         </div>
 
         {/* Total stats pill */}
-        <div className="flex items-center space-x-3 text-xs font-medium text-[#6F7976]">
-          <div className="flex items-center space-x-2 bg-[#ECEFEC] dark:bg-[#272B2A] px-3.5 py-1.5 rounded-full">
+        <div className="flex items-center space-x-3 text-xs font-medium text-[#475569]">
+          <div className="flex items-center space-x-2 bg-[#F1F5F4] dark:bg-[#1E293B] px-3.5 py-1.5 rounded-full">
             <Layers className="w-3.5 h-3.5 text-[#00695C] dark:text-[#80D5C4]" />
-            <span className="text-[#6F7976]">
-              Pipeline: <strong className="text-[#191C1B] dark:text-[#E1E3E0] font-semibold">{filteredLeads.length}</strong>
+            <span className="text-[#475569]">
+              Pipeline: <strong className="text-[#0F172A] dark:text-[#F1F5F9] font-semibold">{filteredLeads.length}</strong>
             </span>
-            <span className="text-[#BEC9C5] dark:text-[#3F4946]">•</span>
+            <span className="text-[#E2E8F0] dark:text-[#475569]">•</span>
             <span className="font-semibold text-[#00695C] dark:text-[#80D5C4]">
               {formatCurrency(totalFilteredValue)}
             </span>
@@ -320,9 +320,9 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
               {onOpenBulkImport && (
                 <button
                   onClick={onOpenBulkImport}
-                  className="px-3.5 py-1.5 rounded-full text-xs font-medium text-[#191C1B] dark:text-[#E1E3E0] bg-[#ECEFEC] dark:bg-[#272B2A] hover:bg-[#BEC9C5]/40 transition-colors flex items-center space-x-1.5 min-h-[36px]"
+                  className="px-3.5 py-1.5 rounded-full text-xs font-medium text-[#0F172A] dark:text-[#F1F5F9] bg-[#F1F5F4] dark:bg-[#1E293B] hover:bg-[#E2E8F0]/40 transition-colors flex items-center space-x-1.5 min-h-[36px]"
                 >
-                  <Upload className="w-3.5 h-3.5 text-[#6F7976]" />
+                  <Upload className="w-3.5 h-3.5 text-[#475569]" />
                   <span>Import</span>
                 </button>
               )}
@@ -357,29 +357,29 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                 onDragOver={(e) => handleDragOver(e, stage.id)}
                 onDragLeave={handleDragLeave}
                 onDrop={(e) => handleDrop(e, stage.id)}
-                className={`flex flex-col bg-[#ECEFEC]/60 dark:bg-[#1D201F] rounded-[24px] border transition-all duration-200 p-3 min-h-[520px] max-h-[calc(100vh-210px)] ${
+                className={`flex flex-col bg-[#F1F5F4]/60 dark:bg-[#161A19] rounded-[24px] border transition-all duration-200 p-3 min-h-[520px] max-h-[calc(100vh-210px)] ${
                   isTarget
                     ? 'border-[#00695C] ring-2 ring-[#00695C]/20 bg-[#CCE8E1]/30 dark:bg-[#004F46]/20'
-                    : 'border-[#BEC9C5]/40 dark:border-[#3F4946]/40'
+                    : 'border-[#E2E8F0]/40 dark:border-[#334155]/40'
                 }`}
               >
                 {/* Stage Header */}
-                <div className="flex items-center justify-between px-1.5 py-1 mb-2 border-b border-[#BEC9C5]/30 dark:border-[#3F4946]/30">
+                <div className="flex items-center justify-between px-1.5 py-1 mb-2 border-b border-[#E2E8F0]/30 dark:border-[#334155]/30">
                   <div className="flex items-center space-x-2 min-w-0">
                     <span className={`w-2.5 h-2.5 rounded-full ${stage.dotBg}`} aria-hidden="true" />
-                    <h3 className="font-semibold text-xs text-[#191C1B] dark:text-[#E1E3E0] m3-title-small truncate">
+                    <h3 className="font-semibold text-xs text-[#0F172A] dark:text-[#F1F5F9] m3-title-small truncate">
                       {stage.title}
                     </h3>
                   </div>
-                  <span className="text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-[#F8FAF8] dark:bg-[#272B2A] border border-[#BEC9C5]/40 dark:border-[#3F4946]/40 text-[#191C1B] dark:text-[#E1E3E0] tabular-nums">
+                  <span className="text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-[#F8FAF9] dark:bg-[#1E293B] border border-[#E2E8F0]/40 dark:border-[#334155]/40 text-[#0F172A] dark:text-[#F1F5F9] tabular-nums">
                     {stageLeads.length}
                   </span>
                 </div>
 
                 {/* Deal Value Subtitle */}
                 {stageValue > 0 && (
-                  <div className="px-1.5 pb-2 text-[11px] text-[#6F7976] font-normal">
-                    Total: <span className="font-semibold text-[#191C1B] dark:text-[#E1E3E0] tabular-nums font-mono">{formatCurrency(stageValue)}</span>
+                  <div className="px-1.5 pb-2 text-[11px] text-[#475569] font-normal">
+                    Total: <span className="font-semibold text-[#0F172A] dark:text-[#F1F5F9] tabular-nums font-mono">{formatCurrency(stageValue)}</span>
                   </div>
                 )}
 
@@ -403,9 +403,9 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                   ))}
 
                   {stageLeads.length === 0 && (
-                    <div className="h-32 border border-dashed border-[#BEC9C5]/60 dark:border-[#3F4946]/60 rounded-[18px] flex flex-col items-center justify-center p-3 text-center text-[#6F7976] group/empty hover:border-[#00695C]/50 transition-colors">
-                      <p className="text-xs font-medium text-[#191C1B] dark:text-[#E1E3E0]">No leads in stage</p>
-                      <p className="text-[10px] text-[#6F7976] mt-0.5">Drop card here to update stage</p>
+                    <div className="h-32 border border-dashed border-[#E2E8F0]/60 dark:border-[#334155]/60 rounded-[18px] flex flex-col items-center justify-center p-3 text-center text-[#475569] group/empty hover:border-[#00695C]/50 transition-colors">
+                      <p className="text-xs font-medium text-[#0F172A] dark:text-[#F1F5F9]">No leads in stage</p>
+                      <p className="text-[10px] text-[#475569] mt-0.5">Drop card here to update stage</p>
                       {onOpenAddLead && (
                         <button
                           type="button"
@@ -430,7 +430,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
       {(selectedLeadIds.size > 0 || isBulkMode) && (
         <div
           id="bulk-edit-bar"
-          className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 bg-[#00201B] dark:bg-[#1D201F] text-white px-5 py-3 rounded-full shadow-2xl border border-[#004F46] dark:border-[#3F4946] flex flex-wrap items-center gap-3 max-w-[95vw] sm:max-w-3xl animate-in fade-in slide-in-from-bottom-4 duration-200"
+          className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 bg-[#00201B] dark:bg-[#161A19] text-white px-5 py-3 rounded-full shadow-2xl border border-[#004F46] dark:border-[#334155] flex flex-wrap items-center gap-3 max-w-[95vw] sm:max-w-3xl animate-in fade-in slide-in-from-bottom-4 duration-200"
         >
           {/* Select all toggle */}
           <button

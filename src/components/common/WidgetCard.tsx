@@ -65,14 +65,14 @@ export const WidgetCard: React.FC<WidgetCardProps> = ({
 
   const cardContent = (
     <div
-      className={`bg-[#F8FAF8] dark:bg-[#1D201F] rounded-[24px] border border-[#BEC9C5]/40 dark:border-[#3F4946]/40 shadow-xs flex flex-col overflow-hidden transition-all duration-200 ${className} ${
+      className={`bg-[#FFFFFF] dark:bg-[#161A19] rounded-[24px] border border-[#E2E8F0] dark:border-[#334155] shadow-xs flex flex-col overflow-hidden transition-all duration-200 ${className} ${
         isExpanded ? 'fixed inset-4 z-50 shadow-2xl p-4' : ''
       }`}
     >
       {/* Header Chrome */}
-      <div className="px-4 py-3.5 border-b border-[#BEC9C5]/30 dark:border-[#3F4946]/30 flex flex-wrap items-center justify-between gap-2.5 bg-[#ECEFEC]/60 dark:bg-[#1D201F]/60">
+      <div className="px-4 py-3.5 border-b border-[#E2E8F0] dark:border-[#334155] flex flex-wrap items-center justify-between gap-2.5 bg-[#F8FAF9] dark:bg-[#111514]">
         <div className="flex items-center space-x-2.5 min-w-0">
-          <h3 className="text-xs font-semibold text-[#191C1B] dark:text-[#E1E3E0] m3-title-small truncate">
+          <h3 className="text-xs font-semibold text-[#0F172A] dark:text-[#F1F5F9] font-heading truncate">
             {title}
           </h3>
           {badge && (
@@ -81,7 +81,7 @@ export const WidgetCard: React.FC<WidgetCardProps> = ({
             </span>
           )}
           {subtitle && (
-            <span className="text-[11px] text-[#6F7976] hidden sm:inline truncate">• {subtitle}</span>
+            <span className="text-[11px] text-[#475569] dark:text-[#94A3B8] hidden sm:inline truncate">• {subtitle}</span>
           )}
         </div>
 
@@ -89,14 +89,14 @@ export const WidgetCard: React.FC<WidgetCardProps> = ({
           {/* Inline search if enabled */}
           {showSearch && (
             <div className="relative">
-              <Search className="w-3.5 h-3.5 text-[#6F7976] absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <Search className="w-3.5 h-3.5 text-[#94A3B8] absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
               <input
                 type="text"
                 placeholder={searchPlaceholder}
                 aria-label={`Search within ${title}`}
                 value={searchValue}
                 onChange={(e) => onSearchChange && onSearchChange(e.target.value)}
-                className="w-28 sm:w-36 pl-7 pr-2.5 py-1.5 text-xs rounded-full bg-[#ECEFEC] dark:bg-[#272B2A] border border-transparent text-[#191C1B] dark:text-[#E1E3E0] placeholder-[#6F7976] focus:outline-none focus:ring-2 focus:ring-[#00695C] transition-all"
+                className="w-28 sm:w-36 pl-7 pr-2.5 py-1.5 text-xs rounded-full bg-white dark:bg-[#1E293B] border border-[#E2E8F0] dark:border-[#334155] text-[#0F172A] dark:text-[#F1F5F9] placeholder-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-[#00695C] transition-all"
               />
             </div>
           )}
@@ -108,7 +108,7 @@ export const WidgetCard: React.FC<WidgetCardProps> = ({
             value={selectedRange}
             onChange={handleRangeSelect}
             aria-label={`Time range filter for ${title}`}
-            className="text-xs font-medium rounded-full px-3 py-1.5 m3-select"
+            className="text-xs font-medium rounded-full px-3 py-1.5 bg-white dark:bg-[#1E293B] border border-[#E2E8F0] dark:border-[#334155] text-[#0F172A] dark:text-[#F1F5F9] focus:outline-none focus:ring-2 focus:ring-[#00695C] cursor-pointer"
           >
             {timeRanges.map((r) => (
               <option key={r} value={r}>
@@ -118,13 +118,13 @@ export const WidgetCard: React.FC<WidgetCardProps> = ({
           </select>
 
           {/* Last refreshed timestamp + manual refresh icon */}
-          <div className="flex items-center space-x-1 pl-1 text-[10px] text-[#6F7976]">
+          <div className="flex items-center space-x-1 pl-1 text-[10px] text-[#475569] dark:text-[#94A3B8]">
             <span className="hidden md:inline tabular-nums">{formattedRefreshed}</span>
             <button
               type="button"
               onClick={handleManualRefresh}
               aria-label={`Refresh data for ${title}`}
-              className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-[#ECEFEC] dark:hover:bg-[#272B2A] text-[#6F7976] hover:text-[#191C1B] dark:hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00695C] transition-colors"
+              className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-[#F1F5F4] dark:hover:bg-[#1E293B] text-[#475569] hover:text-[#0F172A] dark:text-[#94A3B8] dark:hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00695C] transition-colors"
               title="Refresh widget data"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin text-[#00695C] dark:text-[#80D5C4]' : ''}`} />
@@ -136,7 +136,7 @@ export const WidgetCard: React.FC<WidgetCardProps> = ({
             type="button"
             onClick={() => setIsExpanded(!isExpanded)}
             aria-label={isExpanded ? `Collapse ${title}` : `Expand ${title} full screen`}
-            className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-[#ECEFEC] dark:hover:bg-[#272B2A] text-[#6F7976] hover:text-[#191C1B] dark:hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00695C] transition-colors"
+            className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-[#F1F5F4] dark:hover:bg-[#1E293B] text-[#475569] hover:text-[#0F172A] dark:text-[#94A3B8] dark:hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00695C] transition-colors"
             title={isExpanded ? 'Collapse' : 'Expand full screen'}
           >
             {isExpanded ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}

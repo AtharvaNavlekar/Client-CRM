@@ -12,11 +12,11 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(
     const elevationClasses: Record<CardElevation, string> = {
       flat: 'bg-transparent border-none shadow-none',
       surface:
-        'bg-[#FFFFFF] dark:bg-[#161A19] border border-[#E2E8F0] dark:border-[#334155] shadow-2xs rounded-2xl',
+        'bg-[#FFFFFF] dark:bg-[#161A19] border border-[#E2E8F0] dark:border-[#334155] shadow-xs rounded-[24px]',
       interactive:
-        'bg-[#FFFFFF] dark:bg-[#161A19] border border-[#E2E8F0] dark:border-[#334155] hover:border-[#00695C]/60 dark:hover:border-[#80D5C4]/60 shadow-2xs hover:shadow-xs transition-all duration-200 cursor-pointer rounded-2xl',
+        'bg-[#FFFFFF] dark:bg-[#161A19] border border-[#E2E8F0] dark:border-[#334155] hover:border-[#00695C]/60 dark:hover:border-[#80D5C4]/60 shadow-xs hover:shadow-sm transition-all duration-200 cursor-pointer rounded-[24px]',
       elevated:
-        'bg-[#FFFFFF] dark:bg-[#161A19] border border-[#E2E8F0] dark:border-[#334155] shadow-sm dark:shadow-black/40 rounded-2xl'
+        'bg-[#FFFFFF] dark:bg-[#161A19] border border-[#E2E8F0] dark:border-[#334155] shadow-sm dark:shadow-black/40 rounded-[24px]'
     };
 
     return (

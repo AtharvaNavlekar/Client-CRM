@@ -133,7 +133,7 @@ export const LeadPreferencePortalModal: React.FC<LeadPreferencePortalModalProps>
         className="bg-white dark:bg-slate-900 w-full max-w-lg rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden flex flex-col max-h-[90vh]"
       >
         {/* Mobile Portal Device Header Banner */}
-        <div className="bg-gradient-to-r from-[#1F3A5F] to-[#2E6E5C] text-white p-5">
+        <div className="bg-gradient-to-r from-[#1E293B] to-[#00695C] text-white p-5">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white">
@@ -250,7 +250,7 @@ export const LeadPreferencePortalModal: React.FC<LeadPreferencePortalModalProps>
                     }}
                     className={`p-3 rounded-xl border text-xs font-semibold flex flex-col items-center justify-center space-y-1.5 transition-all text-center ${
                       isSel
-                        ? 'bg-[#1F3A5F] text-white border-[#1F3A5F] shadow-xs'
+                        ? 'bg-[#1E293B] text-white border-[#1E293B] shadow-xs'
                         : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-teal-500'
                     }`}
                   >
@@ -285,7 +285,7 @@ export const LeadPreferencePortalModal: React.FC<LeadPreferencePortalModalProps>
                     onClick={() => setTimeWindow(tw as PreferredTimeWindow)}
                     className={`p-2.5 px-3 rounded-xl border text-xs font-semibold flex items-center justify-between transition-all ${
                       isSel
-                        ? 'bg-[#2E6E5C] text-white border-[#2E6E5C]'
+                        ? 'bg-[#00695C] text-white border-[#00695C]'
                         : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-teal-500'
                     }`}
                   >
@@ -345,7 +345,7 @@ export const LeadPreferencePortalModal: React.FC<LeadPreferencePortalModalProps>
             </button>
             <button
               type="submit"
-              className="px-5 py-2 rounded-xl text-xs font-bold bg-[#1F3A5F] hover:bg-[#182f4d] text-white flex items-center space-x-1.5 shadow-sm transition-all"
+              className="px-5 py-2 rounded-xl text-xs font-bold bg-[#1E293B] hover:bg-[#182f4d] text-white flex items-center space-x-1.5 shadow-sm transition-all"
             >
               <span>Save My Preferences</span>
               <ChevronRight className="w-4 h-4" />

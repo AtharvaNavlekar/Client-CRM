@@ -10,12 +10,12 @@ import {
   LifeBuoy,
   Activity,
   ShieldCheck,
-  Shield,
   Settings,
   ChevronLeft,
   ChevronRight,
   Phone,
-  X
+  X,
+  BarChart3
 } from 'lucide-react';
 import { useAuth, usePolicy } from '../../context/AuthContext';
 import { StatusBadge } from '../ui/Badge';
@@ -31,7 +31,7 @@ export type NavView =
   | 'whatsapp'
   | 'support'
   | 'activity'
-  | 'platform'
+  | 'reports'
   | 'settings';
 
 interface SidebarProps {
@@ -41,6 +41,7 @@ interface SidebarProps {
   onCloseMobile?: () => void;
   callbacksDueCount?: number;
   openTicketsCount?: number;
+  leadsCount?: number;
 }
 
 interface NavItemConfig {
@@ -55,7 +56,7 @@ interface NavItemConfig {
 
 interface NavSection {
   title: string;
-  pillar: string;
+  pillar?: string;
   items: NavItemConfig[];
 }
 
@@ -65,7 +66,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   isOpenMobile = false,
   onCloseMobile = () => {},
   callbacksDueCount = 0,
-  openTicketsCount = 0
+  openTicketsCount = 0,
+  leadsCount = 0
 }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const { currentUser } = useAuth();
@@ -76,27 +78,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
     onCloseMobile();
   };
 
-  // Structured logically around DialPulse's 4 Operational Pillars
+  // Structured for the primary Client-Facing CRM experience
   const sections: NavSection[] = [
     {
-      title: 'Capture & Pipeline',
-      pillar: 'Pillar 1',
+      title: 'Workspace',
       items: [
         {
-          id: 'leads',
-          label: 'Leads Table',
-          shortLabel: 'Leads',
-          icon: Table,
-          badgeText: '124',
-          badgeTone: 'neutral',
-          desc: 'Manage leads & ownership'
-        },
-        {
-          id: 'pipeline',
-          label: 'Pipeline Board',
-          shortLabel: 'Pipeline',
-          icon: Kanban,
-          desc: 'Kanban sales workflow'
+          id: 'dashboard',
+          label: 'Dashboard',
+          shortLabel: 'Dash',
+          icon: LayoutDashboard,
+          desc: 'Operational KPI telemetry & funnels'
         },
         {
           id: 'home',
@@ -108,39 +100,58 @@ export const Sidebar: React.FC<SidebarProps> = ({
       ]
     },
     {
-      title: 'Communicate',
-      pillar: 'Pillar 2',
+      title: 'Capture',
       items: [
         {
-          id: 'calls',
-          label: 'Call Console',
-          shortLabel: 'Calls',
-          icon: PhoneCall,
-          badgeText: callbacksDueCount > 0 ? `${callbacksDueCount} due` : null,
-          badgeTone: callbacksDueCount > 0 ? 'warning' : undefined,
-          desc: 'Dialer & dispositions'
+          id: 'leads',
+          label: 'Leads',
+          shortLabel: 'Leads',
+          icon: Table,
+          badgeText: leadsCount > 0 ? `${leadsCount}` : null,
+          badgeTone: 'neutral',
+          desc: 'Manage leads & ownership'
         },
         {
-          id: 'whatsapp',
-          label: 'WhatsApp WACA',
-          shortLabel: 'Chat',
-          icon: MessageSquare,
-          badgeText: 'Official API',
-          badgeTone: 'primary',
-          desc: 'Meta Cloud API inbox'
+          id: 'pipeline',
+          label: 'Pipeline',
+          shortLabel: 'Pipeline',
+          icon: Kanban,
+          desc: 'Kanban sales workflow'
         }
       ]
     },
     {
-      title: 'Manage & Supervise',
-      pillar: 'Pillar 3',
+      title: 'Communicate',
       items: [
         {
-          id: 'dashboard',
-          label: 'Dashboard',
-          shortLabel: 'Dash',
-          icon: LayoutDashboard,
-          desc: 'Operational KPI telemetry'
+          id: 'calls',
+          label: 'Calls',
+          shortLabel: 'Calls',
+          icon: PhoneCall,
+          badgeText: callbacksDueCount > 0 ? `${callbacksDueCount} due` : null,
+          badgeTone: callbacksDueCount > 0 ? 'warning' : undefined,
+          desc: 'Dialer & callback reminders'
+        },
+        {
+          id: 'whatsapp',
+          label: 'Messages',
+          shortLabel: 'Messages',
+          icon: MessageSquare,
+          badgeText: 'Official API',
+          badgeTone: 'primary',
+          desc: 'WhatsApp WACA Cloud inbox'
+        }
+      ]
+    },
+    {
+      title: 'Operate',
+      items: [
+        {
+          id: 'reports',
+          label: 'Reports',
+          shortLabel: 'Reports',
+          icon: BarChart3,
+          desc: 'Team telecalling & conversion reports'
         },
         {
           id: 'leaderboard',
@@ -151,16 +162,30 @@ export const Sidebar: React.FC<SidebarProps> = ({
         },
         {
           id: 'support',
-          label: 'Support Tickets',
+          label: 'Support',
           shortLabel: 'Support',
           icon: LifeBuoy,
           badgeText: openTicketsCount > 0 ? `${openTicketsCount}` : null,
           badgeTone: openTicketsCount > 0 ? 'error' : undefined,
-          desc: 'SLA escalations & help'
+          desc: 'Help & ticket escalations'
+        }
+      ]
+    },
+    {
+      title: 'Protect',
+      items: [
+        {
+          id: 'compliance',
+          label: 'Compliance',
+          shortLabel: 'Trust',
+          icon: ShieldCheck,
+          badgeText: 'Active',
+          badgeTone: 'success',
+          desc: 'Fatigue guard & DND quiet hours'
         },
         {
           id: 'activity',
-          label: 'Activity Logs',
+          label: 'Activity / Audit',
           shortLabel: 'Audit',
           icon: Activity,
           desc: 'Security & mutation trail'
@@ -168,42 +193,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
       ]
     },
     {
-      title: 'Comply & Protect',
-      pillar: 'Pillar 4',
+      title: 'Workspace Settings',
       items: [
         {
-          id: 'compliance',
-          label: 'Trust & Compliance',
-          shortLabel: 'Trust',
-          icon: ShieldCheck,
-          badgeText: 'Active',
-          badgeTone: 'success',
-          desc: 'Fatigue guard & DND checks'
-        },
-        ...(currentUser?.isPlatformStaff
-          ? [
-              {
-                id: 'platform' as NavView,
-                label: 'Platform Ops',
-                shortLabel: 'Ops',
-                icon: Shield,
-                badgeText: 'Admin',
-                badgeTone: 'info' as const,
-                desc: 'Multi-tenant infrastructure'
-              }
-            ]
-          : []),
-        ...(can('manage:policy')
-          ? [
-              {
-                id: 'settings' as NavView,
-                label: 'Admin Settings',
-                shortLabel: 'Settings',
-                icon: Settings,
-                desc: 'RBAC policies & tenant config'
-              }
-            ]
-          : [])
+          id: 'settings',
+          label: 'Settings',
+          shortLabel: 'Settings',
+          icon: Settings,
+          desc: 'Teams, RBAC policies & workspace setup'
+        }
       ]
     }
   ];
@@ -234,8 +232,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <div className="h-16 px-4 flex items-center justify-between border-b border-[#E2E8F0] dark:border-[#334155] bg-[#FFFFFF] dark:bg-[#111514] shrink-0">
           <div className="flex items-center gap-3 min-w-0">
             {/* Primary DialPulse Emblem */}
-            <div className="w-9 h-9 rounded-xl bg-[#00695C] dark:bg-[#80D5C4] flex items-center justify-center text-white dark:text-[#003830] shadow-xs shrink-0">
-              <Phone className="w-5 h-5 text-current" />
+            <div className="w-9 h-9 rounded-full bg-[#00695C] dark:bg-[#80D5C4] flex items-center justify-center text-white dark:text-[#003830] shadow-xs shrink-0">
+              <Phone className="w-4 h-4 text-current" />
             </div>
 
             {!isCollapsed && (
@@ -244,11 +242,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   <span className="font-bold text-base font-heading tracking-tight text-[#0F172A] dark:text-[#F1F5F9] truncate">
                     DialPulse
                   </span>
-                  <span className="text-[10px] font-semibold px-1.5 py-0.2 rounded bg-[#CCE8E1] dark:bg-[#004F46] text-[#00201B] dark:text-[#A3F2E4] uppercase">
+                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#CCE8E1] dark:bg-[#004F46] text-[#00201B] dark:text-[#A3F2E4] uppercase">
                     CRM
                   </span>
                 </div>
-                <p className="text-[11px] text-[#64748B] dark:text-[#94A3B8] truncate leading-tight">
+                <p className="text-[11px] text-[#475569] dark:text-[#94A3B8] truncate leading-tight">
                   Telecalling &amp; WhatsApp
                 </p>
               </div>
@@ -260,7 +258,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             type="button"
             onClick={onCloseMobile}
             aria-label="Close navigation sidebar"
-            className="w-8 h-8 rounded-lg flex items-center justify-center text-[#64748B] hover:text-[#0F172A] dark:text-[#94A3B8] dark:hover:text-[#F1F5F9] hover:bg-[#F1F5F4] dark:hover:bg-[#1E293B] lg:hidden"
+            className="w-8 h-8 rounded-full flex items-center justify-center text-[#475569] hover:text-[#0F172A] dark:text-[#94A3B8] dark:hover:text-[#F1F5F9] hover:bg-[#F1F5F4] dark:hover:bg-[#1E293B] lg:hidden"
           >
             <X className="w-4 h-4" />
           </button>
@@ -272,12 +270,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <div key={sec.title} className="space-y-1">
               {!isCollapsed ? (
                 <div className="px-2 pt-1 pb-1 flex items-center justify-between">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#64748B] dark:text-[#94A3B8]">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#475569] dark:text-[#94A3B8]">
                     {sec.title}
                   </span>
-                  <span className="text-[9px] font-mono text-[#94A3B8] dark:text-[#64748B]">
-                    {sec.pillar}
-                  </span>
+                  {sec.pillar && (
+                    <span className="text-[9px] font-mono text-[#94A3B8] dark:text-[#64748B]">
+                      {sec.pillar}
+                    </span>
+                  )}
                 </div>
               ) : (
                 secIdx > 0 && (
@@ -298,7 +298,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       onClick={() => handleSelect(item.id)}
                       title={isCollapsed ? `${item.label} — ${item.desc}` : undefined}
                       aria-current={isActive ? 'page' : undefined}
-                      className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium transition-all group relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00695C] ${
+                      className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-full text-xs font-medium transition-all group relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00695C] ${
                         isActive
                           ? 'bg-[#CCE8E1] text-[#00201B] font-semibold dark:bg-[#004F46] dark:text-[#A3F2E4]'
                           : 'text-[#475569] dark:text-[#94A3B8] hover:bg-[#F1F5F4] dark:hover:bg-[#1E293B] hover:text-[#0F172A] dark:hover:text-[#F1F5F9]'
@@ -307,7 +307,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       {/* Active Indicator Bar */}
                       {isActive && (
                         <div
-                          className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-[#00695C] dark:bg-[#80D5C4] rounded-r-md"
+                          className="absolute left-1 top-1/2 -translate-y-1/2 w-1.5 h-4 bg-[#00695C] dark:bg-[#80D5C4] rounded-full"
                           aria-hidden="true"
                         />
                       )}
@@ -316,7 +316,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         className={`w-4 h-4 shrink-0 transition-colors ${
                           isActive
                             ? 'text-[#00695C] dark:text-[#80D5C4]'
-                            : 'text-[#64748B] dark:text-[#94A3B8] group-hover:text-[#0F172A] dark:group-hover:text-[#F1F5F9]'
+                            : 'text-[#475569] dark:text-[#94A3B8] group-hover:text-[#0F172A] dark:group-hover:text-[#F1F5F9]'
                         }`}
                       />
 
@@ -348,7 +348,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             type="button"
             onClick={() => setIsCollapsed(!isCollapsed)}
             aria-label={isCollapsed ? 'Expand navigation sidebar' : 'Collapse navigation sidebar'}
-            className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs font-medium text-[#475569] dark:text-[#94A3B8] hover:bg-[#E2E8F0] dark:hover:bg-[#1E293B] hover:text-[#0F172A] dark:hover:text-[#F1F5F9] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00695C]"
+            className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-full text-xs font-medium text-[#475569] dark:text-[#94A3B8] hover:bg-[#E2E8F0] dark:hover:bg-[#1E293B] hover:text-[#0F172A] dark:hover:text-[#F1F5F9] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00695C]"
           >
             {isCollapsed ? (
               <ChevronRight className="w-4 h-4" />

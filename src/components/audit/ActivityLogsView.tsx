@@ -22,6 +22,7 @@ import {
 import { AuditLog } from '../../types';
 import { SkeletonBox } from '../skeletons/M3Skeleton';
 import { useAuth } from '../../context/AuthContext';
+import { api } from '../../services/api';
 
 export const ActivityLogsView: React.FC = () => {
   const { currentUser } = useAuth();
@@ -45,16 +46,7 @@ export const ActivityLogsView: React.FC = () => {
     if (showRefreshSpinner) setIsRefreshing(true);
     setError(null);
     try {
-      const token = localStorage.getItem('dialpulse_token');
-      const response = await fetch('/api/audit-logs', {
-        headers: token ? { Authorization: `Bearer ${token}` } : {}
-      });
-
-      if (!response.ok) {
-        throw new Error(`Failed to load audit logs: ${response.status}`);
-      }
-
-      const data = await response.json();
+      const data = await api.getAuditLogs();
       setLogs(Array.isArray(data) ? data : []);
     } catch (err: any) {
       console.error('Audit logs fetch error:', err);
@@ -107,12 +99,13 @@ export const ActivityLogsView: React.FC = () => {
 
       // Status / Gating filter
       if (statusFilter !== 'all') {
+        const eventType = (log.eventType || '').toUpperCase();
         if (statusFilter === 'denied') {
-          if (!log.eventTypeincludes('DENIED')) return false;
+          if (!eventType.includes('DENIED')) return false;
         } else if (statusFilter === 'approval_gated') {
-          if (!log.metadata?.requiredApproval && !log.eventTypeincludes('EXPORT')) return false;
+          if (!log.metadata?.requiredApproval && !eventType.includes('EXPORT')) return false;
         } else if (statusFilter === 'standard') {
-          if (log.eventTypeincludes('DENIED') || log.metadata?.requiredApproval) return false;
+          if (eventType.includes('DENIED') || log.metadata?.requiredApproval) return false;
         }
       }
 
@@ -216,7 +209,7 @@ export const ActivityLogsView: React.FC = () => {
       );
     }
     return (
-      <span className="inline-flex items-center space-x-1 px-2.5 py-1 rounded-full bg-[#ECEFEC] dark:bg-[#272B2A] text-[#191C1B] dark:text-[#E1E3E0] text-[11px] font-semibold">
+      <span className="inline-flex items-center space-x-1 px-2.5 py-1 rounded-full bg-[#F1F5F4] dark:bg-[#1E293B] text-[#0F172A] dark:text-[#F1F5F9] text-[11px] font-semibold">
         <CheckCircle2 className="w-3 h-3 text-[#00695C] dark:text-[#80D5C4]" />
         <span>{action}</span>
       </span>
@@ -224,9 +217,9 @@ export const ActivityLogsView: React.FC = () => {
   };
 
   return (
-    <div className="flex-1 flex flex-col h-full bg-[#F8FAF8] dark:bg-[#111413] text-[#191C1B] dark:text-[#E1E3E0] overflow-hidden">
+    <div className="flex-1 flex flex-col h-full bg-[#F8FAF9] dark:bg-[#111514] text-[#0F172A] dark:text-[#F1F5F9] overflow-hidden">
       {/* View Header */}
-      <div className="p-4 lg:p-6 pb-3 bg-[#F8FAF8] dark:bg-[#111413] border-b border-[#BEC9C5]/40 dark:border-[#3F4946]/40 space-y-4 shrink-0">
+      <div className="p-4 lg:p-6 pb-3 bg-[#F8FAF9] dark:bg-[#111514] border-b border-[#E2E8F0]/40 dark:border-[#334155]/40 space-y-4 shrink-0">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center space-x-3">
             <div className="w-11 h-11 rounded-2xl bg-[#CCE8E1] dark:bg-[#005046] text-[#00201B] dark:text-[#A3F2E4] flex items-center justify-center shrink-0 shadow-xs">
@@ -234,14 +227,14 @@ export const ActivityLogsView: React.FC = () => {
             </div>
             <div>
               <div className="flex items-center space-x-2">
-                <h1 className="text-xl font-bold tracking-tight text-[#191C1B] dark:text-[#E1E3E0]">
+                <h1 className="text-xl font-bold tracking-tight text-[#0F172A] dark:text-[#F1F5F9]">
                   System Activity &amp; Audit Logs
                 </h1>
                 <span className="px-2 py-0.5 rounded-full bg-[#00695C] text-white text-[10px] font-mono uppercase font-bold">
                   Immutable
                 </span>
               </div>
-              <p className="text-xs text-[#6F7976] dark:text-[#89938F]">
+              <p className="text-xs text-[#475569] dark:text-[#94A3B8]">
                 Real-time tracking of authorization decisions, gated exports, and operator actions.
               </p>
             </div>
@@ -255,7 +248,7 @@ export const ActivityLogsView: React.FC = () => {
               onClick={() => fetchLogs(true)}
               disabled={isRefreshing}
               aria-label="Refresh activity logs"
-              className="touch-target-48 rounded-full border border-[#BEC9C5]/60 dark:border-[#3F4946]/60 bg-white dark:bg-[#191C1B] text-[#3F4946] dark:text-[#BEC9C5] hover:bg-[#ECEFEC] dark:hover:bg-[#272B2A] transition-colors flex items-center justify-center"
+              className="touch-target-48 rounded-full border border-[#E2E8F0]/60 dark:border-[#334155]/60 bg-white dark:bg-[#161A19] text-[#475569] dark:text-[#94A3B8] hover:bg-[#F1F5F4] dark:hover:bg-[#1E293B] transition-colors flex items-center justify-center"
               title="Refresh Logs"
             >
               <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin text-[#00695C]' : ''}`} />
@@ -266,7 +259,7 @@ export const ActivityLogsView: React.FC = () => {
               id="btn-export-audit-logs"
               onClick={handleExportFilteredLogs}
               disabled={filteredLogs.length === 0}
-              className="min-h-[44px] px-4 rounded-full border border-[#BEC9C5] dark:border-[#3F4946] text-xs font-semibold text-[#191C1B] dark:text-[#E1E3E0] hover:bg-[#ECEFEC] dark:hover:bg-[#272B2A] flex items-center space-x-2 transition-colors disabled:opacity-50"
+              className="min-h-[44px] px-4 rounded-full border border-[#E2E8F0] dark:border-[#334155] text-xs font-semibold text-[#0F172A] dark:text-[#F1F5F9] hover:bg-[#F1F5F4] dark:hover:bg-[#1E293B] flex items-center space-x-2 transition-colors disabled:opacity-50"
             >
               <Download className="w-4 h-4" />
               <span>Export CSV</span>
@@ -276,19 +269,19 @@ export const ActivityLogsView: React.FC = () => {
 
         {/* Top 4 KPI Metrics Tiles */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <div className="p-3.5 rounded-2xl bg-white dark:bg-[#191C1B] border border-[#BEC9C5]/30 dark:border-[#3F4946]/30 flex items-center justify-between">
+          <div className="p-3.5 rounded-2xl bg-white dark:bg-[#161A19] border border-[#E2E8F0]/30 dark:border-[#334155]/30 flex items-center justify-between">
             <div>
-              <p className="text-[11px] text-[#6F7976] dark:text-[#89938F] uppercase font-semibold tracking-wider">
+              <p className="text-[11px] text-[#475569] dark:text-[#94A3B8] uppercase font-semibold tracking-wider">
                 Total Events
               </p>
-              <p className="text-xl font-bold font-mono text-[#191C1B] dark:text-[#E1E3E0] mt-0.5">
+              <p className="text-xl font-bold font-mono text-[#0F172A] dark:text-[#F1F5F9] mt-0.5">
                 {metrics.total}
               </p>
             </div>
             <Activity className="w-5 h-5 text-[#00695C] dark:text-[#80D5C4]" />
           </div>
 
-          <div className="p-3.5 rounded-2xl bg-white dark:bg-[#191C1B] border border-[#BEC9C5]/30 dark:border-[#3F4946]/30 flex items-center justify-between">
+          <div className="p-3.5 rounded-2xl bg-white dark:bg-[#161A19] border border-[#E2E8F0]/30 dark:border-[#334155]/30 flex items-center justify-between">
             <div>
               <p className="text-[11px] text-red-600 dark:text-red-400 uppercase font-semibold tracking-wider">
                 Access Denied
@@ -300,7 +293,7 @@ export const ActivityLogsView: React.FC = () => {
             <Lock className="w-5 h-5 text-red-600 dark:text-red-400" />
           </div>
 
-          <div className="p-3.5 rounded-2xl bg-white dark:bg-[#191C1B] border border-[#BEC9C5]/30 dark:border-[#3F4946]/30 flex items-center justify-between">
+          <div className="p-3.5 rounded-2xl bg-white dark:bg-[#161A19] border border-[#E2E8F0]/30 dark:border-[#334155]/30 flex items-center justify-between">
             <div>
               <p className="text-[11px] text-amber-600 dark:text-amber-400 uppercase font-semibold tracking-wider">
                 Approval Gated
@@ -312,12 +305,12 @@ export const ActivityLogsView: React.FC = () => {
             <ShieldAlert className="w-5 h-5 text-amber-600 dark:text-amber-400" />
           </div>
 
-          <div className="p-3.5 rounded-2xl bg-white dark:bg-[#191C1B] border border-[#BEC9C5]/30 dark:border-[#3F4946]/30 flex items-center justify-between">
+          <div className="p-3.5 rounded-2xl bg-white dark:bg-[#161A19] border border-[#E2E8F0]/30 dark:border-[#334155]/30 flex items-center justify-between">
             <div>
-              <p className="text-[11px] text-[#6F7976] dark:text-[#89938F] uppercase font-semibold tracking-wider">
+              <p className="text-[11px] text-[#475569] dark:text-[#94A3B8] uppercase font-semibold tracking-wider">
                 Active Actors
               </p>
-              <p className="text-xl font-bold font-mono text-[#191C1B] dark:text-[#E1E3E0] mt-0.5">
+              <p className="text-xl font-bold font-mono text-[#0F172A] dark:text-[#F1F5F9] mt-0.5">
                 {metrics.actors}
               </p>
             </div>
@@ -329,7 +322,7 @@ export const ActivityLogsView: React.FC = () => {
         <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
           {/* Search bar */}
           <div className="relative flex-1 min-w-[260px] max-w-md">
-            <Search className="w-4 h-4 text-[#6F7976] dark:text-[#89938F] absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-[#475569] dark:text-[#94A3B8] absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               placeholder="Search by action, user, IP, or keywords..."
@@ -338,13 +331,13 @@ export const ActivityLogsView: React.FC = () => {
                 setSearchQuery(e.target.value);
                 setCurrentPage(1);
               }}
-              className="w-full h-11 pl-10 pr-9 text-xs bg-[#ECEFEC] dark:bg-[#1D201F] text-[#191C1B] dark:text-[#E1E3E0] rounded-full border border-transparent focus:border-[#00695C] focus:ring-2 focus:ring-[#00695C]/20 focus:outline-none placeholder-[#6F7976]"
+              className="w-full h-11 pl-10 pr-9 text-xs bg-[#F1F5F4] dark:bg-[#161A19] text-[#0F172A] dark:text-[#F1F5F9] rounded-full border border-transparent focus:border-[#00695C] focus:ring-2 focus:ring-[#00695C]/20 focus:outline-none placeholder-[#475569]"
             />
             {searchQuery && (
               <button
                 type="button"
                 onClick={() => setSearchQuery('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-[#6F7976] hover:text-[#191C1B] rounded-full"
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-[#475569] hover:text-[#0F172A] rounded-full"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
@@ -361,7 +354,7 @@ export const ActivityLogsView: React.FC = () => {
                 setCurrentPage(1);
               }}
               aria-label="Filter by event category"
-              className="h-10 px-3 text-xs font-medium rounded-full dark:bg-[#1D201F] border-[#BEC9C5]/50 dark:border-[#3F4946]/50 focus:ring-[#00695C]/30 m3-select-bare bg-transparent border-none"
+              className="h-10 px-3 text-xs font-medium rounded-full dark:bg-[#161A19] border-[#E2E8F0]/50 dark:border-[#334155]/50 focus:ring-[#00695C]/30 m3-select-bare bg-transparent border-none"
             >
               <option value="all">All Categories</option>
               <option value="security">Security &amp; Denials</option>
@@ -379,7 +372,7 @@ export const ActivityLogsView: React.FC = () => {
                 setCurrentPage(1);
               }}
               aria-label="Filter by user role"
-              className="h-10 px-3 text-xs font-medium rounded-full dark:bg-[#1D201F] border-[#BEC9C5]/50 dark:border-[#3F4946]/50 focus:ring-[#00695C]/30 m3-select-bare bg-transparent border-none"
+              className="h-10 px-3 text-xs font-medium rounded-full dark:bg-[#161A19] border-[#E2E8F0]/50 dark:border-[#334155]/50 focus:ring-[#00695C]/30 m3-select-bare bg-transparent border-none"
             >
               <option value="all">All Roles</option>
               <option value="owner">Owner</option>
@@ -398,7 +391,7 @@ export const ActivityLogsView: React.FC = () => {
                 setCurrentPage(1);
               }}
               aria-label="Filter by authorization status"
-              className="h-10 px-3 text-xs font-medium rounded-full dark:bg-[#1D201F] border-[#BEC9C5]/50 dark:border-[#3F4946]/50 focus:ring-[#00695C]/30 m3-select-bare bg-transparent border-none"
+              className="h-10 px-3 text-xs font-medium rounded-full dark:bg-[#161A19] border-[#E2E8F0]/50 dark:border-[#334155]/50 focus:ring-[#00695C]/30 m3-select-bare bg-transparent border-none"
             >
               <option value="all">All Statuses</option>
               <option value="denied">Access Denied Only</option>
@@ -435,13 +428,13 @@ export const ActivityLogsView: React.FC = () => {
           </div>
         ) : paginatedLogs.length === 0 ? (
           <div className="flex-1 flex flex-col items-center justify-center p-8 text-center">
-            <div className="w-16 h-16 rounded-full bg-[#ECEFEC] dark:bg-[#272B2A] flex items-center justify-center text-[#6F7976] mb-3">
+            <div className="w-16 h-16 rounded-full bg-[#F1F5F4] dark:bg-[#1E293B] flex items-center justify-center text-[#475569] mb-3">
               <Shield className="w-8 h-8" />
             </div>
-            <p className="text-base font-semibold text-[#191C1B] dark:text-[#E1E3E0]">
+            <p className="text-base font-semibold text-[#0F172A] dark:text-[#F1F5F9]">
               No audit events matched your filter criteria.
             </p>
-            <p className="text-xs text-[#6F7976] dark:text-[#89938F] mt-1 max-w-sm">
+            <p className="text-xs text-[#475569] dark:text-[#94A3B8] mt-1 max-w-sm">
               Try adjusting your search keywords or resetting category filters to display all logged events.
             </p>
             <button
@@ -458,12 +451,12 @@ export const ActivityLogsView: React.FC = () => {
             </button>
           </div>
         ) : (
-          <div className="flex-1 flex flex-col bg-white dark:bg-[#191C1B] rounded-3xl border border-[#BEC9C5]/40 dark:border-[#3F4946]/40 overflow-hidden shadow-xs">
+          <div className="flex-1 flex flex-col bg-white dark:bg-[#161A19] rounded-3xl border border-[#E2E8F0]/40 dark:border-[#334155]/40 overflow-hidden shadow-xs">
             {/* Scrollable Table Container */}
             <div className="flex-1 overflow-auto">
               <table className="w-full text-left border-collapse text-xs">
                 {/* Table Header */}
-                <thead className="sticky top-0 z-10 bg-[#ECEFEC] dark:bg-[#272B2A] text-[#3F4946] dark:text-[#BEC9C5] font-semibold border-b border-[#BEC9C5]/40 dark:border-[#3F4946]/40 uppercase text-[10px] tracking-wider">
+                <thead className="sticky top-0 z-10 bg-[#F1F5F4] dark:bg-[#1E293B] text-[#475569] dark:text-[#94A3B8] font-semibold border-b border-[#E2E8F0]/40 dark:border-[#334155]/40 uppercase text-[10px] tracking-wider">
                   <tr>
                     <th className="py-3.5 px-4 w-44">Timestamp</th>
                     <th className="py-3.5 px-4 w-44">Event / Action</th>
@@ -476,7 +469,7 @@ export const ActivityLogsView: React.FC = () => {
                 </thead>
 
                 {/* Table Body */}
-                <tbody className="divide-y divide-[#BEC9C5]/20 dark:divide-[#3F4946]/20">
+                <tbody className="divide-y divide-[#E2E8F0]/20 dark:divide-[#475569]/20">
                   {paginatedLogs.map((log) => {
                     const isExpanded = expandedLogId === log.id;
                     return (
@@ -484,7 +477,7 @@ export const ActivityLogsView: React.FC = () => {
                         <tr
                           onClick={() => toggleExpand(log.id)}
                           className={`hover:bg-[#F2F5F2] dark:hover:bg-[#202322] cursor-pointer transition-colors ${
-                            log.eventTypeincludes('DENIED')
+                            (log.eventType || '').includes('DENIED')
                               ? 'bg-red-50/40 dark:bg-red-950/20'
                               : log.metadata?.requiredApproval
                               ? 'bg-amber-50/40 dark:bg-amber-950/20'
@@ -492,7 +485,7 @@ export const ActivityLogsView: React.FC = () => {
                           }`}
                         >
                           {/* Timestamp */}
-                          <td className="py-3.5 px-4 whitespace-nowrap text-[#6F7976] dark:text-[#89938F] font-mono text-[11px]">
+                          <td className="py-3.5 px-4 whitespace-nowrap text-[#475569] dark:text-[#94A3B8] font-mono text-[11px]">
                             {formatTimestamp(log.occurredAt)}
                           </td>
 
@@ -508,10 +501,10 @@ export const ActivityLogsView: React.FC = () => {
                                 {log.actorUserId.charAt(0)}
                               </div>
                               <div className="min-w-0">
-                                <p className="font-semibold text-[#191C1B] dark:text-[#E1E3E0] truncate">
+                                <p className="font-semibold text-[#0F172A] dark:text-[#F1F5F9] truncate">
                                   {log.actorUserId}
                                 </p>
-                                <p className="text-[10px] text-[#6F7976] dark:text-[#89938F] uppercase font-mono">
+                                <p className="text-[10px] text-[#475569] dark:text-[#94A3B8] uppercase font-mono">
                                   {log.actorRole}
                                 </p>
                               </div>
@@ -520,19 +513,19 @@ export const ActivityLogsView: React.FC = () => {
 
                           {/* Scope */}
                           <td className="py-3.5 px-4 hidden md:table-cell whitespace-nowrap">
-                            <span className="font-mono text-[10px] px-2 py-0.5 rounded-md bg-[#ECEFEC] dark:bg-[#272B2A] text-[#3F4946] dark:text-[#BEC9C5] uppercase font-bold">
+                            <span className="font-mono text-[10px] px-2 py-0.5 rounded-md bg-[#F1F5F4] dark:bg-[#1E293B] text-[#475569] dark:text-[#94A3B8] uppercase font-bold">
                               {log.scope || 'SYSTEM'}
                             </span>
                           </td>
 
                           {/* IP Address */}
-                          <td className="py-3.5 px-4 hidden lg:table-cell whitespace-nowrap font-mono text-[11px] text-[#6F7976] dark:text-[#89938F]">
+                          <td className="py-3.5 px-4 hidden lg:table-cell whitespace-nowrap font-mono text-[11px] text-[#475569] dark:text-[#94A3B8]">
                             {log.ip}
                           </td>
 
                           {/* Details */}
                           <td className="py-3.5 px-4">
-                            <p className="text-[#191C1B] dark:text-[#E1E3E0] font-sans leading-relaxed line-clamp-2">
+                            <p className="text-[#0F172A] dark:text-[#F1F5F9] font-sans leading-relaxed line-clamp-2">
                               {log.reason}
                             </p>
                           </td>
@@ -542,7 +535,7 @@ export const ActivityLogsView: React.FC = () => {
                             <button
                               type="button"
                               aria-label="Expand audit details"
-                              className="p-1 rounded-full text-[#6F7976] hover:text-[#191C1B] dark:hover:text-[#E1E3E0]"
+                              className="p-1 rounded-full text-[#475569] hover:text-[#0F172A] dark:hover:text-[#F1F5F9]"
                             >
                               {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                             </button>
@@ -551,14 +544,14 @@ export const ActivityLogsView: React.FC = () => {
 
                         {/* Expandable JSON Detail Drawer */}
                         {isExpanded && (
-                          <tr className="bg-[#ECEFEC]/70 dark:bg-[#151817]">
-                            <td colSpan={7} className="p-4 px-6 border-b border-[#BEC9C5]/40 dark:border-[#3F4946]/40">
+                          <tr className="bg-[#F1F5F4]/70 dark:bg-[#151817]">
+                            <td colSpan={7} className="p-4 px-6 border-b border-[#E2E8F0]/40 dark:border-[#334155]/40">
                               <div className="space-y-2">
-                                <div className="flex items-center justify-between text-xs font-semibold text-[#6F7976] dark:text-[#89938F]">
+                                <div className="flex items-center justify-between text-xs font-semibold text-[#475569] dark:text-[#94A3B8]">
                                   <span>Full Audit Event Metadata (JSON)</span>
                                   <span className="font-mono text-[10px]">ID: {log.id}</span>
                                 </div>
-                                <pre className="p-3 rounded-2xl bg-white dark:bg-[#111413] border border-[#BEC9C5]/40 dark:border-[#3F4946]/40 text-[11px] font-mono text-[#00695C] dark:text-[#80D5C4] overflow-x-auto leading-relaxed">
+                                <pre className="p-3 rounded-2xl bg-white dark:bg-[#111514] border border-[#E2E8F0]/40 dark:border-[#334155]/40 text-[11px] font-mono text-[#00695C] dark:text-[#80D5C4] overflow-x-auto leading-relaxed">
                                   {JSON.stringify(log, null, 2)}
                                 </pre>
                               </div>
@@ -573,8 +566,8 @@ export const ActivityLogsView: React.FC = () => {
             </div>
 
             {/* Table Pagination Footer */}
-            <div className="p-3 px-4 bg-[#F8FAF8] dark:bg-[#1D201F] border-t border-[#BEC9C5]/30 dark:border-[#3F4946]/30 flex items-center justify-between text-xs shrink-0">
-              <span className="text-[#6F7976] dark:text-[#89938F]">
+            <div className="p-3 px-4 bg-[#F8FAF9] dark:bg-[#161A19] border-t border-[#E2E8F0]/30 dark:border-[#334155]/30 flex items-center justify-between text-xs shrink-0">
+              <span className="text-[#475569] dark:text-[#94A3B8]">
                 Showing {Math.min((currentPage - 1) * pageSize + 1, totalCount)} -{' '}
                 {Math.min(currentPage * pageSize, totalCount)} of {totalCount} events
               </span>
@@ -584,7 +577,7 @@ export const ActivityLogsView: React.FC = () => {
                   type="button"
                   onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                   disabled={currentPage === 1}
-                  className="px-3 py-1 rounded-full border border-[#BEC9C5] dark:border-[#3F4946] text-xs font-medium disabled:opacity-40"
+                  className="px-3 py-1 rounded-full border border-[#E2E8F0] dark:border-[#334155] text-xs font-medium disabled:opacity-40"
                 >
                   Previous
                 </button>
@@ -595,7 +588,7 @@ export const ActivityLogsView: React.FC = () => {
                   type="button"
                   onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                   disabled={currentPage === totalPages}
-                  className="px-3 py-1 rounded-full border border-[#BEC9C5] dark:border-[#3F4946] text-xs font-medium disabled:opacity-40"
+                  className="px-3 py-1 rounded-full border border-[#E2E8F0] dark:border-[#334155] text-xs font-medium disabled:opacity-40"
                 >
                   Next
                 </button>

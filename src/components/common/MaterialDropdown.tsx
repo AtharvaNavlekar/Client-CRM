@@ -171,12 +171,12 @@ export const MaterialDropdown: React.FC<MaterialDropdownProps> = ({
 
   const triggerBase = isChip
     ? // Chip variant: bare inline trigger, no bg/border — parent chip provides those
-      'inline-flex items-center gap-1.5 bg-transparent text-xs font-medium text-[#191C1B] dark:text-[#E1E3E0] cursor-pointer outline-none transition-colors'
+      'inline-flex items-center gap-1.5 bg-transparent text-xs font-medium text-[#0F172A] dark:text-[#F1F5F9] cursor-pointer outline-none transition-colors'
     : // Form variant: full-width bordered container
-      'w-full flex items-center justify-between gap-2 min-h-[44px] px-4 py-2.5 text-xs font-medium bg-[#ECEFEC] dark:bg-[#272B2A] text-[#191C1B] dark:text-[#E1E3E0] border border-[#BEC9C5]/40 dark:border-[#3F4946]/40 rounded-xl hover:border-[#BEC9C5] dark:hover:border-[#3F4946] focus-visible:ring-2 focus-visible:ring-[#00695C] cursor-pointer outline-none transition-all';
+      'w-full flex items-center justify-between gap-2 min-h-[44px] px-4 py-2.5 text-xs font-medium bg-[#FFFFFF] dark:bg-[#161A19] text-[#0F172A] dark:text-[#F1F5F9] border border-[#E2E8F0] dark:border-[#334155] rounded-full hover:border-[#94A3B8] focus-visible:ring-2 focus-visible:ring-[#00695C] cursor-pointer outline-none transition-all';
 
   const menuBase =
-    'absolute z-50 mt-1.5 min-w-[180px] max-h-[240px] overflow-y-auto rounded-2xl bg-white dark:bg-[#1D201F] border border-[#BEC9C5]/30 dark:border-[#3F4946]/50 shadow-lg py-1.5 focus:outline-none';
+    'absolute z-50 mt-1.5 min-w-[180px] max-h-[240px] overflow-y-auto rounded-[20px] bg-white dark:bg-[#161A19] border border-[#E2E8F0] dark:border-[#334155] shadow-xl py-1.5 focus:outline-none';
 
   const menuPosition = isChip ? 'left-0' : 'left-0 right-0';
 
@@ -201,7 +201,7 @@ export const MaterialDropdown: React.FC<MaterialDropdownProps> = ({
       >
         {/* Label prefix */}
         {label && (
-          <span className="text-[11px] text-[#6F7976] dark:text-[#89938F] font-medium shrink-0">
+          <span className="text-[11px] text-[#475569] dark:text-[#94A3B8] font-medium shrink-0">
             {label}
           </span>
         )}
@@ -214,13 +214,13 @@ export const MaterialDropdown: React.FC<MaterialDropdownProps> = ({
               {selectedOption.label}
             </span>
           ) : (
-            <span className="text-[#6F7976] dark:text-[#89938F]">{placeholder}</span>
+            <span className="text-[#94A3B8]">{placeholder}</span>
           )}
         </span>
 
         {/* Chevron */}
         <ChevronDown
-          className={`w-3.5 h-3.5 shrink-0 text-[#6F7976] dark:text-[#89938F] transition-transform duration-200 ${
+          className={`w-3.5 h-3.5 shrink-0 text-[#94A3B8] transition-transform duration-200 ${
             isOpen ? 'rotate-180' : ''
           }`}
         />
@@ -249,14 +249,14 @@ export const MaterialDropdown: React.FC<MaterialDropdownProps> = ({
                 onClick={() => handleSelect(option.value)}
                 onMouseEnter={() => setHighlightedIndex(idx)}
                 className={`
-                  flex items-center gap-2.5 px-3.5 py-2.5 mx-1.5 rounded-xl cursor-pointer text-xs font-medium
+                  flex items-center gap-2.5 px-3 py-2 mx-1.5 rounded-xl cursor-pointer text-xs font-medium
                   transition-colors duration-100 select-none
                   ${
                     isSelected
-                      ? 'bg-[#CCE8E1] dark:bg-[#004F46] text-[#00201B] dark:text-[#A3F2E4]'
+                      ? 'bg-[#CCE8E1] dark:bg-[#004F46] text-[#00201B] dark:text-[#A3F2E4] font-semibold'
                       : isHighlighted
-                        ? 'bg-[#E8F5E9] dark:bg-[#1D3A33] text-[#191C1B] dark:text-[#E1E3E0]'
-                        : 'text-[#191C1B] dark:text-[#E1E3E0] hover:bg-[#E8F5E9] dark:hover:bg-[#1D3A33]'
+                        ? 'bg-[#F1F5F4] dark:bg-[#1E293B] text-[#0F172A] dark:text-[#F1F5F9]'
+                        : 'text-[#0F172A] dark:text-[#F1F5F9] hover:bg-[#F1F5F4] dark:hover:bg-[#1E293B]'
                   }
                 `}
               >

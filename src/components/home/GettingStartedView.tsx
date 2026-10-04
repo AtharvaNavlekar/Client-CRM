@@ -60,7 +60,7 @@ export const GettingStartedView: React.FC<GettingStartedViewProps> = ({
       <div className="flex-1 p-5 space-y-6 max-w-6xl">
         {/* Welcome Header */}
         <div className="space-y-1">
-          <div className="inline-flex items-center space-x-1.5 text-xs font-bold text-[#2E6E5C] dark:text-emerald-400 uppercase tracking-wider bg-emerald-50 dark:bg-emerald-950 px-2.5 py-1 rounded-md border border-emerald-200 dark:border-emerald-800/60">
+          <div className="inline-flex items-center space-x-1.5 text-xs font-bold text-[#00695C] dark:text-emerald-400 uppercase tracking-wider bg-emerald-50 dark:bg-emerald-950 px-2.5 py-1 rounded-md border border-emerald-200 dark:border-emerald-800/60">
             <Sparkles className="w-3.5 h-3.5" />
             <span>Workspace Setup &amp; Admin Hub</span>
           </div>
@@ -114,7 +114,7 @@ export const GettingStartedView: React.FC<GettingStartedViewProps> = ({
               <button
                 type="button"
                 onClick={() => setModalType('excel')}
-                className="mt-4 w-full py-2 px-3 text-xs font-bold rounded-lg bg-[#2E6E5C] text-white hover:bg-[#255a4b] transition-colors flex items-center justify-center space-x-1.5"
+                className="mt-4 w-full py-2 px-3 text-xs font-bold rounded-lg bg-[#00695C] text-white hover:bg-[#255a4b] transition-colors flex items-center justify-center space-x-1.5"
               >
                 <span>Import Leads</span>
                 <ChevronRight className="w-3.5 h-3.5" />
@@ -189,7 +189,7 @@ export const GettingStartedView: React.FC<GettingStartedViewProps> = ({
             <button
               type="button"
               onClick={() => alert('Viewing all 15+ integrations (IndiaMART, Justdial, Zapier, TradeIndia, Meta & Webhook APIs)')}
-              className="text-xs font-bold text-[#2E6E5C] hover:underline flex items-center space-x-1"
+              className="text-xs font-bold text-[#00695C] hover:underline flex items-center space-x-1"
             >
               <span>Explore All Integrations</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -241,7 +241,7 @@ export const GettingStartedView: React.FC<GettingStartedViewProps> = ({
                   className={`px-3.5 py-1.5 text-xs font-bold rounded-lg transition-colors ${
                     fbConnected
                       ? 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200'
-                      : 'bg-[#2E6E5C] text-white hover:bg-[#255a4b]'
+                      : 'bg-[#00695C] text-white hover:bg-[#255a4b]'
                   }`}
                 >
                   {fbConnected ? 'Disconnect' : 'Connect'}
@@ -293,7 +293,7 @@ export const GettingStartedView: React.FC<GettingStartedViewProps> = ({
                   className={`px-3.5 py-1.5 text-xs font-bold rounded-lg transition-colors ${
                     sheetsConnected
                       ? 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200'
-                      : 'bg-[#2E6E5C] text-white hover:bg-[#255a4b]'
+                      : 'bg-[#00695C] text-white hover:bg-[#255a4b]'
                   }`}
                 >
                   {sheetsConnected ? 'Disconnect' : 'Connect'}
@@ -309,7 +309,7 @@ export const GettingStartedView: React.FC<GettingStartedViewProps> = ({
         {/* Native Apps Promotion Panel */}
         <div className="space-y-3">
           <div className="flex items-center space-x-2">
-            <Smartphone className="w-4 h-4 text-[#2E6E5C]" />
+            <Smartphone className="w-4 h-4 text-[#00695C]" />
             <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
               Native Mobile Apps
             </h3>
@@ -357,7 +357,7 @@ export const GettingStartedView: React.FC<GettingStartedViewProps> = ({
 
         {/* Proactive Support Nudge */}
         <div className="p-4 rounded-2xl bg-emerald-50/80 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 space-y-3">
-          <div className="w-9 h-9 rounded-xl bg-[#2E6E5C] text-white flex items-center justify-center shadow-xs">
+          <div className="w-9 h-9 rounded-xl bg-[#00695C] text-white flex items-center justify-center shadow-xs">
             <Headphones className="w-5 h-5" />
           </div>
 
@@ -373,7 +373,7 @@ export const GettingStartedView: React.FC<GettingStartedViewProps> = ({
           <button
             type="button"
             onClick={() => setModalType('support')}
-            className="w-full py-2 px-3 text-xs font-bold rounded-lg bg-[#2E6E5C] text-white hover:bg-[#255a4b] transition-colors shadow-2xs"
+            className="w-full py-2 px-3 text-xs font-bold rounded-lg bg-[#00695C] text-white hover:bg-[#255a4b] transition-colors shadow-2xs"
           >
             Request Support
           </button>
@@ -406,7 +406,7 @@ export const GettingStartedView: React.FC<GettingStartedViewProps> = ({
               {modalType === 'excel' && (
                 <div className="space-y-3">
                   <div className="border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl p-6 text-center space-y-2">
-                    <Upload className="w-8 h-8 text-[#2E6E5C] mx-auto" />
+                    <Upload className="w-8 h-8 text-[#00695C] mx-auto" />
                     <p className="font-bold text-slate-900 dark:text-slate-100">
                       Drag &amp; drop your customer roster here
                     </p>
@@ -485,7 +485,7 @@ export const GettingStartedView: React.FC<GettingStartedViewProps> = ({
               <button
                 type="button"
                 onClick={() => setModalType(null)}
-                className="px-4 py-1.5 text-xs font-bold rounded-lg bg-[#2E6E5C] text-white hover:bg-[#255a4b]"
+                className="px-4 py-1.5 text-xs font-bold rounded-lg bg-[#00695C] text-white hover:bg-[#255a4b]"
               >
                 Done
               </button>

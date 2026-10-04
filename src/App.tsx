@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Sidebar } from './components/layout/Sidebar';
 import { TopBar } from './components/layout/TopBar';
 import { BottomNavBar } from './components/layout/BottomNavBar';
@@ -6,7 +6,7 @@ import { LeadsListView } from './components/leads/LeadsListView';
 import { DashboardView } from './components/dashboard/DashboardView';
 import { LeaderboardView } from './components/leaderboard/LeaderboardView';
 import { GettingStartedView } from './components/home/GettingStartedView';
-import { PlatformDashboardView } from './components/platform/PlatformDashboardView';
+import { ReportsView } from './components/reports/ReportsView';
 import { KanbanBoard } from './components/pipeline/KanbanBoard';
 import { AddLeadModal } from './components/pipeline/AddLeadModal';
 import { BulkImportModal } from './components/pipeline/BulkImportModal';
@@ -23,7 +23,7 @@ import { Plus } from 'lucide-react';
 import { Lead, Call, Message, LeadStage } from './types';
 import { useAuth, AuthProvider, AuthContext } from './context/AuthContext';
 import { ThemeProvider, ThemeContext } from './context/ThemeContext';
-import { api } from './services/api';
+import { api, setAppSecurityLocked } from './services/api';
 import { useIsMobile } from './utils/useBreakpoint';
 import { useDevToolsDeterrence } from './utils/deterrence';
 import { useAutomationDetection } from './utils/automationDetection';
@@ -40,11 +40,50 @@ export const ENABLE_DEVTOOLS_DETERRENCE = true;
 export const ENABLE_AUTOMATION_DETECTION = true;
 
 const AppContent: React.FC = () => {
-  const { currentUser, users, isLoading } = useAuth();
+  const { currentUser, users, isLoading, logout } = useAuth();
 
   // Feature 1 & 2 Security Deterrence Hooks
-  const { isDevToolsOpen, dismissWarning: dismissDevToolsWarning } = useDevToolsDeterrence(ENABLE_DEVTOOLS_DETERRENCE);
+  const { isSecurityLocked, lockState } = useDevToolsDeterrence(ENABLE_DEVTOOLS_DETERRENCE, {
+    consecutiveSamplesRequired: 3,
+    consecutiveClearRequired: 3,
+    sampleIntervalMs: 450,
+    sessionTimeoutMs: 60000,
+    onSessionTimeout: () => {
+      // Secure logout when persistent lock state exceeds timeout threshold
+      logout();
+    }
+  });
   const { isAutomated: isAutomatedBrowser, detectionReasons, dismissWarning: dismissAutomationWarning } = useAutomationDetection(ENABLE_AUTOMATION_DETECTION);
+
+  // Synchronize security lock state with API service & dispatch telemetry event
+  const hasLoggedSecurityEventRef = useRef(false);
+  useEffect(() => {
+    setAppSecurityLocked(isSecurityLocked);
+    if (isSecurityLocked && !hasLoggedSecurityEventRef.current) {
+      hasLoggedSecurityEventRef.current = true;
+      api.logSecurityEvent({
+        eventType: 'CLIENT_DEVTOOLS_RESTRICTION_TRIGGERED',
+        detectionCategory: 'devtools_restriction',
+        metadata: {
+          timestamp: new Date().toISOString()
+        }
+      });
+    } else if (!isSecurityLocked) {
+      hasLoggedSecurityEventRef.current = false;
+    }
+  }, [isSecurityLocked]);
+
+  // When SECURITY_LOCKED becomes active, immediately collapse all modals and sensitive action drawers
+  useEffect(() => {
+    if (isSecurityLocked) {
+      setIsAddLeadOpen(false);
+      setIsBulkImportOpen(false);
+      setSelectedLeadForDetail(null);
+      setActiveCallingLead(null);
+      setActiveChatLeadId(null);
+      setIsMobileSidebarOpen(false);
+    }
+  }, [isSecurityLocked]);
 
   // Navigation state: defaults to 'leads'
   const [currentView, setCurrentView] = useState<string>('leads');
@@ -71,6 +110,11 @@ const AppContent: React.FC = () => {
 
   // Real Data Fetcher
   const loadCrmData = useCallback(async () => {
+    if (isSecurityLocked) {
+      setIsLoadingData(false);
+      setIsRefreshing(false);
+      return;
+    }
     setIsLoadingData(true);
     setDataError(null);
     try {
@@ -89,23 +133,25 @@ const AppContent: React.FC = () => {
       setIsLoadingData(false);
       setIsRefreshing(false);
     }
-  }, []);
+  }, [isSecurityLocked]);
 
-  // Fetch when authenticated user is available
+  // Fetch when authenticated user is available and not locked
   useEffect(() => {
-    if (currentUser) {
+    if (currentUser && !isSecurityLocked) {
       loadCrmData();
     }
-  }, [currentUser, loadCrmData]);
+  }, [currentUser, isSecurityLocked, loadCrmData]);
 
   // Refresh handler
   const handleRefreshAll = () => {
+    if (isSecurityLocked) return;
     setIsRefreshing(true);
     loadCrmData();
   };
 
   // Handler: Single Lead update (persisted via API)
   const handleUpdateLead = async (updated: Lead) => {
+    if (isSecurityLocked) return;
     setLeads((prev) => prev.map((l) => (l.id === updated.id ? updated : l)));
     if (selectedLeadForDetail?.id === updated.id) {
       setSelectedLeadForDetail(updated);
@@ -119,6 +165,7 @@ const AppContent: React.FC = () => {
 
   // Handler: Bulk update leads (persisted via API)
   const handleBulkUpdate = async (leadIds: string[], updates: Partial<Lead>) => {
+    if (isSecurityLocked) return;
     const idSet = new Set(leadIds);
     setLeads((prev) =>
       prev.map((l) => (idSet.has(l.id) ? { ...l, ...updates } : l))
@@ -132,17 +179,20 @@ const AppContent: React.FC = () => {
 
   // Handler: Start Call simulation
   const handleStartCall = (lead: Lead) => {
+    if (isSecurityLocked) return;
     setActiveCallingLead(lead);
   };
 
   // Handler: Open WhatsApp Chat
   const handleOpenWhatsApp = (lead: Lead) => {
+    if (isSecurityLocked) return;
     setActiveChatLeadId(lead.id);
     setCurrentView('whatsapp');
   };
 
   // Handler: Select Lead for Detail Inspection Modal
   const handleSelectLeadForDetail = (lead: Lead) => {
+    if (isSecurityLocked) return;
     setSelectedLeadForDetail(lead);
   };
 
@@ -173,8 +223,7 @@ const AppContent: React.FC = () => {
           reasons={detectionReasons}
         />
         <DevToolsWarningOverlay
-          isOpen={isDevToolsOpen}
-          onDismiss={dismissDevToolsWarning}
+          isOpen={isSecurityLocked}
         />
         <LoginModal />
       </>
@@ -182,22 +231,32 @@ const AppContent: React.FC = () => {
   }
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-[#F8FAF9] dark:bg-[#111514] font-body text-[#0F172A] dark:text-[#F1F5F9] antialiased selection:bg-[#00695C] selection:text-white">
-      {/* DevTools Deterrence Full-Screen Warning Overlay */}
+    <div
+      className="flex h-screen w-screen overflow-hidden bg-[#F8FAF9] dark:bg-[#111514] font-body text-[#0F172A] dark:text-[#F1F5F9] antialiased selection:bg-[#00695C] selection:text-white relative"
+    >
+      {/* DevTools Deterrence Full-Screen Opaque Security Lock Screen */}
       <DevToolsWarningOverlay
-        isOpen={isDevToolsOpen}
-        onDismiss={dismissDevToolsWarning}
+        isOpen={isSecurityLocked}
       />
 
-      {/* Icon-only Collapsible Left Sidebar */}
-      <Sidebar
-        currentView={currentView}
-        onViewChange={(view) => setCurrentView(view)}
-        isOpenMobile={isMobileSidebarOpen}
-        onCloseMobile={() => setIsMobileSidebarOpen(false)}
-        callbacksDueCount={callbacksDueCount}
-        openTicketsCount={1}
-      />
+      {/* Main CRM Application Content: Inert and obscured when SECURITY_LOCKED */}
+      <div
+        className="flex h-full w-full overflow-hidden"
+        inert={isSecurityLocked ? true : undefined}
+        aria-hidden={isSecurityLocked ? true : undefined}
+      >
+        {/* Icon-only Collapsible Left Sidebar */}
+        <Sidebar
+          currentView={currentView}
+          onViewChange={(view) => {
+            if (!isSecurityLocked) setCurrentView(view);
+          }}
+          isOpenMobile={isMobileSidebarOpen}
+          onCloseMobile={() => setIsMobileSidebarOpen(false)}
+          callbacksDueCount={callbacksDueCount}
+          openTicketsCount={1}
+          leadsCount={leads.length}
+        />
 
       {/* Main Content Viewport */}
       <div className="flex flex-col flex-1 h-full min-w-0 overflow-hidden">
@@ -365,9 +424,9 @@ const AppContent: React.FC = () => {
             </div>
           )}
 
-          {currentView === 'platform' && (
-            <div className="flex-1 overflow-y-auto bg-[#F4F7F6] dark:bg-[#121414]">
-              <PlatformDashboardView />
+          {currentView === 'reports' && (
+            <div className="p-4 flex-1 overflow-y-auto">
+              <ReportsView />
             </div>
           )}
         </main>
@@ -480,6 +539,7 @@ const AppContent: React.FC = () => {
           </button>
         </div>
       )}
+      </div>
     </div>
   );
 };

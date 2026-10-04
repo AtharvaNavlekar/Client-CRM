@@ -309,7 +309,7 @@ export const LeadDetailModal: React.FC<LeadDetailModalProps> = ({
                 <button
                   type="button"
                   onClick={handleSaveCallbackReminder}
-                  className="px-2 py-1 rounded-lg text-xs font-bold bg-[#2E6E5C] text-white hover:bg-[#235849] whitespace-nowrap"
+                  className="px-2 py-1 rounded-lg text-xs font-bold bg-[#00695C] text-white hover:bg-[#235849] whitespace-nowrap"
                 >
                   Set
                 </button>
@@ -336,7 +336,7 @@ export const LeadDetailModal: React.FC<LeadDetailModalProps> = ({
               rows={3}
               value={notesInput}
               onChange={(e) => setNotesInput(e.target.value)}
-              className="w-full p-3 text-xs bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#2E6E5C]"
+              className="w-full p-3 text-xs bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#00695C]"
               placeholder="Add key talking points, customer objections, or preferred timing..."
             />
           </div>
@@ -366,7 +366,7 @@ export const LeadDetailModal: React.FC<LeadDetailModalProps> = ({
                     const call = item.data as Call;
                     return (
                       <div key={call.id || idx} className="relative">
-                        <div className="absolute -left-8 top-1 w-7 h-7 rounded-full bg-[#1F3A5F] text-white flex items-center justify-center text-xs shadow-xs">
+                        <div className="absolute -left-8 top-1 w-7 h-7 rounded-full bg-[#1E293B] text-white flex items-center justify-center text-xs shadow-xs">
                           <Phone className="w-3.5 h-3.5 text-teal-300" />
                         </div>
                         <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-700">

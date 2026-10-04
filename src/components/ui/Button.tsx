@@ -3,11 +3,15 @@ import { Loader2 } from 'lucide-react';
 
 export type ButtonVariant =
   | 'primary'
+  | 'filled'
   | 'secondary'
   | 'tonal'
   | 'outline'
+  | 'outlined'
   | 'destructive'
-  | 'ghost';
+  | 'ghost'
+  | 'text'
+  | 'elevated';
 
 export type ButtonSize = 'sm' | 'md' | 'lg' | 'icon-sm' | 'icon-md';
 
@@ -35,9 +39,14 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const baseStyles =
-      'inline-flex items-center justify-center font-medium font-body transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00695C] dark:focus-visible:ring-[#80D5C4] focus-visible:ring-offset-2 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50 select-none cursor-pointer';
+      'inline-flex items-center justify-center font-medium font-body transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00695C] dark:focus-visible:ring-[#80D5C4] focus-visible:ring-offset-2 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50 select-none cursor-pointer rounded-full relative overflow-hidden group';
 
-    const variantStyles: Record<ButtonVariant, string> = {
+    const normalizedVariant: string =
+      variant === 'filled' ? 'primary' :
+      variant === 'outlined' ? 'outline' :
+      variant === 'text' ? 'ghost' : variant;
+
+    const variantStyles: Record<string, string> = {
       primary:
         'bg-[#00695C] hover:bg-[#005449] text-white shadow-xs dark:bg-[#80D5C4] dark:hover:bg-[#68c5b3] dark:text-[#003830]',
       secondary:
@@ -45,7 +54,9 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       tonal:
         'bg-[#CCE8E1] hover:bg-[#b4ded5] text-[#00201B] dark:bg-[#004F46] dark:hover:bg-[#006155] dark:text-[#A3F2E4]',
       outline:
-        'bg-transparent hover:bg-[#F8FAF9] text-[#0F172A] border border-[#E2E8F0] dark:border-[#334155] dark:text-[#F1F5F9] dark:hover:bg-[#161A19]',
+        'bg-transparent hover:bg-[#F8FAF9] text-[#0F172A] border border-[#94A3B8] dark:border-[#64748B] dark:text-[#F1F5F9] dark:hover:bg-[#161A19]',
+      elevated:
+        'bg-[#FFFFFF] dark:bg-[#161A19] text-[#00695C] dark:text-[#80D5C4] shadow-xs hover:shadow-sm border border-[#E2E8F0] dark:border-[#334155] hover:bg-[#F8FAF9]',
       destructive:
         'bg-[#BA1A1A] hover:bg-[#991515] text-white shadow-xs dark:bg-[#FFB4AB] dark:hover:bg-[#ffa095] dark:text-[#690005]',
       ghost:
@@ -53,30 +64,37 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     };
 
     const sizeStyles: Record<ButtonSize, string> = {
-      sm: 'h-8 px-3 text-xs rounded-lg gap-1.5 min-w-[32px]',
-      md: 'h-10 px-4 text-sm rounded-xl gap-2 min-w-[40px]',
-      lg: 'h-12 px-5 text-base rounded-xl gap-2.5 min-w-[48px]',
-      'icon-sm': 'h-8 w-8 rounded-lg p-0',
-      'icon-md': 'h-10 w-10 rounded-xl p-0 min-h-[44px] min-w-[44px]'
+      sm: 'h-8 px-3.5 text-xs rounded-full gap-1.5 min-w-[32px]',
+      md: 'h-10 px-4.5 text-sm rounded-full gap-2 min-w-[40px]',
+      lg: 'h-12 px-6 text-base rounded-full gap-2.5 min-w-[48px]',
+      'icon-sm': 'h-8 w-8 rounded-full p-0 flex items-center justify-center',
+      'icon-md': 'h-10 w-10 rounded-full p-0 min-h-[44px] min-w-[44px] flex items-center justify-center'
     };
 
     return (
       <button
         ref={ref}
         disabled={disabled || isLoading}
-        className={`${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${className}`}
+        className={`${baseStyles} ${variantStyles[normalizedVariant] || variantStyles.primary} ${sizeStyles[size]} ${className}`}
         {...props}
       >
+        {/* Subtle M3 state layer overlay */}
+        <span
+          className="absolute inset-0 bg-current opacity-0 group-hover:opacity-[0.06] group-active:opacity-[0.12] transition-opacity pointer-events-none rounded-full"
+          aria-hidden="true"
+        />
+
         {isLoading ? (
           <Loader2 className="w-4 h-4 animate-spin text-current" />
         ) : (
-          leftIcon && <span className="shrink-0">{leftIcon}</span>
+          leftIcon && <span className="shrink-0 relative z-10">{leftIcon}</span>
         )}
-        {children && <span>{children}</span>}
-        {!isLoading && rightIcon && <span className="shrink-0">{rightIcon}</span>}
+        {children && <span className="relative z-10">{children}</span>}
+        {!isLoading && rightIcon && <span className="shrink-0 relative z-10">{rightIcon}</span>}
       </button>
     );
   }
 );
 
 Button.displayName = 'Button';
+

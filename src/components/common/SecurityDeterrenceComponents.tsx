@@ -1,65 +1,108 @@
-import React from 'react';
-import { ShieldAlert, AlertTriangle, X, Terminal } from 'lucide-react';
+import React, { useEffect, useRef } from 'react';
+import { ShieldAlert, AlertTriangle, X, Lock } from 'lucide-react';
 
 interface DevToolsWarningOverlayProps {
   isOpen: boolean;
-  onDismiss: () => void;
+  onDismiss?: () => void; // Maintained as optional for backwards compatibility, but dismiss action is intentionally omitted
 }
 
 /**
- * Full-screen UX deterrence overlay shown when browser developer tools are detected.
- * Designed to provide a clear deterrence prompt without crashing the page or breaking user state.
+ * Full-screen Opaque Security Lock Screen shown when browser developer tools are detected.
+ *
+ * Implements strict security lock requirements:
+ * - Opaque background: Prevents any sensitive CRM state (leads, phone numbers, messages) from being visible.
+ * - Non-dismissible: No dismiss button, no close button, clicking outside does not dismiss.
+ * - Event containment: Prevents keyboard navigation (Escape, Tab) from escaping to underlying CRM controls.
+ * - Clear compliance copy without exposing internal technical detection details.
  */
-export const DevToolsWarningOverlay: React.FC<DevToolsWarningOverlayProps> = ({ isOpen, onDismiss }) => {
+export const DevToolsWarningOverlay: React.FC<DevToolsWarningOverlayProps> = ({ isOpen }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    // Trap focus inside the security overlay to prevent keyboard navigation to CRM controls
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Prevent Escape from bypassing
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
+
+      // Trap Tab key inside the lock screen
+      if (e.key === 'Tab') {
+        e.preventDefault();
+        e.stopPropagation();
+        if (containerRef.current) {
+          containerRef.current.focus();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown, { capture: true });
+
+    // Focus the lock container
+    if (containerRef.current) {
+      containerRef.current.focus();
+    }
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown, { capture: true });
+    };
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   return (
     <div
-      id="devtools-warning-overlay"
-      className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-950/80 backdrop-blur-md p-4 animate-in fade-in duration-200"
+      id="devtools-security-lock-screen"
+      ref={containerRef}
+      tabIndex={-1}
       role="alertdialog"
       aria-modal="true"
       aria-labelledby="devtools-warning-title"
+      aria-describedby="devtools-warning-desc"
+      onClick={(e) => e.stopPropagation()}
+      className="fixed inset-0 z-[999999] flex items-center justify-center bg-slate-950 p-4 select-none outline-none animate-in fade-in duration-150"
     >
-      <div className="relative w-full max-w-md rounded-2xl bg-white dark:bg-[#1E201F] p-6 shadow-2xl border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-100 text-center">
-        {/* Close / Dismiss button */}
-        <button
-          type="button"
-          onClick={onDismiss}
-          className="absolute top-4 right-4 p-1.5 rounded-full text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-          aria-label="Dismiss warning"
-          title="Dismiss warning"
-        >
-          <X className="w-5 h-5" />
-        </button>
-
-        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-500/10 text-amber-600 dark:text-amber-400">
-          <ShieldAlert className="w-7 h-7" />
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="relative w-full max-w-lg rounded-2xl bg-[#131722] p-8 shadow-2xl border border-slate-800 text-slate-100 text-center"
+      >
+        {/* Status Badge */}
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-950/80 border border-red-800/60 text-red-300 text-xs font-semibold tracking-wider uppercase mb-5">
+          <Lock className="w-3.5 h-3.5 text-red-400" />
+          <span>Security Lock Active</span>
         </div>
 
-        <h2 id="devtools-warning-title" className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+        {/* Shield Icon */}
+        <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-amber-500/10 text-amber-500 border border-amber-500/20">
+          <ShieldAlert className="w-8 h-8" />
+        </div>
+
+        {/* Primary Security Title */}
+        <h2 id="devtools-warning-title" className="text-xl font-bold tracking-tight text-white">
           Developer tools are restricted on this application.
         </h2>
 
-        <p className="mt-3 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-          Access to browser developer tools, console debugging, and source inspection is restricted by policy to protect enterprise client workflows.
+        {/* Supporting Copy */}
+        <p id="devtools-warning-desc" className="mt-3 text-sm text-slate-300 leading-relaxed">
+          Browser inspection tools are restricted while using DialPulse CRM. Close developer tools to continue.
         </p>
 
-        <div className="mt-4 p-3 rounded-xl bg-slate-50 dark:bg-[#161817] border border-slate-200/80 dark:border-slate-800 text-left text-xs text-slate-500 dark:text-slate-400 flex items-start space-x-2.5">
-          <Terminal className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
-          <span>
-            Please close the developer inspection drawer to continue using DialPulse CRM normally.
-          </span>
-        </div>
-
-        <div className="mt-6 flex flex-col sm:flex-row gap-2">
-          <button
-            type="button"
-            onClick={onDismiss}
-            className="w-full inline-flex justify-center items-center px-4 py-2.5 rounded-xl bg-[#00695C] text-white text-sm font-medium hover:bg-[#005449] active:scale-[0.99] transition-all shadow-sm"
-          >
-            I understand, dismiss warning
-          </button>
+        {/* Policy Box */}
+        <div className="mt-5 p-4 rounded-xl bg-slate-900/90 border border-slate-800 text-left text-xs text-slate-400 space-y-1.5">
+          <div className="font-semibold text-slate-200 flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+            Enterprise Data Protection Policy
+          </div>
+          <p>
+            For compliance and sensitive CRM data protection, UI access and interactions are suspended while inspection tools remain active.
+          </p>
+          <p className="text-slate-500 text-[11px] pt-1">
+            Once developer inspection tools are closed, application access will restore automatically. Unresolved lock states will terminate sessions for data security.
+          </p>
         </div>
       </div>
     </div>

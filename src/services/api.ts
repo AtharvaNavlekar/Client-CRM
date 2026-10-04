@@ -29,6 +29,7 @@ export function setStoredTokens(token: string | null): void {
     if (token) {
       sessionStorage.setItem(TOKEN_STORAGE_KEY, token);
       localStorage.setItem(TOKEN_STORAGE_KEY, token); // compatibility
+      localStorage.setItem('dialpulse_token', token);
     } else {
       sessionStorage.removeItem(TOKEN_STORAGE_KEY);
       localStorage.removeItem(TOKEN_STORAGE_KEY);
@@ -58,6 +59,15 @@ export class ApiError extends Error {
 
 let isRefreshing = false;
 let refreshSubscribers: ((token: string) => void)[] = [];
+let appSecurityLocked = false;
+
+export function setAppSecurityLocked(locked: boolean): void {
+  appSecurityLocked = locked;
+}
+
+export function isAppSecurityLocked(): boolean {
+  return appSecurityLocked;
+}
 
 function subscribeTokenRefresh(cb: (token: string) => void) {
   refreshSubscribers.push(cb);
@@ -69,6 +79,21 @@ function onRefreshed(token: string) {
 }
 
 async function authFetch(url: string, options: RequestInit = {}): Promise<Response> {
+  // If application is in SECURITY_LOCKED state, block outgoing CRM API calls
+  if (appSecurityLocked) {
+    const isAllowed =
+      url.includes('/api/auth/logout') ||
+      url.includes('/api/health') ||
+      url.includes('/api/security/events');
+    if (!isAllowed) {
+      throw new ApiError(
+        'Request blocked: Application is in SECURITY_LOCKED state due to active developer tools.',
+        423,
+        { code: 'SECURITY_LOCKED' }
+      );
+    }
+  }
+
   const token = getStoredToken();
   const headers = new Headers(options.headers || {});
 
@@ -332,11 +357,11 @@ export const api = {
     return res.json();
   },
 
-  async sendMessage(leadId: string, text: string, direction: 'inbound' | 'outbound' = 'outbound'): Promise<Message> {
+  async sendMessage(leadId: string, text: string, direction: 'inbound' | 'outbound' = 'outbound', overrideCompliance?: boolean): Promise<Message> {
     const res = await authFetch('/api/messages', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ leadId, text, direction })
+      body: JSON.stringify({ leadId, text, direction, overrideCompliance })
     });
     return res.json();
   },
@@ -502,5 +527,21 @@ export const api = {
       body: JSON.stringify({ enabled })
     });
     return res.json();
+  },
+
+  async logSecurityEvent(payload: {
+    eventType: string;
+    detectionCategory?: string;
+    metadata?: Record<string, any>;
+  }): Promise<void> {
+    try {
+      await authFetch('/api/security/events', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+    } catch {
+      // Telemetry failures are non-fatal
+    }
   }
 };

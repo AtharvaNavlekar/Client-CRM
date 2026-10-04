@@ -66,13 +66,13 @@ export const ReportsView: React.FC = () => {
           <div className="flex justify-center space-x-2">
             <button
               onClick={() => updateCurrentRole('tl')}
-              className="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#1F3A5F] text-white hover:bg-[#162A45]"
+              className="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#1E293B] text-white hover:bg-[#162A45]"
             >
               Switch to Team Lead
             </button>
             <button
               onClick={() => updateCurrentRole('owner')}
-              className="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#2E6E5C] text-white hover:bg-[#235b4c]"
+              className="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#00695C] text-white hover:bg-[#235b4c]"
             >
               Switch to Owner
             </button>
@@ -82,7 +82,7 @@ export const ReportsView: React.FC = () => {
     );
   }
 
-  if (isLoading || !stats) {
+  if (isLoading || !stats || !Array.isArray(stats.leadsBySource)) {
     return (
       <div className="p-12 text-center text-xs text-slate-400">
         Computing real-time telecalling metrics and team charts...
@@ -96,7 +96,7 @@ export const ReportsView: React.FC = () => {
       <div className="flex flex-wrap items-center justify-between gap-4 bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
         <div>
           <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 rounded-lg bg-[#1F3A5F] text-white flex items-center justify-center font-bold">
+            <div className="w-8 h-8 rounded-lg bg-[#1E293B] text-white flex items-center justify-center font-bold">
               <BarChart3 className="w-4 h-4 text-teal-300" />
             </div>
             <div>
@@ -193,7 +193,7 @@ export const ReportsView: React.FC = () => {
                 <YAxis allowDecimals={false} tick={{ fontSize: 11 }} />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: '#1F3A5F',
+                    backgroundColor: '#1E293B',
                     borderRadius: '12px',
                     color: '#fff',
                     border: 'none',
@@ -201,8 +201,8 @@ export const ReportsView: React.FC = () => {
                   }}
                 />
                 <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '8px' }} />
-                <Bar dataKey="totalCalls" name="Total Calls" fill="#1F3A5F" radius={[4, 4, 0, 0]} />
-                <Bar dataKey="convertedCalls" name="Converted Deals" fill="#2E6E5C" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="totalCalls" name="Total Calls" fill="#1E293B" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="convertedCalls" name="Converted Deals" fill="#00695C" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -232,7 +232,7 @@ export const ReportsView: React.FC = () => {
                 <YAxis allowDecimals={false} tick={{ fontSize: 11 }} />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: '#1F3A5F',
+                    backgroundColor: '#1E293B',
                     borderRadius: '12px',
                     color: '#fff',
                     border: 'none',
@@ -240,8 +240,8 @@ export const ReportsView: React.FC = () => {
                   }}
                 />
                 <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '8px' }} />
-                <Line type="monotone" dataKey="Total" stroke="#1F3A5F" strokeWidth={2.5} dot={{ r: 3 }} />
-                <Line type="monotone" dataKey="Won" stroke="#2E6E5C" strokeWidth={2} dot={{ r: 3 }} />
+                <Line type="monotone" dataKey="Total" stroke="#1E293B" strokeWidth={2.5} dot={{ r: 3 }} />
+                <Line type="monotone" dataKey="Won" stroke="#00695C" strokeWidth={2} dot={{ r: 3 }} />
                 <Line type="monotone" dataKey="Contacted" stroke="#6366f1" strokeWidth={2} dot={{ r: 3 }} />
               </LineChart>
             </ResponsiveContainer>
@@ -255,7 +255,7 @@ export const ReportsView: React.FC = () => {
           <div className="flex flex-wrap items-center justify-between mb-4 gap-2">
             <div>
               <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 flex items-center space-x-2">
-                <Clock className="w-4 h-4 text-[#1F3A5F] dark:text-teal-400" />
+                <Clock className="w-4 h-4 text-[#1E293B] dark:text-teal-400" />
                 <span>Peak Telecalling Windows & Hourly Activity</span>
               </h3>
               <p className="text-[11px] text-slate-500 dark:text-slate-400">
@@ -277,7 +277,7 @@ export const ReportsView: React.FC = () => {
                 <YAxis allowDecimals={false} tick={{ fontSize: 11 }} />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: '#1F3A5F',
+                    backgroundColor: '#1E293B',
                     borderRadius: '12px',
                     color: '#fff',
                     border: 'none',
@@ -285,9 +285,9 @@ export const ReportsView: React.FC = () => {
                   }}
                 />
                 <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '8px' }} />
-                <Bar dataKey="calls" name="Calls Dialed" fill="#1F3A5F" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="calls" name="Calls Dialed" fill="#1E293B" radius={[4, 4, 0, 0]} />
                 <Bar dataKey="followUps" name="Follow-Ups Scheduled" fill="#0284c7" radius={[4, 4, 0, 0]} />
-                <Bar dataKey="conversions" name="Deals Converted" fill="#2E6E5C" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="conversions" name="Deals Converted" fill="#00695C" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -326,7 +326,7 @@ export const ReportsView: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                {stats.repLeaderboard.map((item, idx) => {
+                {(stats.repLeaderboard || []).map((item, idx) => {
                   const rankMedals = ['🥇', '🥈', '🥉'];
                   return (
                     <tr key={item.repId} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors">
@@ -339,7 +339,7 @@ export const ReportsView: React.FC = () => {
                       </td>
                       <td className="py-3 px-4">
                         <div className="flex items-center space-x-2">
-                          <div className="w-7 h-7 rounded-full bg-[#1F3A5F] text-white flex items-center justify-center font-bold text-xs">
+                          <div className="w-7 h-7 rounded-full bg-[#1E293B] text-white flex items-center justify-center font-bold text-xs">
                             {item.repName.charAt(0)}
                           </div>
                           <div>
@@ -353,7 +353,7 @@ export const ReportsView: React.FC = () => {
                       <td className="py-3 px-4 text-right font-mono text-slate-600 dark:text-slate-400">
                         {item.talkTimeMin} mins
                       </td>
-                      <td className="py-3 px-4 text-right font-mono font-bold text-[#2E6E5C] dark:text-teal-400">
+                      <td className="py-3 px-4 text-right font-mono font-bold text-[#00695C] dark:text-teal-400">
                         {item.conversions}
                       </td>
                       <td className="py-3 px-4 text-right font-mono font-bold text-slate-900 dark:text-slate-100">
@@ -362,7 +362,7 @@ export const ReportsView: React.FC = () => {
                       <td className="py-3 px-4">
                         <div className="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
                           <div
-                            className="bg-[#2E6E5C] h-full rounded-full transition-all duration-300"
+                            className="bg-[#00695C] h-full rounded-full transition-all duration-300"
                             style={{ width: `${Math.min(100, item.conversionRate * 3.5)}%` }}
                           />
                         </div>
@@ -386,7 +386,7 @@ export const ReportsView: React.FC = () => {
         </p>
 
         <div className="space-y-3">
-          {stats.leadsBySource.map((s) => (
+          {(stats.leadsBySource || []).map((s) => (
             <div key={s.source} className="space-y-1">
               <div className="flex items-center justify-between text-xs">
                 <span className="font-semibold text-slate-800 dark:text-slate-200">{s.source}</span>
@@ -396,7 +396,7 @@ export const ReportsView: React.FC = () => {
               </div>
               <div className="h-2 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-[#2E6E5C] rounded-full transition-all duration-500"
+                  className="h-full bg-[#00695C] rounded-full transition-all duration-500"
                   style={{ width: `${s.percentage}%` }}
                 />
               </div>

@@ -353,7 +353,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onDataReset }) => {
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4 bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
         <div className="flex items-center space-x-3">
-          <div className="w-9 h-9 rounded-xl bg-[#1F3A5F] text-white flex items-center justify-center font-bold">
+          <div className="w-9 h-9 rounded-xl bg-[#1E293B] text-white flex items-center justify-center font-bold">
             <Settings className="w-5 h-5 text-teal-300" />
           </div>
           <div>
@@ -382,7 +382,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onDataReset }) => {
           onClick={() => setActiveTab('automation')}
           className={`pb-3 text-xs font-bold border-b-2 transition-all whitespace-nowrap flex items-center space-x-2 ${
             activeTab === 'automation'
-              ? 'border-[#2E6E5C] text-[#2E6E5C] dark:text-teal-400'
+              ? 'border-[#00695C] text-[#00695C] dark:text-teal-400'
               : 'border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
           }`}
         >
@@ -395,11 +395,11 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onDataReset }) => {
           onClick={() => setActiveTab('pipeline')}
           className={`pb-3 text-xs font-bold border-b-2 transition-all whitespace-nowrap flex items-center space-x-2 ${
             activeTab === 'pipeline'
-              ? 'border-[#2E6E5C] text-[#2E6E5C] dark:text-teal-400'
+              ? 'border-[#00695C] text-[#00695C] dark:text-teal-400'
               : 'border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
           }`}
         >
-          <Layers className="w-4 h-4 text-[#1F3A5F] dark:text-teal-300" />
+          <Layers className="w-4 h-4 text-[#1E293B] dark:text-teal-300" />
           <span>Pipeline Stages</span>
         </button>
 
@@ -408,7 +408,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onDataReset }) => {
           onClick={() => setActiveTab('fields')}
           className={`pb-3 text-xs font-bold border-b-2 transition-all whitespace-nowrap flex items-center space-x-2 ${
             activeTab === 'fields'
-              ? 'border-[#2E6E5C] text-[#2E6E5C] dark:text-teal-400'
+              ? 'border-[#00695C] text-[#00695C] dark:text-teal-400'
               : 'border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
           }`}
         >
@@ -421,7 +421,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onDataReset }) => {
           onClick={() => setActiveTab('rbac')}
           className={`pb-3 text-xs font-bold border-b-2 transition-all whitespace-nowrap flex items-center space-x-2 ${
             activeTab === 'rbac'
-              ? 'border-[#2E6E5C] text-[#2E6E5C] dark:text-teal-400'
+              ? 'border-[#00695C] text-[#00695C] dark:text-teal-400'
               : 'border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
           }`}
         >
@@ -434,7 +434,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onDataReset }) => {
           onClick={() => setActiveTab('audit')}
           className={`pb-3 text-xs font-bold border-b-2 transition-all whitespace-nowrap flex items-center space-x-2 ${
             activeTab === 'audit'
-              ? 'border-[#2E6E5C] text-[#2E6E5C] dark:text-teal-400'
+              ? 'border-[#00695C] text-[#00695C] dark:text-teal-400'
               : 'border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
           }`}
         >
@@ -464,7 +464,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onDataReset }) => {
                 disabled={isSavingAutoAssign}
                 className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl font-bold text-xs transition-all shadow-xs ${
                   autoAssignment
-                    ? 'bg-[#2E6E5C] text-white hover:bg-[#245b4c]'
+                    ? 'bg-[#00695C] text-white hover:bg-[#245b4c]'
                     : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-300'
                 }`}
               >
@@ -519,18 +519,18 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onDataReset }) => {
                 }}
                 className={`p-4 rounded-xl border-2 text-left transition-all flex items-start space-x-3.5 ${
                   theme === 'light'
-                    ? 'border-[#2E6E5C] bg-emerald-50/50 dark:bg-emerald-950/20 shadow-xs'
+                    ? 'border-[#00695C] bg-emerald-50/50 dark:bg-emerald-950/20 shadow-xs'
                     : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-white dark:bg-slate-900'
                 }`}
               >
-                <div className={`p-2.5 rounded-xl ${theme === 'light' ? 'bg-[#2E6E5C] text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'}`}>
+                <div className={`p-2.5 rounded-xl ${theme === 'light' ? 'bg-[#00695C] text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'}`}>
                   <Sun className="w-5 h-5 text-amber-400" />
                 </div>
                 <div>
                   <div className="flex items-center space-x-2">
                     <span className="font-bold text-xs text-slate-900 dark:text-slate-100">White Theme (Clean Light SaaS)</span>
                     {theme === 'light' && (
-                      <span className="text-[10px] bg-[#2E6E5C] text-white px-2 py-0.5 rounded-full font-bold">Active</span>
+                      <span className="text-[10px] bg-[#00695C] text-white px-2 py-0.5 rounded-full font-bold">Active</span>
                     )}
                   </div>
                   <p className="text-[11px] text-slate-500 mt-1">
@@ -548,18 +548,18 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onDataReset }) => {
                 }}
                 className={`p-4 rounded-xl border-2 text-left transition-all flex items-start space-x-3.5 ${
                   theme === 'dark'
-                    ? 'border-[#2E6E5C] bg-emerald-50/50 dark:bg-emerald-950/20 shadow-xs'
+                    ? 'border-[#00695C] bg-emerald-50/50 dark:bg-emerald-950/20 shadow-xs'
                     : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-white dark:bg-slate-900'
                 }`}
               >
-                <div className={`p-2.5 rounded-xl ${theme === 'dark' ? 'bg-[#2E6E5C] text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'}`}>
+                <div className={`p-2.5 rounded-xl ${theme === 'dark' ? 'bg-[#00695C] text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'}`}>
                   <Moon className="w-5 h-5 text-sky-400" />
                 </div>
                 <div>
                   <div className="flex items-center space-x-2">
                     <span className="font-bold text-xs text-slate-900 dark:text-slate-100">Dark Theme (Night Calling)</span>
                     {theme === 'dark' && (
-                      <span className="text-[10px] bg-[#2E6E5C] text-white px-2 py-0.5 rounded-full font-bold">Active</span>
+                      <span className="text-[10px] bg-[#00695C] text-white px-2 py-0.5 rounded-full font-bold">Active</span>
                     )}
                   </div>
                   <p className="text-[11px] text-slate-500 mt-1">
@@ -590,7 +590,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onDataReset }) => {
                 id="btn-save-pipeline-stages"
                 onClick={handleSavePipelineStages}
                 disabled={isSavingPipeline}
-                className="flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl bg-[#1F3A5F] text-white hover:bg-[#162A45] text-xs font-bold transition-all shadow-xs"
+                className="flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl bg-[#1E293B] text-white hover:bg-[#162A45] text-xs font-bold transition-all shadow-xs"
               >
                 <Save className="w-3.5 h-3.5" />
                 <span>{isSavingPipeline ? 'Saving...' : 'Save Stages'}</span>
@@ -606,7 +606,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onDataReset }) => {
                   <span className="w-6 h-6 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 font-mono text-xs flex items-center justify-center font-bold">
                     {idx + 1}
                   </span>
-                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: stage.dotBg || '#2E6E5C' }}></div>
+                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: stage.dotBg || '#00695C' }}></div>
                   <div className="flex-1">
                     <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider block">
                       ID: {stage.id}
@@ -615,7 +615,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onDataReset }) => {
                       type="text"
                       value={stage.title}
                       onChange={(e) => handleStageTitleChange(stage.id, e.target.value)}
-                      className="w-full mt-0.5 px-2.5 py-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-xs font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-[#2E6E5C]"
+                      className="w-full mt-0.5 px-2.5 py-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-xs font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-[#00695C]"
                     />
                   </div>
                 </div>
@@ -671,7 +671,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onDataReset }) => {
                     type="checkbox"
                     checked={newFieldRequired}
                     onChange={(e) => setNewFieldRequired(e.target.checked)}
-                    className="rounded text-[#2E6E5C]"
+                    className="rounded text-[#00695C]"
                   />
                   <span>Required on Lead Creation</span>
                 </label>
@@ -679,7 +679,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onDataReset }) => {
               <button
                 type="submit"
                 disabled={isSavingFields || !newFieldName.trim()}
-                className="flex items-center justify-center space-x-1.5 px-3 py-1.5 bg-[#2E6E5C] hover:bg-[#235849] disabled:opacity-50 text-white rounded-xl text-xs font-bold transition-all shadow-xs"
+                className="flex items-center justify-center space-x-1.5 px-3 py-1.5 bg-[#00695C] hover:bg-[#235849] disabled:opacity-50 text-white rounded-xl text-xs font-bold transition-all shadow-xs"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Add Field</span>
@@ -757,7 +757,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onDataReset }) => {
                 id="btn-save-role-permissions"
                 onClick={handleSaveRolePermissions}
                 disabled={isSavingRoles}
-                className="flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-[#1F3A5F] text-white hover:bg-[#162A45] text-xs font-bold transition-all shadow-xs self-start sm:self-auto"
+                className="flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-[#1E293B] text-white hover:bg-[#162A45] text-xs font-bold transition-all shadow-xs self-start sm:self-auto"
               >
                 <Save className="w-3.5 h-3.5" />
                 <span>{isSavingRoles ? 'Saving...' : 'Save Permissions'}</span>
@@ -913,7 +913,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onDataReset }) => {
 
               <button
                 onClick={() => setIsAddingUser(!isAddingUser)}
-                className="px-3 py-1.5 rounded-xl text-xs font-bold bg-[#2E6E5C] text-white hover:bg-[#255e4e] flex items-center space-x-1"
+                className="px-3 py-1.5 rounded-xl text-xs font-bold bg-[#00695C] text-white hover:bg-[#255e4e] flex items-center space-x-1"
               >
                 <UserPlus className="w-3.5 h-3.5" />
                 <span>{isAddingUser ? 'Close Form' : 'Add Team Member'}</span>
@@ -1001,7 +1001,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onDataReset }) => {
                               if (e.target.checked) setNewUserManagesTeams(prev => [...prev, 'team-mumbai']);
                               else setNewUserManagesTeams(prev => prev.filter(t => t !== 'team-mumbai'));
                             }}
-                            className="rounded text-[#2E6E5C]"
+                            className="rounded text-[#00695C]"
                           />
                           <span>Team Mumbai</span>
                         </label>
@@ -1013,7 +1013,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onDataReset }) => {
                               if (e.target.checked) setNewUserManagesTeams(prev => [...prev, 'team-delhi']);
                               else setNewUserManagesTeams(prev => prev.filter(t => t !== 'team-delhi'));
                             }}
-                            className="rounded text-[#2E6E5C]"
+                            className="rounded text-[#00695C]"
                           />
                           <span>Team Delhi</span>
                         </label>
@@ -1035,7 +1035,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onDataReset }) => {
                   <div className="flex items-end space-x-2">
                     <button
                       type="submit"
-                      className="flex-1 py-1.5 bg-[#1F3A5F] text-white rounded-xl text-xs font-bold hover:bg-[#162A45] shadow-xs"
+                      className="flex-1 py-1.5 bg-[#1E293B] text-white rounded-xl text-xs font-bold hover:bg-[#162A45] shadow-xs"
                     >
                       Register Personnel
                     </button>
@@ -1090,7 +1090,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onDataReset }) => {
                     return (
                       <tr key={u.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
                         <td className="p-3 font-medium text-slate-900 dark:text-slate-100 flex items-center space-x-2">
-                          <div className="w-7 h-7 rounded-full bg-[#1F3A5F] text-white font-bold flex items-center justify-center text-xs">
+                          <div className="w-7 h-7 rounded-full bg-[#1E293B] text-white font-bold flex items-center justify-center text-xs">
                             {u.name.charAt(0)}
                           </div>
                           <div>

@@ -213,19 +213,19 @@ export const AudioTranscriberModal: React.FC<AudioTranscriberModalProps> = ({
     >
       <div
         ref={modalRef}
-        className="w-full max-w-lg bg-[#F8FAF8] dark:bg-[#1D201F] text-[#191C1B] dark:text-[#E1E3E0] rounded-[28px] shadow-2xl border border-[#BEC9C5]/60 dark:border-[#3F4946]/60 overflow-hidden flex flex-col animate-in zoom-in-95 duration-200"
+        className="w-full max-w-lg bg-[#F8FAF9] dark:bg-[#161A19] text-[#0F172A] dark:text-[#F1F5F9] rounded-[28px] shadow-2xl border border-[#E2E8F0]/60 dark:border-[#334155]/60 overflow-hidden flex flex-col animate-in zoom-in-95 duration-200"
       >
         {/* Header */}
-        <div className="p-5 px-6 border-b border-[#BEC9C5]/30 dark:border-[#3F4946]/30 flex items-center justify-between bg-[#F2F5F2] dark:bg-[#191C1B]">
+        <div className="p-5 px-6 border-b border-[#E2E8F0]/30 dark:border-[#334155]/30 flex items-center justify-between bg-[#F2F5F2] dark:bg-[#161A19]">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 rounded-2xl bg-[#CCE8E1] dark:bg-[#005046] text-[#00201B] dark:text-[#A3F2E4] flex items-center justify-center shrink-0">
               <Mic className="w-5 h-5" />
             </div>
             <div>
-              <h2 id="audio-transcriber-title" className="text-base font-bold text-[#191C1B] dark:text-[#E1E3E0]">
+              <h2 id="audio-transcriber-title" className="text-base font-bold text-[#0F172A] dark:text-[#F1F5F9]">
                 Audio Voice Transcriber
               </h2>
-              <p className="text-xs text-[#6F7976] dark:text-[#89938F]">
+              <p className="text-xs text-[#475569] dark:text-[#94A3B8]">
                 Powered by Gemini <span className="font-mono font-semibold text-[#00695C] dark:text-[#80D5C4]">gemini-3.5-transcribe</span>
               </p>
             </div>
@@ -235,7 +235,7 @@ export const AudioTranscriberModal: React.FC<AudioTranscriberModalProps> = ({
             type="button"
             onClick={handleClose}
             aria-label="Close audio transcriber dialog"
-            className="touch-target-48 rounded-full text-[#6F7976] hover:text-[#191C1B] dark:hover:text-[#E1E3E0] hover:bg-[#ECEFEC] dark:hover:bg-[#272B2A] transition-colors"
+            className="touch-target-48 rounded-full text-[#475569] hover:text-[#0F172A] dark:hover:text-[#F1F5F9] hover:bg-[#F1F5F4] dark:hover:bg-[#1E293B] transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -244,14 +244,14 @@ export const AudioTranscriberModal: React.FC<AudioTranscriberModalProps> = ({
         {/* Modal Body */}
         <div className="p-6 space-y-5">
           {leadName && (
-            <div className="p-2.5 rounded-2xl bg-[#ECEFEC] dark:bg-[#272B2A] text-xs flex items-center justify-between">
-              <span className="text-[#6F7976] dark:text-[#89938F]">Target Lead:</span>
-              <span className="font-semibold text-[#191C1B] dark:text-[#E1E3E0]">{leadName}</span>
+            <div className="p-2.5 rounded-2xl bg-[#F1F5F4] dark:bg-[#1E293B] text-xs flex items-center justify-between">
+              <span className="text-[#475569] dark:text-[#94A3B8]">Target Lead:</span>
+              <span className="font-semibold text-[#0F172A] dark:text-[#F1F5F9]">{leadName}</span>
             </div>
           )}
 
           {/* Recording Status & Control Area */}
-          <div className="flex flex-col items-center justify-center p-6 rounded-3xl bg-[#ECEFEC]/60 dark:bg-[#272B2A]/60 border border-[#BEC9C5]/30 dark:border-[#3F4946]/30 space-y-4">
+          <div className="flex flex-col items-center justify-center p-6 rounded-3xl bg-[#F1F5F4]/60 dark:bg-[#1E293B]/60 border border-[#E2E8F0]/30 dark:border-[#334155]/30 space-y-4">
             {isRecording ? (
               <>
                 {/* Live Pulse Waveform Indicator */}
@@ -267,7 +267,7 @@ export const AudioTranscriberModal: React.FC<AudioTranscriberModalProps> = ({
                   <div className="text-2xl font-mono font-bold text-[#BA1A1A] tracking-wider">
                     {formatTime(recordingDuration)}
                   </div>
-                  <p className="text-xs text-[#6F7976] dark:text-[#89938F] mt-0.5">
+                  <p className="text-xs text-[#475569] dark:text-[#94A3B8] mt-0.5">
                     Recording live microphone audio...
                   </p>
                 </div>
@@ -286,10 +286,10 @@ export const AudioTranscriberModal: React.FC<AudioTranscriberModalProps> = ({
               <div className="py-6 flex flex-col items-center space-y-3">
                 <RefreshCw className="w-10 h-10 text-[#00695C] dark:text-[#80D5C4] animate-spin" />
                 <div className="text-center">
-                  <p className="text-sm font-semibold text-[#191C1B] dark:text-[#E1E3E0]">
+                  <p className="text-sm font-semibold text-[#0F172A] dark:text-[#F1F5F9]">
                     Transcribing with gemini-3.5-transcribe...
                   </p>
-                  <p className="text-xs text-[#6F7976] dark:text-[#89938F] mt-0.5">
+                  <p className="text-xs text-[#475569] dark:text-[#94A3B8] mt-0.5">
                     Analyzing speech modality and telecalling context
                   </p>
                 </div>
@@ -301,10 +301,10 @@ export const AudioTranscriberModal: React.FC<AudioTranscriberModalProps> = ({
                 </div>
 
                 <div className="text-center max-w-xs">
-                  <p className="text-sm font-semibold text-[#191C1B] dark:text-[#E1E3E0]">
+                  <p className="text-sm font-semibold text-[#0F172A] dark:text-[#F1F5F9]">
                     Speak into your microphone
                   </p>
-                  <p className="text-xs text-[#6F7976] dark:text-[#89938F] mt-0.5">
+                  <p className="text-xs text-[#475569] dark:text-[#94A3B8] mt-0.5">
                     Dictate call notes, meeting follow-ups, or client requirements.
                   </p>
                 </div>
@@ -324,7 +324,7 @@ export const AudioTranscriberModal: React.FC<AudioTranscriberModalProps> = ({
 
           {/* Audio Playback preview if recorded */}
           {audioBlobUrl && !isRecording && (
-            <div className="flex items-center space-x-3 p-3 rounded-2xl bg-[#ECEFEC] dark:bg-[#272B2A]">
+            <div className="flex items-center space-x-3 p-3 rounded-2xl bg-[#F1F5F4] dark:bg-[#1E293B]">
               <Volume2 className="w-4 h-4 text-[#00695C] dark:text-[#80D5C4] shrink-0" />
               <audio src={audioBlobUrl} controls className="w-full h-8" />
             </div>
@@ -342,7 +342,7 @@ export const AudioTranscriberModal: React.FC<AudioTranscriberModalProps> = ({
           {transcription && (
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold text-[#191C1B] dark:text-[#E1E3E0] flex items-center space-x-1.5">
+                <span className="text-xs font-semibold text-[#0F172A] dark:text-[#F1F5F9] flex items-center space-x-1.5">
                   <Sparkles className="w-3.5 h-3.5 text-[#00695C] dark:text-[#80D5C4]" />
                   <span>Transcribed Notes</span>
                 </span>
@@ -371,7 +371,7 @@ export const AudioTranscriberModal: React.FC<AudioTranscriberModalProps> = ({
                 onChange={(e) => setTranscription(e.target.value)}
                 rows={4}
                 aria-label="Transcribed audio text editor"
-                className="w-full p-3.5 text-xs bg-white dark:bg-[#191C1B] text-[#191C1B] dark:text-[#E1E3E0] rounded-2xl border border-[#BEC9C5]/50 dark:border-[#3F4946]/50 focus:border-[#00695C] focus:ring-2 focus:ring-[#00695C]/20 focus:outline-none font-sans leading-relaxed"
+                className="w-full p-3.5 text-xs bg-white dark:bg-[#161A19] text-[#0F172A] dark:text-[#F1F5F9] rounded-2xl border border-[#E2E8F0]/50 dark:border-[#334155]/50 focus:border-[#00695C] focus:ring-2 focus:ring-[#00695C]/20 focus:outline-none font-sans leading-relaxed"
                 placeholder="Transcribed text will appear here..."
               />
             </div>
@@ -379,11 +379,11 @@ export const AudioTranscriberModal: React.FC<AudioTranscriberModalProps> = ({
         </div>
 
         {/* Footer Actions */}
-        <div className="p-4 px-6 border-t border-[#BEC9C5]/30 dark:border-[#3F4946]/30 bg-[#F2F5F2] dark:bg-[#191C1B] flex items-center justify-end space-x-3">
+        <div className="p-4 px-6 border-t border-[#E2E8F0]/30 dark:border-[#334155]/30 bg-[#F2F5F2] dark:bg-[#161A19] flex items-center justify-end space-x-3">
           <button
             type="button"
             onClick={handleClose}
-            className="min-h-[44px] px-5 text-xs font-medium rounded-full border border-[#BEC9C5] dark:border-[#3F4946] text-[#3F4946] dark:text-[#BEC9C5] hover:bg-[#ECEFEC] dark:hover:bg-[#272B2A] transition-all"
+            className="min-h-[44px] px-5 text-xs font-medium rounded-full border border-[#E2E8F0] dark:border-[#334155] text-[#475569] dark:text-[#94A3B8] hover:bg-[#F1F5F4] dark:hover:bg-[#1E293B] transition-all"
           >
             Close
           </button>

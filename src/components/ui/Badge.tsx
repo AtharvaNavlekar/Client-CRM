@@ -83,9 +83,9 @@ const toneStyles: Record<
     text: 'text-[#92400E] dark:text-[#FCD34D]'
   },
   error: {
-    container: 'bg-[#FEE2E2]/70 text-[#991B1B] border-[#FECACA] dark:bg-[#7F1D1D]/30 dark:text-[#FCA5A5] dark:border-[#991B1B]',
-    dot: 'bg-[#EF4444]',
-    text: 'text-[#991B1B] dark:text-[#FCA5A5]'
+    container: 'bg-[#FFDAD6] text-[#410002] border-[#FFB4AB] dark:bg-[#93000A]/40 dark:text-[#FFDAD6] dark:border-[#93000A]',
+    dot: 'bg-[#BA1A1A]',
+    text: 'text-[#410002] dark:text-[#FFDAD6]'
   },
   info: {
     container: 'bg-[#E0F2FE]/70 text-[#0369A1] border-[#BAE6FD] dark:bg-[#0C4A6E]/30 dark:text-[#7DD3FC] dark:border-[#0369A1]',

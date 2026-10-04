@@ -43,7 +43,7 @@ export const LeadCard: React.FC<LeadCardProps> = ({
       className={`rounded-2xl border transition-all duration-200 ${
         isSelected
           ? 'border-[#00695C] bg-[#CCE8E1]/20 dark:bg-[#004F46]/20 shadow-sm'
-          : 'border-[#BEC9C5]/40 dark:border-[#3F4946]/40 bg-[#F8FAF8] dark:bg-[#1D201F] hover:border-[#BEC9C5] dark:hover:border-[#3F4946]'
+          : 'border-[#E2E8F0]/40 dark:border-[#334155]/40 bg-[#F8FAF9] dark:bg-[#161A19] hover:border-[#E2E8F0] dark:hover:border-[#475569]'
       }`}
     >
       {/* Card Header — tap to select */}
@@ -56,18 +56,18 @@ export const LeadCard: React.FC<LeadCardProps> = ({
         <div className="flex-1 min-w-0">
           {/* Name + Phone */}
           <div className="flex items-center gap-2 mb-1">
-            <h3 className="text-sm font-semibold text-[#191C1B] dark:text-[#E1E3E0] truncate m3-title-small">
+            <h3 className="text-sm font-semibold text-[#0F172A] dark:text-[#F1F5F9] truncate m3-title-small">
               {lead.name}
             </h3>
             {isSelected && (
               <span className="w-2 h-2 rounded-full bg-[#00695C] shrink-0" />
             )}
           </div>
-          <p className="text-xs text-[#6F7976] dark:text-[#89938F] font-mono">
+          <p className="text-xs text-[#475569] dark:text-[#94A3B8] font-mono">
             {lead.phone}
           </p>
           {companyOrProject && (
-            <p className="text-xs text-[#6F7976] dark:text-[#89938F] truncate mt-0.5">
+            <p className="text-xs text-[#475569] dark:text-[#94A3B8] truncate mt-0.5">
               {companyOrProject}
             </p>
           )}
@@ -82,7 +82,7 @@ export const LeadCard: React.FC<LeadCardProps> = ({
       {/* Card Body — metadata row */}
       <div className="px-4 pb-2 flex items-center justify-between gap-3 flex-wrap">
         {/* Stars + Assignee + Value */}
-        <div className="flex items-center gap-3 text-xs text-[#3F4946] dark:text-[#BEC9C5] min-w-0">
+        <div className="flex items-center gap-3 text-xs text-[#475569] dark:text-[#94A3B8] min-w-0">
           {/* Compact star rating */}
           <div className="flex items-center gap-0.5">
             {[1, 2, 3, 4, 5].map((star) => (
@@ -100,7 +100,7 @@ export const LeadCard: React.FC<LeadCardProps> = ({
                   className={`w-3.5 h-3.5 ${
                     star <= currentRating
                       ? 'text-amber-500 fill-amber-500'
-                      : 'text-[#BEC9C5] dark:text-[#6F7976]'
+                      : 'text-[#E2E8F0] dark:text-[#475569]'
                   }`}
                 />
               </button>
@@ -108,7 +108,7 @@ export const LeadCard: React.FC<LeadCardProps> = ({
           </div>
 
           {/* Separator dot */}
-          <span className="text-[#BEC9C5] dark:text-[#3F4946]">·</span>
+          <span className="text-[#E2E8F0] dark:text-[#475569]">·</span>
 
           {/* Assignee */}
           <div className="flex items-center gap-1.5 truncate">
@@ -118,7 +118,7 @@ export const LeadCard: React.FC<LeadCardProps> = ({
         </div>
 
         {/* Value badge */}
-        <span className="text-xs font-mono font-semibold text-[#191C1B] dark:text-[#E1E3E0] shrink-0">
+        <span className="text-xs font-mono font-semibold text-[#0F172A] dark:text-[#F1F5F9] shrink-0">
           {formattedValue}
         </span>
       </div>
@@ -169,7 +169,7 @@ export const LeadCard: React.FC<LeadCardProps> = ({
               title={isCallBlocked ? 'Calling restricted for this lead' : `Call ${lead.name}`}
               className={`flex-1 min-h-[48px] flex items-center justify-center gap-2 rounded-2xl text-xs font-semibold transition-all ${
                 isCallBlocked
-                  ? 'bg-[#ECEFEC] dark:bg-[#272B2A] text-[#6F7976] cursor-not-allowed'
+                  ? 'bg-[#F1F5F4] dark:bg-[#1E293B] text-[#475569] cursor-not-allowed'
                   : 'bg-[#CCE8E1] dark:bg-[#005046] text-[#00201B] dark:text-[#A3F2E4] hover:bg-[#B7DFD6] dark:hover:bg-[#006558] active:scale-[0.98]'
               }`}
             >
@@ -186,7 +186,7 @@ export const LeadCard: React.FC<LeadCardProps> = ({
             onOpenChat?.(lead);
           }}
           aria-label={`Chat with ${lead.name} on WhatsApp`}
-          className="flex-1 min-h-[48px] flex items-center justify-center gap-2 rounded-2xl text-xs font-semibold bg-[#ECEFEC] dark:bg-[#272B2A] text-[#191C1B] dark:text-[#E1E3E0] border border-[#BEC9C5]/40 dark:border-[#3F4946]/40 hover:bg-[#E6EAE6] dark:hover:bg-[#323634] active:scale-[0.98] transition-all"
+          className="flex-1 min-h-[48px] flex items-center justify-center gap-2 rounded-2xl text-xs font-semibold bg-[#F1F5F4] dark:bg-[#1E293B] text-[#0F172A] dark:text-[#F1F5F9] border border-[#E2E8F0]/40 dark:border-[#334155]/40 hover:bg-[#E2E8F0] dark:hover:bg-[#323634] active:scale-[0.98] transition-all"
         >
           <MessageSquare className="w-4 h-4" />
           <span>WhatsApp</span>

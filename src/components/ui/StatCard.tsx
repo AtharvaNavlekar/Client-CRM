@@ -33,7 +33,7 @@ export const StatCard: React.FC<StatCardProps> = ({
     >
       <div className="flex items-start justify-between">
         <div className="space-y-1">
-          <p className="text-xs font-medium text-[#64748B] dark:text-[#94A3B8] tracking-wider uppercase font-body">
+          <p className="text-xs font-semibold text-[#475569] dark:text-[#94A3B8] tracking-wider uppercase font-body">
             {label}
           </p>
           <div className="text-2xl sm:text-3xl font-bold font-heading text-[#0F172A] dark:text-[#F1F5F9] tabular-nums tracking-tight">
@@ -42,7 +42,7 @@ export const StatCard: React.FC<StatCardProps> = ({
         </div>
 
         {icon && (
-          <div className="w-10 h-10 rounded-xl bg-[#CCE8E1]/60 dark:bg-[#004F46]/50 text-[#00695C] dark:text-[#80D5C4] flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 rounded-full bg-[#CCE8E1] dark:bg-[#004F46] text-[#00695C] dark:text-[#80D5C4] flex items-center justify-center shrink-0">
             {icon}
           </div>
         )}

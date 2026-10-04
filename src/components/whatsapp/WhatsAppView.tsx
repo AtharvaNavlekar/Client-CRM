@@ -66,6 +66,8 @@ export const WhatsAppView: React.FC<WhatsAppViewProps> = ({
   const [inputText, setInputText] = useState('');
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
   const [isSending, setIsSending] = useState(false);
+  const [sendError, setSendError] = useState<string | null>(null);
+  const [failedPendingText, setFailedPendingText] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [messageHealth, setMessageHealth] = useState<{
     totalOutbound: number;
@@ -116,21 +118,25 @@ export const WhatsAppView: React.FC<WhatsAppViewProps> = ({
     chatBottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages.length]);
 
-  const handleSendMessage = async (e?: React.FormEvent) => {
+  const handleSendMessage = async (e?: React.FormEvent, override: boolean = false) => {
     if (e) e.preventDefault();
-    if (!inputText.trim() || !activeLead || isSending) return;
+    const textToSend = override ? (failedPendingText || inputText.trim()) : inputText.trim();
+    if (!textToSend || !activeLead || isSending) return;
 
-    const text = inputText.trim();
-    setInputText('');
+    if (!override) setInputText('');
+    setSendError(null);
     setIsSending(true);
 
     try {
       // API adds with 'Queued' status, progresses to 'Sent', and simulates ~10% transient retry before 'Delivered'
-      const newMsg = await api.sendMessage(activeLead.id, text, 'outbound');
+      const newMsg = await api.sendMessage(activeLead.id, textToSend, 'outbound', override);
       setMessages((prev) => [...prev, newMsg]);
+      setFailedPendingText(null);
       fetchHealthStats();
-    } catch (e) {
-      console.error('Failed to send WhatsApp message:', e);
+    } catch (e: any) {
+      console.warn('WhatsApp message not sent:', e?.message || e);
+      setFailedPendingText(textToSend);
+      setSendError(e?.message || 'Failed to send WhatsApp message');
     } finally {
       setIsSending(false);
     }
@@ -198,9 +204,9 @@ export const WhatsAppView: React.FC<WhatsAppViewProps> = ({
   );
 
   return (
-    <div className="h-[calc(100vh-140px)] min-h-[550px] bg-[#F8FAF8] dark:bg-[#1D201F] rounded-[28px] border border-[#BEC9C5]/40 dark:border-[#3F4946]/40 shadow-xs overflow-hidden flex flex-col">
+    <div className="h-[calc(100vh-140px)] min-h-[550px] bg-[#F8FAF9] dark:bg-[#161A19] rounded-[28px] border border-[#E2E8F0]/40 dark:border-[#334155]/40 shadow-xs overflow-hidden flex flex-col">
       {/* Top Persistent Message Delivery Health Header */}
-      <div className="flex flex-wrap items-center justify-between px-5 py-3 bg-[#00201B] text-[#E1E3E0] border-b border-[#3F4946]/30 text-xs gap-2">
+      <div className="flex flex-wrap items-center justify-between px-5 py-3 bg-[#00201B] text-[#F1F5F9] border-b border-[#475569]/30 text-xs gap-2">
         <div className="flex items-center space-x-2.5">
           <div className="flex items-center space-x-1.5 text-[#80D5C4] font-medium">
             <ShieldCheck className="w-4 h-4" />
@@ -234,15 +240,15 @@ export const WhatsAppView: React.FC<WhatsAppViewProps> = ({
 
       <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
       {/* Left Column: Lead Conversations List */}
-      <div className="w-full md:w-80 border-r border-[#BEC9C5]/30 dark:border-[#3F4946]/30 flex flex-col bg-[#F8FAF8] dark:bg-[#1D201F]">
+      <div className="w-full md:w-80 border-r border-[#E2E8F0]/30 dark:border-[#334155]/30 flex flex-col bg-[#F8FAF9] dark:bg-[#161A19]">
         {/* Header */}
-        <div className="p-4 border-b border-[#BEC9C5]/30 dark:border-[#3F4946]/30 bg-[#F8FAF8] dark:bg-[#1D201F]">
+        <div className="p-4 border-b border-[#E2E8F0]/30 dark:border-[#334155]/30 bg-[#F8FAF9] dark:bg-[#161A19]">
           <div className="flex items-center justify-between mb-2.5">
             <div className="flex items-center space-x-2">
               <div className="w-8 h-8 rounded-full bg-[#00695C] flex items-center justify-center">
                 <MessageSquare className="w-4 h-4 text-white" />
               </div>
-              <h2 className="text-sm font-semibold tracking-tight text-[#191C1B] dark:text-[#E1E3E0] m3-title-small">WhatsApp Chats</h2>
+              <h2 className="text-sm font-semibold tracking-tight text-[#0F172A] dark:text-[#F1F5F9] m3-title-small">WhatsApp Chats</h2>
             </div>
             <span className="text-[10px] font-medium uppercase bg-[#CCE8E1] dark:bg-[#004F46] text-[#00201B] dark:text-[#80D5C4] px-2.5 py-0.5 rounded-full">
               Cloud API
@@ -250,13 +256,13 @@ export const WhatsAppView: React.FC<WhatsAppViewProps> = ({
           </div>
 
           <div className="relative">
-            <Search className="w-4 h-4 text-[#6F7976] absolute left-3 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-[#475569] absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               placeholder="Search chat or phone..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-3.5 py-2 bg-[#ECEFEC] dark:bg-[#272B2A] border-none rounded-full text-xs text-[#191C1B] dark:text-[#E1E3E0] placeholder-[#6F7976] focus:outline-none focus:ring-2 focus:ring-[#00695C]"
+              className="w-full pl-9 pr-3.5 py-2 bg-[#F1F5F4] dark:bg-[#1E293B] border-none rounded-full text-xs text-[#0F172A] dark:text-[#F1F5F9] placeholder-[#475569] focus:outline-none focus:ring-2 focus:ring-[#00695C]"
             />
           </div>
         </div>
@@ -272,12 +278,12 @@ export const WhatsAppView: React.FC<WhatsAppViewProps> = ({
                 onClick={() => onSelectLead(lead.id)}
                 className={`w-full p-3 rounded-[20px] text-left transition-all flex items-center space-x-3 ${
                   isSelected
-                    ? 'bg-[#CCE8E1] dark:bg-[#004F46] text-[#00201B] dark:text-[#E1E3E0] shadow-xs'
-                    : 'hover:bg-[#ECEFEC]/60 dark:hover:bg-[#272B2A]/60 text-[#191C1B] dark:text-[#E1E3E0]'
+                    ? 'bg-[#CCE8E1] dark:bg-[#004F46] text-[#00201B] dark:text-[#F1F5F9] shadow-xs'
+                    : 'hover:bg-[#F1F5F4]/60 dark:hover:bg-[#1E293B]/60 text-[#0F172A] dark:text-[#F1F5F9]'
                 }`}
               >
                 <div className={`w-9 h-9 rounded-full font-semibold text-xs flex items-center justify-center flex-shrink-0 ${
-                  isSelected ? 'bg-[#00695C] text-white' : 'bg-[#1F3A5F] text-white'
+                  isSelected ? 'bg-[#00695C] text-white' : 'bg-[#1E293B] text-white'
                 }`}>
                   {lead.name.charAt(0)}
                 </div>
@@ -301,14 +307,14 @@ export const WhatsAppView: React.FC<WhatsAppViewProps> = ({
       {activeLead ? (
         <div className="flex-1 flex flex-col h-full bg-[#EFEAE2] dark:bg-[#0b141a]">
           {/* Chat Header */}
-          <div className="h-16 px-5 bg-[#00201B] text-[#E1E3E0] flex items-center justify-between border-b border-[#3F4946]/30 z-10">
+          <div className="h-16 px-5 bg-[#00201B] text-[#F1F5F9] flex items-center justify-between border-b border-[#475569]/30 z-10">
             <div className="flex items-center space-x-3 min-w-0">
               <div className="w-10 h-10 rounded-full bg-[#00695C] text-white font-semibold text-sm flex items-center justify-center shadow-xs">
                 {activeLead.name.charAt(0)}
               </div>
               <div className="min-w-0">
                 <div className="flex items-center space-x-2">
-                  <h3 className="font-semibold text-sm truncate text-[#E1E3E0] m3-title-small">{activeLead.name}</h3>
+                  <h3 className="font-semibold text-sm truncate text-[#F1F5F9] m3-title-small">{activeLead.name}</h3>
                   <span className="text-[10px] bg-[#004F46] text-[#80D5C4] px-2 py-0.5 rounded-full font-medium">
                     {activeLead.stage}
                   </span>
@@ -346,14 +352,14 @@ export const WhatsAppView: React.FC<WhatsAppViewProps> = ({
                 className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors"
                 title="View Full Profile"
               >
-                <Info className="w-4 h-4 text-[#E1E3E0]" />
+                <Info className="w-4 h-4 text-[#F1F5F9]" />
               </button>
             </div>
           </div>
 
           {/* Quick Reply Canned Templates Bar */}
-          <div className="bg-[#F8FAF8]/95 dark:bg-[#1D201F]/95 border-b border-[#BEC9C5]/30 dark:border-[#3F4946]/30 px-4 py-2.5 flex items-center space-x-2 overflow-x-auto">
-            <span className="text-[10px] font-medium uppercase tracking-wider text-[#6F7976] whitespace-nowrap flex items-center space-x-1">
+          <div className="bg-[#F8FAF9]/95 dark:bg-[#161A19]/95 border-b border-[#E2E8F0]/30 dark:border-[#334155]/30 px-4 py-2.5 flex items-center space-x-2 overflow-x-auto">
+            <span className="text-[10px] font-medium uppercase tracking-wider text-[#475569] whitespace-nowrap flex items-center space-x-1">
               <Zap className="w-3 h-3 text-amber-500" />
               <span>Quick Templates:</span>
             </span>
@@ -361,7 +367,7 @@ export const WhatsAppView: React.FC<WhatsAppViewProps> = ({
               <button
                 key={idx}
                 onClick={() => setInputText(tmpl.text)}
-                className="text-xs px-3.5 py-1 rounded-full bg-[#ECEFEC] dark:bg-[#272B2A] hover:bg-[#CCE8E1] dark:hover:bg-[#004F46] hover:text-[#00201B] dark:hover:text-[#80D5C4] transition-colors whitespace-nowrap font-medium text-[#191C1B] dark:text-[#E1E3E0]"
+                className="text-xs px-3.5 py-1 rounded-full bg-[#F1F5F4] dark:bg-[#1E293B] hover:bg-[#CCE8E1] dark:hover:bg-[#004F46] hover:text-[#00201B] dark:hover:text-[#80D5C4] transition-colors whitespace-nowrap font-medium text-[#0F172A] dark:text-[#F1F5F9]"
               >
                 {tmpl.label}
               </button>
@@ -387,12 +393,12 @@ export const WhatsAppView: React.FC<WhatsAppViewProps> = ({
                   <div
                     className={`max-w-md sm:max-w-lg rounded-[22px] px-4 py-2.5 shadow-xs relative text-xs leading-relaxed ${
                       isOutbound
-                        ? 'bg-[#d9fdd3] dark:bg-[#005c4b] text-[#191C1B] dark:text-[#E1E3E0] rounded-tr-xs'
-                        : 'bg-white dark:bg-[#202c33] text-[#191C1B] dark:text-[#E1E3E0] rounded-tl-xs'
+                        ? 'bg-[#d9fdd3] dark:bg-[#005c4b] text-[#0F172A] dark:text-[#F1F5F9] rounded-tr-xs'
+                        : 'bg-white dark:bg-[#202c33] text-[#0F172A] dark:text-[#F1F5F9] rounded-tl-xs'
                     }`}
                   >
                     <p className="whitespace-pre-wrap">{msg.text}</p>
-                    <div className="flex items-center justify-end space-x-1.5 mt-1 text-[10px] text-[#6F7976] dark:text-[#C4C7C5]">
+                    <div className="flex items-center justify-end space-x-1.5 mt-1 text-[10px] text-[#475569] dark:text-[#94A3B8]">
                       <span>
                         {new Date(msg.timestamp).toLocaleTimeString('en-IN', {
                           hour: '2-digit',
@@ -407,7 +413,7 @@ export const WhatsAppView: React.FC<WhatsAppViewProps> = ({
             })}
 
             {messages.length === 0 && !isLoadingMessages && (
-              <div className="text-center py-12 text-[#6F7976] text-xs">
+              <div className="text-center py-12 text-[#475569] text-xs">
                 No WhatsApp messages yet. Select a quick template or type below to initiate outreach!
               </div>
             )}
@@ -415,10 +421,38 @@ export const WhatsAppView: React.FC<WhatsAppViewProps> = ({
             <div ref={chatBottomRef} />
           </div>
 
+          {/* Error Banner */}
+          {sendError && (
+            <div className="px-4 py-2 bg-rose-50 dark:bg-rose-950/60 border-t border-rose-200 dark:border-rose-900/50 flex flex-wrap items-center justify-between gap-2 text-xs text-rose-700 dark:text-rose-300">
+              <div className="flex items-center space-x-2">
+                <AlertTriangle className="w-4 h-4 shrink-0 text-rose-500" />
+                <span>{sendError}</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                {(sendError.toLowerCase().includes('cap') || sendError.includes('429')) && (
+                  <button
+                    type="button"
+                    onClick={() => handleSendMessage(undefined, true)}
+                    className="px-2.5 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded text-[11px] font-semibold transition-colors"
+                  >
+                    Send with Manager Override
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={() => { setSendError(null); setFailedPendingText(null); }}
+                  className="text-rose-500 hover:text-rose-700 dark:hover:text-rose-200 font-bold text-xs ml-2"
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+          )}
+
           {/* Message Input Box */}
           <form
             onSubmit={handleSendMessage}
-            className="p-3 bg-[#F8FAF8] dark:bg-[#1D201F] border-t border-[#BEC9C5]/30 dark:border-[#3F4946]/30 flex items-center space-x-2"
+            className="p-3 bg-[#F8FAF9] dark:bg-[#161A19] border-t border-[#E2E8F0]/30 dark:border-[#334155]/30 flex items-center space-x-2"
           >
             <input
               id="input-whatsapp-message"
@@ -426,7 +460,7 @@ export const WhatsAppView: React.FC<WhatsAppViewProps> = ({
               placeholder={`Message ${activeLead.name} on WhatsApp...`}
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
-              className="flex-1 px-5 py-3 bg-[#ECEFEC] dark:bg-[#272B2A] border-none rounded-full text-xs text-[#191C1B] dark:text-[#E1E3E0] focus:outline-none focus:ring-2 focus:ring-[#00695C]"
+              className="flex-1 px-5 py-3 bg-[#F1F5F4] dark:bg-[#1E293B] border-none rounded-full text-xs text-[#0F172A] dark:text-[#F1F5F9] focus:outline-none focus:ring-2 focus:ring-[#00695C]"
             />
             <button
               id="btn-send-whatsapp-message"
@@ -440,12 +474,12 @@ export const WhatsAppView: React.FC<WhatsAppViewProps> = ({
           </form>
         </div>
       ) : (
-        <div className="flex-1 flex flex-col items-center justify-center p-8 text-center text-[#6F7976]">
-          <MessageSquare className="w-12 h-12 text-[#BEC9C5] dark:text-[#3F4946] mb-3" />
-          <h3 className="text-base font-semibold text-[#191C1B] dark:text-[#E1E3E0]">
+        <div className="flex-1 flex flex-col items-center justify-center p-8 text-center text-[#475569]">
+          <MessageSquare className="w-12 h-12 text-[#E2E8F0] dark:text-[#475569] mb-3" />
+          <h3 className="text-base font-semibold text-[#0F172A] dark:text-[#F1F5F9]">
             No Lead Selected
           </h3>
-          <p className="text-xs text-[#6F7976]">Pick a lead from the left pane to view conversation</p>
+          <p className="text-xs text-[#475569]">Pick a lead from the left pane to view conversation</p>
         </div>
       )}
       </div>

@@ -154,7 +154,7 @@ export const SupportView: React.FC<SupportViewProps> = ({ leads, users }) => {
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4 bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
         <div className="flex items-center space-x-2.5">
-          <div className="w-8 h-8 rounded-lg bg-[#1F3A5F] text-white flex items-center justify-center font-bold">
+          <div className="w-8 h-8 rounded-lg bg-[#1E293B] text-white flex items-center justify-center font-bold">
             <LifeBuoy className="w-4 h-4 text-teal-300" />
           </div>
           <div>
@@ -170,7 +170,7 @@ export const SupportView: React.FC<SupportViewProps> = ({ leads, users }) => {
         <button
           id="btn-new-ticket"
           onClick={() => setIsModalOpen(true)}
-          className="px-3.5 py-2 rounded-xl text-xs font-bold bg-[#2E6E5C] hover:bg-[#255b4c] text-white flex items-center space-x-1.5 transition-colors shadow-xs"
+          className="px-3.5 py-2 rounded-xl text-xs font-bold bg-[#00695C] hover:bg-[#255b4c] text-white flex items-center space-x-1.5 transition-colors shadow-xs"
         >
           <Plus className="w-4 h-4" />
           <span>New Support Ticket</span>
@@ -202,7 +202,7 @@ export const SupportView: React.FC<SupportViewProps> = ({ leads, users }) => {
                   onClick={() => setSelectedTicket(t)}
                   className={`w-full p-3.5 text-left transition-colors flex flex-col space-y-1.5 ${
                     isSelected
-                      ? 'bg-teal-50/70 dark:bg-teal-950/40 border-l-4 border-[#2E6E5C]'
+                      ? 'bg-teal-50/70 dark:bg-teal-950/40 border-l-4 border-[#00695C]'
                       : 'hover:bg-slate-50 dark:hover:bg-slate-800/50'
                   }`}
                 >
@@ -317,12 +317,12 @@ export const SupportView: React.FC<SupportViewProps> = ({ leads, users }) => {
                 placeholder="Post reply or SLA status update..."
                 value={replyText}
                 onChange={(e) => setReplyText(e.target.value)}
-                className="flex-1 px-3 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#2E6E5C]"
+                className="flex-1 px-3 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#00695C]"
               />
               <button
                 type="submit"
                 disabled={isSendingReply || !replyText.trim()}
-                className="px-3.5 py-2 rounded-xl text-xs font-bold bg-[#2E6E5C] hover:bg-[#255b4c] disabled:opacity-50 text-white flex items-center space-x-1 transition-colors"
+                className="px-3.5 py-2 rounded-xl text-xs font-bold bg-[#00695C] hover:bg-[#255b4c] disabled:opacity-50 text-white flex items-center space-x-1 transition-colors"
               >
                 <Send className="w-3.5 h-3.5" />
                 <span>Reply</span>
@@ -341,7 +341,7 @@ export const SupportView: React.FC<SupportViewProps> = ({ leads, users }) => {
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in">
           <div className="bg-white dark:bg-slate-900 w-full max-w-md rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
-            <div className="px-5 py-4 bg-[#1F3A5F] text-white flex items-center justify-between">
+            <div className="px-5 py-4 bg-[#1E293B] text-white flex items-center justify-between">
               <h3 className="text-sm font-bold">Create Escalation / Support Ticket</h3>
               <button onClick={() => setIsModalOpen(false)} className="p-1 rounded-lg text-slate-300 hover:text-white">
                 <X className="w-4 h-4" />
@@ -359,7 +359,7 @@ export const SupportView: React.FC<SupportViewProps> = ({ leads, users }) => {
                   placeholder="e.g. Document sanction letter delay for client"
                   value={newSubject}
                   onChange={(e) => setNewSubject(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#2E6E5C]"
+                  className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#00695C]"
                 />
               </div>
 
@@ -405,7 +405,7 @@ export const SupportView: React.FC<SupportViewProps> = ({ leads, users }) => {
                   placeholder="Describe the issue or client query that requires attention..."
                   value={newInitialMsg}
                   onChange={(e) => setNewInitialMsg(e.target.value)}
-                  className="w-full p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#2E6E5C]"
+                  className="w-full p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#00695C]"
                 />
               </div>
 
@@ -420,7 +420,7 @@ export const SupportView: React.FC<SupportViewProps> = ({ leads, users }) => {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-4 py-2 rounded-xl text-xs font-bold bg-[#2E6E5C] text-white hover:bg-[#255b4c]"
+                  className="px-4 py-2 rounded-xl text-xs font-bold bg-[#00695C] text-white hover:bg-[#255b4c]"
                 >
                   {isSubmitting ? 'Opening Ticket...' : 'Create Ticket (4h SLA)'}
                 </button>

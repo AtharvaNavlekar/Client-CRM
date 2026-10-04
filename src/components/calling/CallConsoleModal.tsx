@@ -218,11 +218,11 @@ export const CallConsoleModal: React.FC<CallConsoleModalProps> = ({
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-call-console-title"
-        className="bg-[#191C1B] text-[#E1E3E0] w-full max-w-md rounded-[28px] shadow-2xl border border-[#3F4946]/50 overflow-hidden flex flex-col outline-none"
+        className="bg-[#0F172A] text-[#F1F5F9] w-full max-w-md rounded-[28px] shadow-2xl border border-[#475569]/50 overflow-hidden flex flex-col outline-none"
         tabIndex={-1}
       >
         {/* Header Bar */}
-        <div className="px-6 py-4 bg-[#00201B] flex items-center justify-between border-b border-[#3F4946]/30">
+        <div className="px-6 py-4 bg-[#00201B] flex items-center justify-between border-b border-[#475569]/30">
           <div className="flex items-center space-x-2.5">
             <div className="w-2.5 h-2.5 rounded-full bg-[#80D5C4] animate-pulse" />
             <span id="modal-call-console-title" className="text-xs font-semibold tracking-wide uppercase text-[#80D5C4] m3-label-large">
@@ -256,7 +256,7 @@ export const CallConsoleModal: React.FC<CallConsoleModalProps> = ({
             </div>
 
             {/* Lead Name & Phone */}
-            <h2 className="text-xl font-bold tracking-tight text-[#E1E3E0] mb-1 m3-headline-small">
+            <h2 className="text-xl font-bold tracking-tight text-[#F1F5F9] mb-1 m3-headline-small">
               {lead.name}
             </h2>
             <p className="text-sm font-mono text-[#80D5C4] mb-2">{lead.phone}</p>
@@ -302,7 +302,7 @@ export const CallConsoleModal: React.FC<CallConsoleModalProps> = ({
                   className={`flex flex-col items-center justify-center p-3.5 rounded-[20px] border transition-all ${
                     isMuted
                       ? 'bg-[#FFDAD6]/20 border-[#BA1A1A] text-[#FFB4AB]'
-                      : 'bg-white/5 border-white/10 hover:bg-white/10 text-[#E1E3E0]'
+                      : 'bg-white/5 border-white/10 hover:bg-white/10 text-[#F1F5F9]'
                   }`}
                 >
                   {isMuted ? <MicOff className="w-5 h-5 mb-1 text-[#FFB4AB]" /> : <Mic className="w-5 h-5 mb-1" />}
@@ -315,7 +315,7 @@ export const CallConsoleModal: React.FC<CallConsoleModalProps> = ({
                   className={`flex flex-col items-center justify-center p-3.5 rounded-[20px] border transition-all ${
                     isOnHold
                       ? 'bg-amber-500/20 border-amber-500 text-amber-300'
-                      : 'bg-white/5 border-white/10 hover:bg-white/10 text-[#E1E3E0]'
+                      : 'bg-white/5 border-white/10 hover:bg-white/10 text-[#F1F5F9]'
                   }`}
                 >
                   {isOnHold ? <Play className="w-5 h-5 mb-1 text-amber-400" /> : <Pause className="w-5 h-5 mb-1" />}
@@ -323,7 +323,7 @@ export const CallConsoleModal: React.FC<CallConsoleModalProps> = ({
                 </button>
 
                 {/* Speaker */}
-                <div className="flex flex-col items-center justify-center p-3.5 rounded-[20px] border bg-white/5 border-white/10 text-[#E1E3E0]">
+                <div className="flex flex-col items-center justify-center p-3.5 rounded-[20px] border bg-white/5 border-white/10 text-[#F1F5F9]">
                   <Volume2 className="w-5 h-5 mb-1 text-[#80D5C4]" />
                   <span className="text-[11px] font-medium">Headset</span>
                 </div>
@@ -348,7 +348,7 @@ export const CallConsoleModal: React.FC<CallConsoleModalProps> = ({
           <div className="p-6 space-y-4 animate-in fade-in">
             <div className="flex items-center justify-between pb-3 border-b border-white/10">
               <div>
-                <h3 className="text-base font-semibold text-[#E1E3E0] m3-title-medium">Call Wrap-Up Disposition</h3>
+                <h3 className="text-base font-semibold text-[#F1F5F9] m3-title-medium">Call Wrap-Up Disposition</h3>
                 <p className="text-xs text-[#A2ADA9]">Duration: {formatTimer(durationSeconds)} with {lead.name}</p>
               </div>
               <div className="w-8 h-8 rounded-full bg-[#004F46] text-[#80D5C4] flex items-center justify-center">
@@ -385,7 +385,7 @@ export const CallConsoleModal: React.FC<CallConsoleModalProps> = ({
                 placeholder="e.g. Client requested customized pricing sheet, asked to call back post lunch..."
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
-                className="w-full p-3.5 bg-[#272B2A] border border-transparent rounded-[18px] text-xs text-white placeholder-[#6F7976] focus:outline-none focus:ring-2 focus:ring-[#80D5C4]"
+                className="w-full p-3.5 bg-[#272B2A] border border-transparent rounded-[18px] text-xs text-white placeholder-[#475569] focus:outline-none focus:ring-2 focus:ring-[#80D5C4]"
               />
             </div>
 
@@ -409,7 +409,7 @@ export const CallConsoleModal: React.FC<CallConsoleModalProps> = ({
               <button
                 type="button"
                 onClick={onClose}
-                className="px-5 py-2.5 rounded-full text-xs font-medium text-[#C4C7C5] hover:text-white border border-[#3F4946] hover:bg-white/10 transition-colors min-h-[44px]"
+                className="px-5 py-2.5 rounded-full text-xs font-medium text-[#C4C7C5] hover:text-white border border-[#475569] hover:bg-white/10 transition-colors min-h-[44px]"
               >
                 Discard
               </button>

@@ -60,10 +60,10 @@ export const ExportConfirmationModal: React.FC<ExportConfirmationModalProps> = (
     >
       <div
         ref={modalRef}
-        className="w-full max-w-lg bg-[#F8FAF8] dark:bg-[#1D201F] text-[#191C1B] dark:text-[#E1E3E0] rounded-[28px] shadow-2xl border border-[#BEC9C5]/60 dark:border-[#3F4946]/60 overflow-hidden flex flex-col animate-in zoom-in-95 duration-200"
+        className="w-full max-w-lg bg-[#F8FAF9] dark:bg-[#161A19] text-[#0F172A] dark:text-[#F1F5F9] rounded-[28px] shadow-2xl border border-[#E2E8F0]/60 dark:border-[#334155]/60 overflow-hidden flex flex-col animate-in zoom-in-95 duration-200"
       >
         {/* Header with Security Lock Tone */}
-        <div className="p-6 pb-4 border-b border-[#BEC9C5]/30 dark:border-[#3F4946]/30 flex items-start justify-between bg-[#F2F5F2] dark:bg-[#191C1B]">
+        <div className="p-6 pb-4 border-b border-[#E2E8F0]/30 dark:border-[#334155]/30 flex items-start justify-between bg-[#F2F5F2] dark:bg-[#161A19]">
           <div className="flex items-center space-x-3.5">
             <div className="w-12 h-12 rounded-2xl bg-amber-100 dark:bg-amber-950/80 text-amber-900 dark:text-amber-200 flex items-center justify-center shrink-0 shadow-xs">
               <ShieldAlert className="w-6 h-6" />
@@ -72,7 +72,7 @@ export const ExportConfirmationModal: React.FC<ExportConfirmationModalProps> = (
               <span className="text-[11px] font-bold uppercase tracking-wider text-amber-700 dark:text-amber-300">
                 Approval Required
               </span>
-              <h2 id="export-confirmation-title" className="text-lg font-bold tracking-tight text-[#191C1B] dark:text-[#E1E3E0]">
+              <h2 id="export-confirmation-title" className="text-lg font-bold tracking-tight text-[#0F172A] dark:text-[#F1F5F9]">
                 Authorize Customer Data Export
               </h2>
             </div>
@@ -83,7 +83,7 @@ export const ExportConfirmationModal: React.FC<ExportConfirmationModalProps> = (
             onClick={onClose}
             disabled={isProcessing}
             aria-label="Close export confirmation dialog"
-            className="touch-target-48 rounded-full text-[#6F7976] hover:text-[#191C1B] dark:hover:text-[#E1E3E0] hover:bg-[#ECEFEC] dark:hover:bg-[#272B2A] transition-colors"
+            className="touch-target-48 rounded-full text-[#475569] hover:text-[#0F172A] dark:hover:text-[#F1F5F9] hover:bg-[#F1F5F4] dark:hover:bg-[#1E293B] transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -104,39 +104,39 @@ export const ExportConfirmationModal: React.FC<ExportConfirmationModalProps> = (
           </div>
 
           {/* Export Transaction Parameters Table */}
-          <div className="bg-[#ECEFEC] dark:bg-[#272B2A] rounded-2xl p-4 space-y-2.5 text-xs">
-            <div className="flex items-center justify-between py-1 border-b border-[#BEC9C5]/30 dark:border-[#3F4946]/30">
-              <span className="text-[#6F7976] dark:text-[#89938F] flex items-center space-x-1.5">
+          <div className="bg-[#F1F5F4] dark:bg-[#1E293B] rounded-2xl p-4 space-y-2.5 text-xs">
+            <div className="flex items-center justify-between py-1 border-b border-[#E2E8F0]/30 dark:border-[#334155]/30">
+              <span className="text-[#475569] dark:text-[#94A3B8] flex items-center space-x-1.5">
                 <FileSpreadsheet className="w-4 h-4 text-[#00695C] dark:text-[#80D5C4]" />
                 <span>Records to Export:</span>
               </span>
-              <span className="font-bold font-mono text-[#191C1B] dark:text-[#E1E3E0]">
+              <span className="font-bold font-mono text-[#0F172A] dark:text-[#F1F5F9]">
                 {exportCount} Lead Records ({format.toUpperCase()})
               </span>
             </div>
 
-            <div className="flex items-center justify-between py-1 border-b border-[#BEC9C5]/30 dark:border-[#3F4946]/30">
-              <span className="text-[#6F7976] dark:text-[#89938F] flex items-center space-x-1.5">
+            <div className="flex items-center justify-between py-1 border-b border-[#E2E8F0]/30 dark:border-[#334155]/30">
+              <span className="text-[#475569] dark:text-[#94A3B8] flex items-center space-x-1.5">
                 <UserCheck className="w-4 h-4 text-[#00695C] dark:text-[#80D5C4]" />
                 <span>Requesting Actor:</span>
               </span>
-              <span className="font-medium text-[#191C1B] dark:text-[#E1E3E0]">
-                {userName} <span className="capitalize text-[#6F7976] dark:text-[#89938F]">({userRole})</span>
+              <span className="font-medium text-[#0F172A] dark:text-[#F1F5F9]">
+                {userName} <span className="capitalize text-[#475569] dark:text-[#94A3B8]">({userRole})</span>
               </span>
             </div>
 
-            <div className="flex items-center justify-between py-1 border-b border-[#BEC9C5]/30 dark:border-[#3F4946]/30">
-              <span className="text-[#6F7976] dark:text-[#89938F] flex items-center space-x-1.5">
+            <div className="flex items-center justify-between py-1 border-b border-[#E2E8F0]/30 dark:border-[#334155]/30">
+              <span className="text-[#475569] dark:text-[#94A3B8] flex items-center space-x-1.5">
                 <Lock className="w-4 h-4 text-[#00695C] dark:text-[#80D5C4]" />
                 <span>Audit Action Code:</span>
               </span>
-              <span className="font-mono text-[11px] px-2 py-0.5 rounded-full bg-white dark:bg-[#191C1B] text-[#00695C] dark:text-[#80D5C4] font-semibold">
+              <span className="font-mono text-[11px] px-2 py-0.5 rounded-full bg-white dark:bg-[#161A19] text-[#00695C] dark:text-[#80D5C4] font-semibold">
                 DATA_EXPORT (Approval Gated)
               </span>
             </div>
 
             <div className="flex items-center justify-between py-1">
-              <span className="text-[#6F7976] dark:text-[#89938F]">Formula Neutralization:</span>
+              <span className="text-[#475569] dark:text-[#94A3B8]">Formula Neutralization:</span>
               <span className="text-emerald-700 dark:text-emerald-400 font-medium flex items-center space-x-1">
                 <CheckCircle2 className="w-3.5 h-3.5" />
                 <span>Active (Prepends &apos; to =, +, -, @)</span>
@@ -160,7 +160,7 @@ export const ExportConfirmationModal: React.FC<ExportConfirmationModalProps> = (
           )}
 
           {/* Explicit Acknowledgment Checkbox */}
-          <label className="flex items-start space-x-3 p-3 rounded-2xl border border-[#BEC9C5]/60 dark:border-[#3F4946]/60 hover:bg-[#ECEFEC] dark:hover:bg-[#272B2A] transition-colors cursor-pointer select-none">
+          <label className="flex items-start space-x-3 p-3 rounded-2xl border border-[#E2E8F0]/60 dark:border-[#334155]/60 hover:bg-[#F1F5F4] dark:hover:bg-[#1E293B] transition-colors cursor-pointer select-none">
             <input
               type="checkbox"
               id="chk-confirm-audit-trail"
@@ -169,20 +169,20 @@ export const ExportConfirmationModal: React.FC<ExportConfirmationModalProps> = (
               disabled={isProcessing}
               className="w-4 h-4 mt-0.5 rounded-sm text-[#00695C] focus:ring-[#00695C] cursor-pointer"
             />
-            <span className="text-xs text-[#191C1B] dark:text-[#E1E3E0] leading-relaxed">
+            <span className="text-xs text-[#0F172A] dark:text-[#F1F5F9] leading-relaxed">
               I acknowledge and confirm that this customer export is authorized, aligns with company privacy standards, and will be logged to the immutable security audit trail.
             </span>
           </label>
         </div>
 
         {/* Footer Actions - M3 Pill Buttons */}
-        <div className="p-4 px-6 border-t border-[#BEC9C5]/30 dark:border-[#3F4946]/30 bg-[#F2F5F2] dark:bg-[#191C1B] flex items-center justify-end space-x-3">
+        <div className="p-4 px-6 border-t border-[#E2E8F0]/30 dark:border-[#334155]/30 bg-[#F2F5F2] dark:bg-[#161A19] flex items-center justify-end space-x-3">
           <button
             type="button"
             id="btn-cancel-export"
             onClick={onClose}
             disabled={isProcessing}
-            className="min-h-[44px] px-5 text-xs font-semibold rounded-full border border-[#BEC9C5] dark:border-[#3F4946] text-[#3F4946] dark:text-[#BEC9C5] hover:bg-[#ECEFEC] dark:hover:bg-[#272B2A] transition-all"
+            className="min-h-[44px] px-5 text-xs font-semibold rounded-full border border-[#E2E8F0] dark:border-[#334155] text-[#475569] dark:text-[#94A3B8] hover:bg-[#F1F5F4] dark:hover:bg-[#1E293B] transition-all"
           >
             Cancel &amp; Block Export
           </button>
@@ -195,7 +195,7 @@ export const ExportConfirmationModal: React.FC<ExportConfirmationModalProps> = (
             className={`min-h-[44px] px-6 text-xs font-semibold rounded-full flex items-center space-x-2 transition-all shadow-sm ${
               hasAcknowledged && !isProcessing
                 ? 'bg-[#00695C] text-white hover:bg-[#005449] hover:shadow-md'
-                : 'bg-[#ECEFEC] dark:bg-[#272B2A] text-[#6F7976] dark:text-[#89938F] cursor-not-allowed border border-transparent'
+                : 'bg-[#F1F5F4] dark:bg-[#1E293B] text-[#475569] dark:text-[#94A3B8] cursor-not-allowed border border-transparent'
             }`}
           >
             {isProcessing ? (

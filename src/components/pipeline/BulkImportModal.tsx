@@ -212,9 +212,9 @@ Bhavna Mehra,+91 98444 55667,Google Ads,Health insurance plan for senior citizen
         tabIndex={-1}
       >
         {/* Header */}
-        <div className="px-6 py-4 bg-[#1F3A5F] text-white flex items-center justify-between">
+        <div className="px-6 py-4 bg-[#1E293B] text-white flex items-center justify-between">
           <div className="flex items-center space-x-2.5">
-            <div className="w-8 h-8 rounded-lg bg-[#2E6E5C] flex items-center justify-center text-white">
+            <div className="w-8 h-8 rounded-lg bg-[#00695C] flex items-center justify-center text-white">
               <FileSpreadsheet className="w-4 h-4" />
             </div>
             <div>
@@ -268,7 +268,7 @@ Bhavna Mehra,+91 98444 55667,Google Ads,Health insurance plan for senior citizen
               <button
                 type="button"
                 onClick={handleDownloadSample}
-                className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-[#2E6E5C] text-white hover:bg-[#255e4e] flex items-center space-x-1"
+                className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-[#00695C] text-white hover:bg-[#255e4e] flex items-center space-x-1"
               >
                 <Download className="w-3 h-3" />
                 <span>Download .CSV</span>
@@ -306,7 +306,7 @@ Bhavna Mehra,+91 98444 55667,Google Ads,Health insurance plan for senior citizen
                   parseCsv(e.target.value);
                 }
               }}
-              className="w-full p-3 font-mono text-xs bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#2E6E5C]"
+              className="w-full p-3 font-mono text-xs bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#00695C]"
             />
           </div>
 
@@ -431,7 +431,7 @@ Bhavna Mehra,+91 98444 55667,Google Ads,Health insurance plan for senior citizen
             type="button"
             onClick={handleExecuteImport}
             disabled={isProcessing || !csvText}
-            className="px-5 py-2 rounded-xl text-xs font-bold text-white bg-[#2E6E5C] hover:bg-[#255e4e] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2E6E5C] focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 disabled:opacity-50 transition-all flex items-center space-x-1.5 shadow-xs"
+            className="px-5 py-2 rounded-xl text-xs font-bold text-white bg-[#00695C] hover:bg-[#255e4e] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00695C] focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 disabled:opacity-50 transition-all flex items-center space-x-1.5 shadow-xs"
           >
             <Check className="w-4 h-4" />
             <span>{isProcessing ? 'Importing Leads...' : 'Import Leads to Pipeline'}</span>

@@ -148,7 +148,7 @@ export const PlatformDashboardView: React.FC = () => {
     return (
       <div className="p-8 flex flex-col items-center justify-center min-h-[50vh]">
         <AlertTriangle className="w-12 h-12 text-red-500 mb-4" />
-        <h2 className="text-xl font-bold text-[#191C1B] dark:text-[#E1E3E0]">Access Denied</h2>
+        <h2 className="text-xl font-bold text-[#0F172A] dark:text-[#F1F5F9]">Access Denied</h2>
         <p className="text-[#404947] dark:text-[#BFC9C6]">Platform staff only.</p>
       </div>
     );
@@ -158,12 +158,12 @@ export const PlatformDashboardView: React.FC = () => {
     <div className="p-4 md:p-8 max-w-7xl mx-auto space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-[#191C1B] dark:text-[#E1E3E0]">Platform Control Plane</h1>
+          <h1 className="text-2xl font-bold text-[#0F172A] dark:text-[#F1F5F9]">Platform Control Plane</h1>
           <p className="text-[#404947] dark:text-[#BFC9C6]">Manage tenant lifecycles, security alerts, and feature rollouts.</p>
         </div>
       </div>
 
-      <div className="flex overflow-x-auto gap-2 border-b border-[#E1E3E0] dark:border-[#404947] pb-2">
+      <div className="flex overflow-x-auto gap-2 border-b border-[#F1F5F9] dark:border-[#334155] pb-2">
         {TABS.map(tab => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -174,7 +174,7 @@ export const PlatformDashboardView: React.FC = () => {
               className={`flex items-center gap-2 px-4 py-2 rounded-t-lg transition-colors whitespace-nowrap ${
                 isActive 
                   ? 'bg-[#CCE8E1] dark:bg-[#004F46] text-[#00201B] dark:text-[#A3F2E4] border-b-2 border-[#00695C]' 
-                  : 'text-[#404947] dark:text-[#BFC9C6] hover:bg-[#F0F5F3] dark:hover:bg-[#272B2A]'
+                  : 'text-[#404947] dark:text-[#BFC9C6] hover:bg-[#F0F5F3] dark:hover:bg-[#1E293B]'
               }`}
             >
               <Icon className="w-4 h-4" />
@@ -186,9 +186,9 @@ export const PlatformDashboardView: React.FC = () => {
 
       <div className="mt-6">
         {activeTab === 'tenants' && (
-          <div className="bg-white dark:bg-[#191C1B] rounded-xl shadow-sm border border-[#E1E3E0] dark:border-[#404947] overflow-hidden">
+          <div className="bg-white dark:bg-[#161A19] rounded-xl shadow-sm border border-[#F1F5F9] dark:border-[#334155] overflow-hidden">
             <table className="w-full text-sm text-left">
-              <thead className="bg-[#F0F5F3] dark:bg-[#272B2A] text-[#404947] dark:text-[#BFC9C6] font-medium">
+              <thead className="bg-[#F0F5F3] dark:bg-[#1E293B] text-[#404947] dark:text-[#BFC9C6] font-medium">
                 <tr>
                   <th className="px-6 py-4">Tenant Name</th>
                   <th className="px-6 py-4">Status</th>
@@ -199,10 +199,10 @@ export const PlatformDashboardView: React.FC = () => {
                   <th className="px-6 py-4 text-center">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#E1E3E0] dark:divide-[#404947]">
+              <tbody className="divide-y divide-[#F1F5F9] dark:divide-[#404947]">
                 {tenants.map(t => (
                   <tr key={t.id} className="hover:bg-gray-50 dark:hover:bg-[#202423]">
-                    <td className="px-6 py-4 font-medium text-[#191C1B] dark:text-[#E1E3E0]">{t.name}</td>
+                    <td className="px-6 py-4 font-medium text-[#0F172A] dark:text-[#F1F5F9]">{t.name}</td>
                     <td className="px-6 py-4">
                       <span className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${
                         t.status === 'active' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' :
@@ -244,19 +244,19 @@ export const PlatformDashboardView: React.FC = () => {
 
         {activeTab === 'soc' && (
           <div className="space-y-6">
-            <div className="bg-white dark:bg-[#191C1B] rounded-xl shadow-sm border border-[#E1E3E0] dark:border-[#404947] overflow-hidden p-6">
-              <h3 className="text-lg font-medium text-[#191C1B] dark:text-[#E1E3E0] mb-4">Cross-Tenant Security Alerts</h3>
+            <div className="bg-white dark:bg-[#161A19] rounded-xl shadow-sm border border-[#F1F5F9] dark:border-[#334155] overflow-hidden p-6">
+              <h3 className="text-lg font-medium text-[#0F172A] dark:text-[#F1F5F9] mb-4">Cross-Tenant Security Alerts</h3>
               <div className="space-y-4">
                 {alerts.map(a => (
-                  <div key={a.id} className="flex gap-4 p-4 rounded-lg bg-[#F0F5F3] dark:bg-[#272B2A] border-l-4 border-red-500">
+                  <div key={a.id} className="flex gap-4 p-4 rounded-lg bg-[#F0F5F3] dark:bg-[#1E293B] border-l-4 border-red-500">
                     <ShieldAlert className="w-5 h-5 text-red-500 flex-shrink-0" />
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="font-semibold text-[#191C1B] dark:text-[#E1E3E0]">{a.type}</span>
+                        <span className="font-semibold text-[#0F172A] dark:text-[#F1F5F9]">{a.type}</span>
                         <span className="text-xs text-red-600 dark:text-red-400 bg-red-100 dark:bg-red-900/30 px-2 py-0.5 rounded-full uppercase">{a.severity}</span>
                       </div>
                       <p className="text-sm text-[#404947] dark:text-[#BFC9C6] mt-1">Tenant: {a.tenantName || 'Unknown'} | IP: {a.sourceIp}</p>
-                      <p className="text-sm text-[#191C1B] dark:text-[#E1E3E0] mt-2">{a.details}</p>
+                      <p className="text-sm text-[#0F172A] dark:text-[#F1F5F9] mt-2">{a.details}</p>
                     </div>
                   </div>
                 ))}
@@ -269,8 +269,8 @@ export const PlatformDashboardView: React.FC = () => {
         )}
 
         {activeTab === 'impersonate' && (
-          <div className="bg-white dark:bg-[#191C1B] rounded-xl shadow-sm border border-[#E1E3E0] dark:border-[#404947] overflow-hidden p-6">
-             <h3 className="text-lg font-medium text-[#191C1B] dark:text-[#E1E3E0] mb-4">Active Impersonation Sessions</h3>
+          <div className="bg-white dark:bg-[#161A19] rounded-xl shadow-sm border border-[#F1F5F9] dark:border-[#334155] overflow-hidden p-6">
+             <h3 className="text-lg font-medium text-[#0F172A] dark:text-[#F1F5F9] mb-4">Active Impersonation Sessions</h3>
              <div className="space-y-4">
                {impersonationSessions.map(s => (
                  <div key={s.id} className={`p-4 rounded-lg border ${s.active ? 'border-amber-500 bg-amber-50 dark:bg-amber-950/20' : 'border-gray-200 dark:border-gray-800 opacity-60'}`}>
@@ -298,27 +298,27 @@ export const PlatformDashboardView: React.FC = () => {
         {activeTab === 'billing' && billing && (
           <div className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-               <div className="bg-white dark:bg-[#191C1B] p-6 rounded-xl border border-[#E1E3E0] dark:border-[#404947]">
+               <div className="bg-white dark:bg-[#161A19] p-6 rounded-xl border border-[#F1F5F9] dark:border-[#334155]">
                  <div className="text-sm text-[#404947] dark:text-[#BFC9C6] mb-1">Total MRR</div>
-                 <div className="text-3xl font-bold text-[#191C1B] dark:text-[#E1E3E0]">₹{(billing.totalMRR).toLocaleString()}</div>
+                 <div className="text-3xl font-bold text-[#0F172A] dark:text-[#F1F5F9]">₹{(billing.totalMRR).toLocaleString()}</div>
                </div>
-               <div className="bg-white dark:bg-[#191C1B] p-6 rounded-xl border border-[#E1E3E0] dark:border-[#404947]">
+               <div className="bg-white dark:bg-[#161A19] p-6 rounded-xl border border-[#F1F5F9] dark:border-[#334155]">
                  <div className="text-sm text-[#404947] dark:text-[#BFC9C6] mb-1">Enterprise Tenants</div>
-                 <div className="text-3xl font-bold text-[#191C1B] dark:text-[#E1E3E0]">{billing.tierCounts.enterprise}</div>
+                 <div className="text-3xl font-bold text-[#0F172A] dark:text-[#F1F5F9]">{billing.tierCounts.enterprise}</div>
                </div>
-               <div className="bg-white dark:bg-[#191C1B] p-6 rounded-xl border border-[#E1E3E0] dark:border-[#404947]">
+               <div className="bg-white dark:bg-[#161A19] p-6 rounded-xl border border-[#F1F5F9] dark:border-[#334155]">
                  <div className="text-sm text-[#404947] dark:text-[#BFC9C6] mb-1">Growth Tenants</div>
-                 <div className="text-3xl font-bold text-[#191C1B] dark:text-[#E1E3E0]">{billing.tierCounts.growth}</div>
+                 <div className="text-3xl font-bold text-[#0F172A] dark:text-[#F1F5F9]">{billing.tierCounts.growth}</div>
                </div>
-               <div className="bg-white dark:bg-[#191C1B] p-6 rounded-xl border border-[#E1E3E0] dark:border-[#404947]">
+               <div className="bg-white dark:bg-[#161A19] p-6 rounded-xl border border-[#F1F5F9] dark:border-[#334155]">
                  <div className="text-sm text-[#404947] dark:text-[#BFC9C6] mb-1">Failed Invoices</div>
                  <div className="text-3xl font-bold text-red-600">{billing.prioritizedInvoices.filter(i => i.status === 'failed').length}</div>
                </div>
             </div>
-            <div className="bg-white dark:bg-[#191C1B] rounded-xl shadow-sm border border-[#E1E3E0] dark:border-[#404947] overflow-hidden p-6">
-              <h3 className="text-lg font-medium text-[#191C1B] dark:text-[#E1E3E0] mb-4">All Invoices</h3>
+            <div className="bg-white dark:bg-[#161A19] rounded-xl shadow-sm border border-[#F1F5F9] dark:border-[#334155] overflow-hidden p-6">
+              <h3 className="text-lg font-medium text-[#0F172A] dark:text-[#F1F5F9] mb-4">All Invoices</h3>
               <table className="w-full text-sm text-left">
-                <thead className="bg-[#F0F5F3] dark:bg-[#272B2A] text-[#404947] dark:text-[#BFC9C6] font-medium">
+                <thead className="bg-[#F0F5F3] dark:bg-[#1E293B] text-[#404947] dark:text-[#BFC9C6] font-medium">
                   <tr>
                     <th className="px-4 py-3">Tenant</th>
                     <th className="px-4 py-3">Invoice ID</th>
@@ -327,10 +327,10 @@ export const PlatformDashboardView: React.FC = () => {
                     <th className="px-4 py-3">Status</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#E1E3E0] dark:divide-[#404947]">
+                <tbody className="divide-y divide-[#F1F5F9] dark:divide-[#404947]">
                   {billing.allInvoices.map((inv: any) => (
                      <tr key={inv.id}>
-                        <td className="px-4 py-3 font-medium text-[#191C1B] dark:text-[#E1E3E0]">{inv.tenantName}</td>
+                        <td className="px-4 py-3 font-medium text-[#0F172A] dark:text-[#F1F5F9]">{inv.tenantName}</td>
                         <td className="px-4 py-3 font-mono text-xs">{inv.invoiceId}</td>
                         <td className="px-4 py-3">₹{inv.amount.toLocaleString()}</td>
                         <td className="px-4 py-3">{new Date(inv.dueDate).toLocaleDateString()}</td>
@@ -355,13 +355,13 @@ export const PlatformDashboardView: React.FC = () => {
         )}
 
         {activeTab === 'features' && (
-          <div className="bg-white dark:bg-[#191C1B] rounded-xl shadow-sm border border-[#E1E3E0] dark:border-[#404947] overflow-hidden p-6">
-             <h3 className="text-lg font-medium text-[#191C1B] dark:text-[#E1E3E0] mb-4">Feature Flags</h3>
+          <div className="bg-white dark:bg-[#161A19] rounded-xl shadow-sm border border-[#F1F5F9] dark:border-[#334155] overflow-hidden p-6">
+             <h3 className="text-lg font-medium text-[#0F172A] dark:text-[#F1F5F9] mb-4">Feature Flags</h3>
              <div className="space-y-4">
                {features.map(f => (
-                 <div key={f.id} className="p-4 rounded-lg border border-[#E1E3E0] dark:border-[#404947] flex justify-between items-center">
+                 <div key={f.id} className="p-4 rounded-lg border border-[#F1F5F9] dark:border-[#334155] flex justify-between items-center">
                     <div>
-                       <h4 className="font-semibold text-[#191C1B] dark:text-[#E1E3E0]">{f.key}</h4>
+                       <h4 className="font-semibold text-[#0F172A] dark:text-[#F1F5F9]">{f.key}</h4>
                        <p className="text-sm text-[#404947] dark:text-[#BFC9C6] mt-1">{f.description}</p>
                        <div className="flex gap-2 mt-3">
                           <span className={`text-xs px-2 py-1 rounded-full ${f.enabledGlobally ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
@@ -377,7 +377,7 @@ export const PlatformDashboardView: React.FC = () => {
                           )}
                        </div>
                     </div>
-                    <button className="px-4 py-2 bg-white dark:bg-[#191C1B] border border-[#00695C] text-[#00695C] dark:text-[#4DB6AC] rounded-lg hover:bg-[#F0F5F3] dark:hover:bg-[#004F46]/30 text-sm font-medium transition-colors">
+                    <button className="px-4 py-2 bg-white dark:bg-[#161A19] border border-[#00695C] text-[#00695C] dark:text-[#4DB6AC] rounded-lg hover:bg-[#F0F5F3] dark:hover:bg-[#004F46]/30 text-sm font-medium transition-colors">
                       Edit Rollout
                     </button>
                  </div>
