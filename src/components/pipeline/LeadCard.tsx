@@ -1,5 +1,5 @@
 import React from 'react';
-import { Phone, MessageSquare, Clock, Calendar, ArrowRight, UserCheck, AlertCircle } from 'lucide-react';
+import { Phone, MessageSquare, Clock, UserCheck, Building } from 'lucide-react';
 import { MaterialDropdown } from '../common/MaterialDropdown';
 import { Lead, LeadStage, User } from '../../types';
 
@@ -24,7 +24,6 @@ export const LeadCard: React.FC<LeadCardProps> = ({
   onOpenDetail,
   onStartCall,
   onOpenWhatsApp,
-  onUpdateStage,
   onAssignRep = (_leadId: string, _repId: string) => {},
   isDraggable = true,
   onDragStart,
@@ -35,46 +34,47 @@ export const LeadCard: React.FC<LeadCardProps> = ({
   const getSourceBadge = (source: Lead['source']) => {
     switch (source) {
       case 'WhatsApp':
-        return 'bg-emerald-50 dark:bg-emerald-950/70 text-emerald-700 dark:text-emerald-300 border-emerald-200/80 dark:border-emerald-800/80';
+        return 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800';
       case 'IndiaMART':
-        return 'bg-amber-50 dark:bg-amber-950/70 text-amber-800 dark:text-amber-300 border-amber-200/80 dark:border-amber-800/80';
+        return 'bg-amber-50 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border-amber-200 dark:border-amber-800';
       case 'Website':
-        return 'bg-sky-50 dark:bg-sky-950/70 text-sky-800 dark:text-sky-300 border-sky-200/80 dark:border-sky-800/80';
+        return 'bg-sky-50 text-sky-800 dark:bg-sky-950/60 dark:text-sky-300 border-sky-200 dark:border-sky-800';
       case 'Google Ads':
-        return 'bg-yellow-50 dark:bg-yellow-950/70 text-yellow-800 dark:text-yellow-300 border-yellow-200/80 dark:border-yellow-800/80';
+        return 'bg-orange-50 text-orange-800 dark:bg-orange-950/60 dark:text-orange-300 border-orange-200 dark:border-orange-800';
       case 'Facebook':
-        return 'bg-indigo-50 dark:bg-indigo-950/70 text-indigo-800 dark:text-indigo-300 border-indigo-200/80 dark:border-indigo-800/80';
-      case 'Manual':
+        return 'bg-indigo-50 text-indigo-800 dark:bg-indigo-950/60 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800';
       default:
-        return 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700';
+        return 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300 border-slate-200 dark:border-slate-700';
     }
   };
 
   const formatCurrency = (amount?: number) => {
     if (!amount) return null;
-    if (amount >= 10000000) return `₹${(amount / 10000000).toFixed(1)} Cr`;
+    if (amount >= 10000000) return `₹${(amount / 10000000).toFixed(2)} Cr`;
     if (amount >= 100000) return `₹${(amount / 100000).toFixed(1)} L`;
     return `₹${amount.toLocaleString('en-IN')}`;
   };
 
-  // Check if callback reminder is due or overdue
+  // Check callback reminder
   const isCallbackDue = lead.callbackReminder ? new Date(lead.callbackReminder).getTime() <= Date.now() + 3600000 : false;
   const isCallbackOverdue = lead.callbackReminder ? new Date(lead.callbackReminder).getTime() < Date.now() : false;
+
+  const assignedRep = users.find(u => u.id === lead.assignedRepId);
 
   return (
     <div
       id={`lead-card-${lead.id}`}
       draggable={isDraggable}
       onDragStart={(e) => onDragStart && onDragStart(e, lead.id)}
-      className={`group relative bg-[#F8FAF9] dark:bg-[#161A19] rounded-[20px] p-3.5 border transition-all duration-200 cursor-grab active:cursor-grabbing shadow-xs hover:shadow-md ${
+      className={`group relative bg-white dark:bg-[#181F1D] rounded-xl p-3.5 border transition-all duration-150 cursor-grab active:cursor-grabbing shadow-xs hover:shadow-md ${
         isSelected
-          ? 'border-[#00695C] ring-2 ring-[#00695C]/40 bg-[#CCE8E1]/30 dark:bg-[#004F46]/20'
-          : 'border-[#E2E8F0]/40 dark:border-[#334155]/40 hover:border-[#00695C]/60 dark:hover:border-[#80D5C4]/60'
+          ? 'border-emerald-600 ring-2 ring-emerald-600/30 bg-emerald-50/20 dark:bg-emerald-950/20'
+          : 'border-slate-200 dark:border-slate-800/80 hover:border-emerald-600/50'
       }`}
     >
-      {/* Top row: Checkbox, Name & Value */}
-      <div className="flex items-start justify-between gap-2 mb-1.5">
-        <div className="flex items-center space-x-2 min-w-0">
+      {/* Header: Select Checkbox, Name, Deal Value */}
+      <div className="flex items-start justify-between gap-2 mb-2">
+        <div className="flex items-center gap-2 min-w-0">
           {(isSelectMode || onToggleSelect) && (
             <input
               type="checkbox"
@@ -83,77 +83,81 @@ export const LeadCard: React.FC<LeadCardProps> = ({
               checked={isSelected}
               onChange={() => onToggleSelect && onToggleSelect(lead.id)}
               onClick={(e) => e.stopPropagation()}
-              className="w-4 h-4 rounded text-[#00695C] border-[#E2E8F0] dark:border-[#334155] focus:ring-[#00695C] focus-visible:ring-2 cursor-pointer"
+              className="w-4 h-4 rounded text-emerald-600 border-slate-300 dark:border-slate-700 focus:ring-emerald-600 cursor-pointer shrink-0"
             />
           )}
           <button
             type="button"
             onClick={() => onOpenDetail(lead)}
             aria-label={`View details for ${lead.name}`}
-            className="text-left font-semibold text-xs sm:text-sm text-[#0F172A] dark:text-[#F1F5F9] hover:text-[#00695C] dark:hover:text-[#80D5C4] leading-snug line-clamp-1 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00695C] rounded"
+            className="text-left font-semibold text-sm text-slate-900 dark:text-slate-100 hover:text-emerald-700 dark:hover:text-emerald-400 leading-snug transition-colors line-clamp-1"
           >
             {lead.name}
           </button>
         </div>
+
         {lead.value ? (
-          <span className="text-[11px] font-semibold text-[#00201B] dark:text-[#80D5C4] bg-[#CCE8E1] dark:bg-[#004F46] px-2.5 py-0.5 rounded-full whitespace-nowrap tabular-nums">
+          <span className="text-xs font-semibold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-200/60 dark:border-emerald-800/60 whitespace-nowrap tabular-nums shrink-0">
             {formatCurrency(lead.value)}
           </span>
         ) : null}
       </div>
 
-      {/* Phone number and industry */}
-      <div className="flex items-center space-x-2 text-xs text-[#475569] mb-2 font-normal">
-        <span className="tabular-nums text-[11px] font-mono">{lead.phone}</span>
+      {/* Contact & Meta Row */}
+      <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-500 dark:text-slate-400 mb-2.5">
+        <span className="font-mono tabular-nums text-slate-700 dark:text-slate-300 text-[11px]">
+          {lead.phone}
+        </span>
+        <span className="text-slate-300 dark:text-slate-700">·</span>
+        <span className={`text-[10px] font-medium px-2 py-0.5 rounded border ${getSourceBadge(lead.source)}`}>
+          {lead.source}
+        </span>
         {lead.industry && (
           <>
-            <span className="text-[#E2E8F0] dark:text-[#475569]">•</span>
-            <span className="text-[11px] text-[#475569]">{lead.industry}</span>
+            <span className="text-slate-300 dark:text-slate-700">·</span>
+            <span className="text-[11px] text-slate-500 inline-flex items-center gap-1">
+              <Building className="w-3 h-3 text-slate-400 shrink-0" />
+              <span>{lead.industry}</span>
+            </span>
           </>
         )}
       </div>
 
-      {/* Badges: Source & Callback Reminder */}
-      <div className="flex flex-wrap items-center gap-1.5 mb-2.5">
-        <span className={`text-[10px] font-medium px-2.5 py-0.5 rounded-full ${getSourceBadge(lead.source)}`}>
-          {lead.source}
-        </span>
-
-        {lead.callbackReminder && (
-          <span
-            className={`text-[10px] font-medium px-2.5 py-0.5 rounded-full flex items-center space-x-1 ${
-              isCallbackOverdue
-                ? 'bg-[#FFDAD6] text-[#410002] dark:bg-[#93000A] dark:text-[#FFB4AB]'
-                : isCallbackDue
-                ? 'bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-200'
-                : 'bg-[#F1F5F4] text-[#0F172A] dark:bg-[#1E293B] dark:text-[#F1F5F9]'
-            }`}
-            title={`Callback reminder: ${new Date(lead.callbackReminder).toLocaleString('en-IN')}`}
-          >
-            <Clock className="w-3 h-3 inline text-[#475569]" />
-            <span>
-              {isCallbackOverdue ? 'Overdue' : 'Due'}{' '}
-              {new Date(lead.callbackReminder).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}
-            </span>
-          </span>
-        )}
-      </div>
-
-      {/* Notes preview */}
+      {/* Notes / Requirement Preview */}
       {lead.notes && (
         <p
           onClick={() => onOpenDetail(lead)}
-          className="text-[11px] text-[#475569] dark:text-[#94A3B8] bg-[#F1F5F4]/60 dark:bg-[#1E293B]/60 p-2.5 rounded-[12px] mb-2.5 line-clamp-2 italic border border-transparent cursor-pointer"
+          className="text-xs text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-900/60 p-2.5 rounded-lg mb-3 line-clamp-2 leading-relaxed border border-slate-100 dark:border-slate-800/60 cursor-pointer hover:bg-slate-100/70 dark:hover:bg-slate-800/60 transition-colors"
+          title={lead.notes}
         >
           "{lead.notes}"
         </p>
       )}
 
-      {/* Rep Assignment & Stage Selector */}
-      <div className="flex items-center justify-between pt-2 border-t border-[#E2E8F0]/30 dark:border-[#334155]/30 mb-2.5">
-        <div className="flex items-center space-x-1 text-[#475569]">
-          <UserCheck className="w-3.5 h-3.5 text-[#475569]" />
-          <span className="text-[11px]">Rep:</span>
+      {/* Callback Reminder Indicator */}
+      {lead.callbackReminder && (
+        <div
+          className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-medium mb-2.5 border ${
+            isCallbackOverdue
+              ? 'bg-rose-50 text-rose-800 border-rose-200 dark:bg-rose-950/60 dark:text-rose-300 dark:border-rose-800'
+              : isCallbackDue
+              ? 'bg-amber-50 text-amber-800 border-amber-200 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-800'
+              : 'bg-slate-50 text-slate-700 border-slate-200 dark:bg-slate-800/60 dark:text-slate-300 dark:border-slate-700'
+          }`}
+        >
+          <Clock className="w-3.5 h-3.5 shrink-0" />
+          <span>
+            {isCallbackOverdue ? 'Overdue Reminder' : 'Callback'}:{' '}
+            {new Date(lead.callbackReminder).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}
+          </span>
+        </div>
+      )}
+
+      {/* Rep Assignment Row */}
+      <div className="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800 text-xs mb-3">
+        <div className="flex items-center gap-1 text-slate-500">
+          <UserCheck className="w-3.5 h-3.5 text-slate-400" />
+          <span className="text-[11px]">Owner:</span>
         </div>
         <MaterialDropdown
           id={`select-rep-${lead.id}`}
@@ -161,13 +165,13 @@ export const LeadCard: React.FC<LeadCardProps> = ({
           ariaLabel={`Assign sales representative for ${lead.name}`}
           onChange={(val) => onAssignRep(lead.id, val)}
           variant="chip"
-          triggerClassName="text-[11px] max-w-[130px]"
+          triggerClassName="text-[11px] max-w-[150px] font-medium text-slate-700 dark:text-slate-200"
           options={users.map((u) => ({ value: u.id, label: `${u.name} (${u.role})` }))}
         />
       </div>
 
-      {/* Bottom Action Buttons: Call, WhatsApp */}
-      <div className="grid grid-cols-2 gap-1.5">
+      {/* Action Buttons: Quick Call & WhatsApp */}
+      <div className="grid grid-cols-2 gap-2">
         <button
           id={`btn-call-lead-${lead.id}`}
           type="button"
@@ -176,10 +180,9 @@ export const LeadCard: React.FC<LeadCardProps> = ({
             onStartCall(lead);
           }}
           aria-label={`Start phone call to ${lead.name}`}
-          className="flex items-center justify-center space-x-1.5 py-2 px-2.5 rounded-full text-xs font-medium bg-[#1E293B] hover:bg-[#162A45] text-white transition-colors shadow-xs active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E293B] min-h-[36px]"
-          title={`Simulate phone call to ${lead.name}`}
+          className="flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-lg text-xs font-medium bg-slate-900 hover:bg-slate-800 text-white dark:bg-slate-800 dark:hover:bg-slate-700 transition-colors shadow-xs active:scale-[0.98]"
         >
-          <Phone className="w-3.5 h-3.5 text-teal-300" />
+          <Phone className="w-3.5 h-3.5 text-teal-400" />
           <span>Call</span>
         </button>
 
@@ -191,10 +194,9 @@ export const LeadCard: React.FC<LeadCardProps> = ({
             onOpenWhatsApp(lead);
           }}
           aria-label={`Open WhatsApp chat with ${lead.name}`}
-          className="flex items-center justify-center space-x-1.5 py-2 px-2.5 rounded-full text-xs font-medium bg-[#00695C] hover:bg-[#005449] text-white transition-colors shadow-xs active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00695C] min-h-[36px]"
-          title={`Open WhatsApp chat with ${lead.name}`}
+          className="flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-lg text-xs font-medium bg-emerald-600 hover:bg-emerald-700 text-white transition-colors shadow-xs active:scale-[0.98]"
         >
-          <MessageSquare className="w-3.5 h-3.5 text-[#80D5C4]" />
+          <MessageSquare className="w-3.5 h-3.5 text-emerald-200" />
           <span>WhatsApp</span>
         </button>
       </div>

@@ -832,6 +832,7 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
               leads={currentLeads}
               selectedIds={selectedIds}
               onToggleSelect={handleToggleRow}
+              onSelectLead={onSelectLead}
               onUpdateLead={onUpdateLead}
               onInitiateCall={onInitiateCall}
               onOpenChat={onOpenChat}
@@ -1011,7 +1012,7 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
                     return (
                       <tr
                         key={lead.id}
-                        onClick={() => handleToggleRow(lead.id)}
+                        onClick={() => onSelectLead?.(lead)}
                         className={`group cursor-pointer transition-colors ${
                           isSelected
                             ? 'bg-[#CCE8E1]/35 dark:bg-[#004F46]/30 border-l-4 border-l-[#00695C]'
@@ -1039,7 +1040,16 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
                         {visibleColumns.name && (
                           <td className="px-4 py-3.5 text-[#0F172A] dark:text-[#F1F5F9]">
                             <div className="flex flex-col">
-                              <span className="font-medium text-sm tracking-tight m3-title-small">{lead.name}</span>
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  onSelectLead?.(lead);
+                                }}
+                                className="text-left font-semibold text-sm tracking-tight text-[#0F172A] dark:text-[#F1F5F9] hover:text-[#00695C] dark:hover:text-[#80D5C4] transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#00695C] rounded"
+                              >
+                                {lead.name}
+                              </button>
                               <span className="text-xs text-[#475569] dark:text-[#94A3B8] font-normal font-mono mt-0.5">
                                 {lead.phone} {company ? `• ${company}` : ''}
                               </span>
@@ -1159,15 +1169,19 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
                             className="flex items-center justify-end space-x-1"
                             onClick={(e) => e.stopPropagation()}
                           >
-                            {/* View Detail Modal Trigger */}
+                            {/* View Detail Trigger */}
                             <button
                               type="button"
-                              onClick={() => onSelectLead?.(lead)}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                onSelectLead?.(lead);
+                              }}
                               aria-label={`View details for ${lead.name}`}
                               title="Inspect lead record & timeline"
-                              className="w-8 h-8 rounded-full flex items-center justify-center text-[#00695C] dark:text-[#80D5C4] hover:bg-[#CCE8E1]/50 dark:hover:bg-[#004F46]/50 transition-colors"
+                              className="px-2.5 py-1 rounded-lg flex items-center space-x-1 text-xs font-medium text-[#00695C] dark:text-[#80D5C4] hover:bg-[#CCE8E1]/50 dark:hover:bg-[#004F46]/50 transition-colors"
                             >
-                              <Eye className="w-4 h-4" />
+                              <Eye className="w-3.5 h-3.5" />
+                              <span>View</span>
                             </button>
 
                             {/* Call Button */}

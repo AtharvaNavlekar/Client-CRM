@@ -13,9 +13,11 @@
     "clean": "rimraf dist server.js",
     "lint": "tsc --noEmit",
     "worker": "tsx server/jobs/worker.ts",
-    "test": "tsx tests/auth-and-compliance.test.ts",
+    "test": "tsx tests/auth-and-compliance.test.ts && tsx tests/lead-profile.test.ts",
     "test:security": "tsx security-tests/run-all.ts",
     "bootstrap-admin": "tsx server/bootstrap.ts",
+    "db:migrate": "tsx server/db/migrate.ts",
+    "db:seed": "tsx -e \"import('./server/db/provisionDev.ts').then(m => m.provisionDevelopmentData())\"",
     "db:generate": "drizzle-kit generate",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio"

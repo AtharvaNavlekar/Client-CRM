@@ -6,6 +6,7 @@ interface LeadCardListProps {
   leads: Lead[];
   selectedIds: Set<string>;
   onToggleSelect: (id: string) => void;
+  onSelectLead?: (lead: Lead) => void;
   onUpdateLead: (updated: Lead) => void;
   onInitiateCall?: (lead: Lead) => void;
   onOpenChat?: (lead: Lead) => void;
@@ -22,6 +23,7 @@ export const LeadCardList: React.FC<LeadCardListProps> = ({
   leads,
   selectedIds,
   onToggleSelect,
+  onSelectLead,
   onUpdateLead,
   onInitiateCall,
   onOpenChat
@@ -81,6 +83,7 @@ export const LeadCardList: React.FC<LeadCardListProps> = ({
           lead={lead}
           isSelected={selectedIds.has(lead.id)}
           onToggleSelect={onToggleSelect}
+          onSelectLead={onSelectLead}
           onInitiateCall={onInitiateCall}
           onOpenChat={onOpenChat}
           onRatingChange={handleRatingChange}

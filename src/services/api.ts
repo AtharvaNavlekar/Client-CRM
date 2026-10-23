@@ -260,6 +260,11 @@ export const api = {
     return res.json();
   },
 
+  async getLead(id: string): Promise<Lead> {
+    const res = await authFetch(`/api/leads/${encodeURIComponent(id)}`);
+    return res.json();
+  },
+
   async createLead(lead: Partial<Lead>): Promise<Lead> {
     const res = await authFetch('/api/leads', {
       method: 'POST',

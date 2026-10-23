@@ -71,11 +71,13 @@ const LoginForm: React.FC<{ setView: (v: AuthView) => void }> = ({ setView }) =>
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [ssoNotice, setSsoNotice] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     setError(null);
+    setSsoNotice(null);
     clearSessionExpiredMessage();
 
     if (!email.trim() || !password) {
@@ -91,6 +93,10 @@ const LoginForm: React.FC<{ setView: (v: AuthView) => void }> = ({ setView }) =>
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleSsoClick = (provider: 'Google' | 'Apple') => {
+    setSsoNotice(`${provider} Single Sign-On is not configured for this deployment. Please use a Quick Demo Account or enter email and password credentials below.`);
   };
 
   return (
@@ -111,6 +117,13 @@ const LoginForm: React.FC<{ setView: (v: AuthView) => void }> = ({ setView }) =>
         </div>
       )}
 
+      {ssoNotice && (
+        <div className="flex items-start space-x-2.5 p-3 rounded-xl bg-blue-50 border border-blue-200 text-blue-800 text-xs text-left animate-in fade-in">
+          <AlertCircle className="w-4 h-4 mt-0.5 shrink-0 text-blue-600" />
+          <span>{ssoNotice}</span>
+        </div>
+      )}
+
       {error && (
         <div className="flex items-start space-x-2.5 p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs text-left">
           <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
@@ -122,18 +135,24 @@ const LoginForm: React.FC<{ setView: (v: AuthView) => void }> = ({ setView }) =>
         <div className="space-y-3">
           <button
             type="button"
-            className="w-full flex items-center justify-center space-x-2 py-2.5 px-4 rounded-full border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-medium text-sm focus:outline-none focus:ring-2 focus:ring-slate-200 transition-colors"
+            onClick={() => handleSsoClick('Google')}
+            className="w-full flex items-center justify-center space-x-2 py-2.5 px-4 rounded-full border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-medium text-sm focus:outline-none focus:ring-2 focus:ring-slate-200 transition-colors cursor-pointer"
+            title="Google SSO not configured in this environment"
           >
             <GoogleIcon />
             <span>Log In with Google</span>
+            <span className="text-[10px] text-slate-400 font-normal ml-1">(Unavailable)</span>
           </button>
 
           <button
             type="button"
-            className="w-full flex items-center justify-center space-x-2 py-2.5 px-4 rounded-full border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-medium text-sm focus:outline-none focus:ring-2 focus:ring-slate-200 transition-colors"
+            onClick={() => handleSsoClick('Apple')}
+            className="w-full flex items-center justify-center space-x-2 py-2.5 px-4 rounded-full border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-medium text-sm focus:outline-none focus:ring-2 focus:ring-slate-200 transition-colors cursor-pointer"
+            title="Apple SSO not configured in this environment"
           >
             <AppleIcon />
             <span>Log In with Apple</span>
+            <span className="text-[10px] text-slate-400 font-normal ml-1">(Unavailable)</span>
           </button>
         </div>
 

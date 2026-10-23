@@ -10,7 +10,7 @@ import { ReportsView } from './components/reports/ReportsView';
 import { KanbanBoard } from './components/pipeline/KanbanBoard';
 import { AddLeadModal } from './components/pipeline/AddLeadModal';
 import { BulkImportModal } from './components/pipeline/BulkImportModal';
-import { LeadDetailModal } from './components/pipeline/LeadDetailModal';
+import { LeadProfileView } from './components/leads/LeadProfileView';
 import { CallConsoleModal } from './components/calling/CallConsoleModal';
 import { CallsView } from './components/calling/CallsView';
 import { WhatsAppView } from './components/whatsapp/WhatsAppView';
@@ -249,7 +249,10 @@ const AppContent: React.FC = () => {
         <Sidebar
           currentView={currentView}
           onViewChange={(view) => {
-            if (!isSecurityLocked) setCurrentView(view);
+            if (!isSecurityLocked) {
+              setSelectedLeadForDetail(null);
+              setCurrentView(view);
+            }
           }}
           isOpenMobile={isMobileSidebarOpen}
           onCloseMobile={() => setIsMobileSidebarOpen(false)}
@@ -285,7 +288,35 @@ const AppContent: React.FC = () => {
 
         {/* View Router */}
         <main className="flex-1 overflow-hidden relative flex flex-col">
-          {/* SCREEN 1: Leads List View */}
+          {selectedLeadForDetail ? (
+            <LeadProfileView
+              leadId={selectedLeadForDetail.id}
+              initialLead={selectedLeadForDetail}
+              users={users}
+              onBack={() => setSelectedLeadForDetail(null)}
+              onStartCall={handleStartCall}
+              onOpenWhatsApp={handleOpenWhatsApp}
+              onUpdateLead={handleUpdateLead}
+              onUpdateStage={(leadId, stage) => {
+                handleUpdateLead({
+                  ...selectedLeadForDetail,
+                  stage
+                });
+              }}
+              onAssignRep={(leadId, repId) => {
+                const rep = users.find((u) => u.id === repId);
+                if (rep) {
+                  handleUpdateLead({
+                    ...selectedLeadForDetail,
+                    assignedRepId: rep.id,
+                    assignedRepName: rep.name
+                  });
+                }
+              }}
+            />
+          ) : (
+            <>
+              {/* SCREEN 1: Leads List View */}
           {currentView === 'leads' && (
             <LeadsListView
               leads={leads}
@@ -429,6 +460,8 @@ const AppContent: React.FC = () => {
               <ReportsView />
             </div>
           )}
+            </>
+          )}
         </main>
       </div>
 
@@ -447,33 +480,6 @@ const AppContent: React.FC = () => {
         onClose={() => setIsBulkImportOpen(false)}
         onImportComplete={(imported) => {
           setLeads((prev) => [...imported, ...prev]);
-        }}
-        users={users}
-      />
-
-      <LeadDetailModal
-        lead={selectedLeadForDetail}
-        onClose={() => setSelectedLeadForDetail(null)}
-        onStartCall={handleStartCall}
-        onOpenWhatsApp={handleOpenWhatsApp}
-        onUpdateStage={(leadId, stage) => {
-          handleUpdateLead({
-            ...(selectedLeadForDetail as Lead),
-            stage
-          });
-        }}
-        onAssignRep={(leadId, repId) => {
-          const rep = users.find((u) => u.id === repId);
-          if (rep) {
-            handleUpdateLead({
-              ...(selectedLeadForDetail as Lead),
-              assignedRepId: rep.id,
-              assignedRepName: rep.name
-            });
-          }
-        }}
-        onUpdateLead={(updated) => {
-          handleUpdateLead(updated);
         }}
         users={users}
       />
@@ -518,27 +524,14 @@ const AppContent: React.FC = () => {
       {isMobile && (
         <BottomNavBar
           currentView={currentView}
-          onViewChange={setCurrentView}
+          onViewChange={(view) => {
+            setSelectedLeadForDetail(null);
+            setCurrentView(view);
+          }}
           onAddLead={() => setIsAddLeadOpen(true)}
         />
       )}
 
-      {/* Material Design 3 Extended Floating Action Button (FAB) — desktop only */}
-      {!isMobile && (
-        <div className="fixed bottom-6 right-6 z-40 flex items-center space-x-3">
-          <button
-            id="m3-fab-add-lead"
-            type="button"
-            onClick={() => setIsAddLeadOpen(true)}
-            aria-label="Add new lead"
-            className="m3-elevation-3 hover:m3-elevation-4 active:m3-elevation-2 flex items-center space-x-2.5 px-5 py-4 rounded-[24px] bg-[#00695C] text-white hover:bg-[#005449] active:scale-[0.98] transition-all duration-200 min-h-[56px]"
-            title="Add New Lead"
-          >
-            <Plus className="w-6 h-6 stroke-[2.5]" />
-            <span className="text-sm font-medium tracking-wide pr-1">Add Lead</span>
-          </button>
-        </div>
-      )}
       </div>
     </div>
   );

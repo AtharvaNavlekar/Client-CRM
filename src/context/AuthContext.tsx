@@ -97,7 +97,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setCurrentUser(res.user);
       setSecurityContext(res.securityContext || null);
       setPermissions(res.permissions || null);
-      await fetchUsers();
+      try {
+        await fetchUsers();
+      } catch (userErr) {
+        console.warn('Non-fatal: could not prefetch user list after login', userErr);
+      }
     } finally {
       setIsLoading(false);
     }

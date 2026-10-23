@@ -19,6 +19,7 @@ import { redisService, createSafeKey } from './server/infrastructure/redis';
 import jwt from 'jsonwebtoken';
 import bcryptjs from 'bcryptjs';
 import { createServer as createViteServer } from 'vite';
+import { initializeDatabase } from './server/db/init';
 import { aiService } from './server/services/ai/aiService';
 import {
   calculateReports,
@@ -242,6 +243,9 @@ async function startServer() {
   // Trust proxy for reverse proxy environments (Cloud Run, Nginx)
   app.set('trust proxy', 1);
 
+  // Initialize Database: Apply migrations and idempotent dev provisioning
+  await initializeDatabase();
+
   const getClientIp = (req: express.Request) => {
     return (req.headers['x-forwarded-for'] as string) || req.socket.remoteAddress || '127.0.0.1';
   };
@@ -345,6 +349,16 @@ async function startServer() {
     res.type('text/plain').send(generateRobotsTxtContent());
   });
 
+  // Serve static public assets (favicon.ico, favicon.svg, robots.txt, etc.)
+  const publicDir = path.join(process.cwd(), 'public');
+  app.use(express.static(publicDir));
+  app.get('/favicon.ico', (req, res) => {
+    res.sendFile(path.join(publicDir, 'favicon.ico'));
+  });
+  app.get('/favicon.svg', (req, res) => {
+    res.sendFile(path.join(publicDir, 'favicon.svg'));
+  });
+
   app.use(express.json({ limit: '5mb' }));
 
   // Prototype Pollution Guard
@@ -434,17 +448,57 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
 
   // 3. Auth Routes
   app.post('/api/auth/login', loginLimiter, async (req, res) => {
+    const requestId = req.securityContext?.requestId || crypto.randomUUID();
     const { email, password } = req.body;
     if (!email || !password) return res.status(400).json({ error: 'Email and password are required' });
     if (!validateEmail(email)) return res.status(400).json({ error: 'Invalid email address format' });
 
-    const usersData = await db.select().from(schema.users).where(eq(schema.users.email, String(email).trim().toLowerCase())).limit(1);
-    const user = usersData[0];
+    const normalizedEmail = String(email).trim().toLowerCase();
 
-    if (!user || !user.passwordHash) return res.status(401).json({ error: 'Invalid email or password' });
+    let user;
+    try {
+      const usersData = await db.select().from(schema.users).where(eq(schema.users.email, normalizedEmail)).limit(1);
+      user = usersData[0];
+    } catch (dbErr: any) {
+      console.error(`[AUTH_LOGIN_DB_ERROR] requestId=${requestId} code=${dbErr?.code || 'UNKNOWN'}`, dbErr?.message || dbErr);
+      return res.status(503).json({
+        error: 'Authentication service temporarily unavailable. Please try again shortly.',
+        code: 'DATABASE_UNAVAILABLE',
+        requestId
+      });
+    }
+
+    if (!user || !user.passwordHash) {
+      return res.status(401).json({ error: 'Invalid email or password' });
+    }
 
     const isMatch = bcryptjs.compareSync(String(password), user.passwordHash);
-    if (!isMatch) return res.status(401).json({ error: 'Invalid email or password' });
+    if (!isMatch) {
+      return res.status(401).json({ error: 'Invalid email or password' });
+    }
+
+    // Verify tenant is active (unless global platform staff without tenant)
+    if (user.tenantId) {
+      try {
+        const tenantData = await db.select().from(schema.tenants).where(eq(schema.tenants.id, user.tenantId)).limit(1);
+        const tenant = tenantData[0];
+        if (tenant && tenant.status === 'suspended' && !user.isPlatformStaff) {
+          return res.status(403).json({
+            error: `Access Suspended: The tenant organization "${tenant.name}" has been suspended.`,
+            code: 'TENANT_SUSPENDED',
+            suspensionReason: tenant.suspensionReason || 'Account compliance review required.',
+            suspendedAt: tenant.suspendedAt
+          });
+        }
+      } catch (tenantErr: any) {
+        console.error(`[AUTH_TENANT_CHECK_ERROR] requestId=${requestId}`, tenantErr?.message || tenantErr);
+        return res.status(503).json({
+          error: 'Authentication service temporarily unavailable. Please try again shortly.',
+          code: 'DATABASE_UNAVAILABLE',
+          requestId
+        });
+      }
+    }
 
     const tokenFamilyId = crypto.randomUUID();
     const rawRefreshToken = generateOpaqueRefreshToken();
@@ -454,20 +508,29 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
     const now = new Date();
     const expiresAt = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
 
-    await db.insert(sessions).values({
-      id: sessionId,
-      userId: user.id,
-      tenantId: user.tenantId,
-      tokenFamilyId,
-      refreshTokenHash,
-      createdAt: now.toISOString(),
-      expiresAt: expiresAt.toISOString(),
-      lastUsedAt: now.toISOString(),
-      createdIp: getClientIp(req),
-      lastUsedIp: getClientIp(req),
-      createdUserAgent: req.headers['user-agent']?.substring(0, 255),
-      lastUsedUserAgent: req.headers['user-agent']?.substring(0, 255),
-    });
+    try {
+      await db.insert(sessions).values({
+        id: sessionId,
+        userId: user.id,
+        tenantId: user.tenantId,
+        tokenFamilyId,
+        refreshTokenHash,
+        createdAt: now.toISOString(),
+        expiresAt: expiresAt.toISOString(),
+        lastUsedAt: now.toISOString(),
+        createdIp: getClientIp(req),
+        lastUsedIp: getClientIp(req),
+        createdUserAgent: req.headers['user-agent']?.substring(0, 255),
+        lastUsedUserAgent: req.headers['user-agent']?.substring(0, 255),
+      });
+    } catch (sessErr: any) {
+      console.error(`[AUTH_SESSION_INSERT_ERROR] requestId=${requestId}`, sessErr?.message || sessErr);
+      return res.status(503).json({
+        error: 'Authentication service temporarily unavailable. Please try again shortly.',
+        code: 'DATABASE_UNAVAILABLE',
+        requestId
+      });
+    }
 
     const token = signAccessToken({ id: user.id, email: user.email, role: user.role as any, tenantId: user.tenantId, isPlatformStaff: user.isPlatformStaff }, sessionId);
 
@@ -480,8 +543,13 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
       path: '/api/auth'
     });
 
-    const permsData = await db.select().from(schema.rolePermissions).where(eq(schema.rolePermissions.role, user.role)).limit(1);
-    const rolePermission = permsData[0] || null;
+    let rolePermission = null;
+    try {
+      const permsData = await db.select().from(schema.rolePermissions).where(eq(schema.rolePermissions.role, user.role)).limit(1);
+      rolePermission = permsData[0] || null;
+    } catch (permErr: any) {
+      console.warn(`[AUTH_ROLE_PERMS_WARN] requestId=${requestId}`, permErr?.message);
+    }
 
     res.json({ 
       user: sanitizeUser(user as any), 
@@ -805,6 +873,11 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
     const lead = leads[0];
     if (!lead) return res.status(404).json({ error: 'Lead not found' });
 
+    if (lead.tenantId && req.securityContext?.tenantId && lead.tenantId !== req.securityContext.tenantId && !req.securityContext.isPlatformStaff) {
+      adapterLogAudit(req, 'CROSS_TENANT_ACCESS_ATTEMPT', `Denied cross-tenant access to lead ${id}`, req.user, getClientIp(req), { severity: 'HIGH' });
+      return res.status(403).json({ error: 'Forbidden: Cannot access lead from another organization.' });
+    }
+
     if (!(await can(req.securityContext!, 'leads:read', { teamId: lead.teamId || '', ownerId: lead.assignedRepId || '' }))) {
       adapterLogAudit(req, 'ACCESS_DENIED', `Denied read access to lead ${id}`, req.user, getClientIp(req), { actionType: 'VIEW_LEAD' });
       return res.status(403).json({ error: 'Forbidden: Cannot access this lead.' });
@@ -923,6 +996,13 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
     if (req.body.fatigueStatus !== undefined) updates.fatigueStatus = req.body.fatigueStatus;
     if (req.body.contactAttempts7d !== undefined) updates.contactAttempts7d = req.body.contactAttempts7d;
     if (req.body.blockedReason !== undefined) updates.blockedReason = req.body.blockedReason;
+    if (req.body.callbackReminder !== undefined) updates.callbackReminder = req.body.callbackReminder;
+    if (req.body.value !== undefined) updates.value = req.body.value;
+    if (req.body.industry !== undefined) updates.industry = req.body.industry;
+    if (req.body.customFields !== undefined) updates.customFields = req.body.customFields;
+    if (req.body.declaredCallReason !== undefined) updates.declaredCallReason = req.body.declaredCallReason;
+    if (req.body.assignedCampaign !== undefined) updates.assignedCampaign = req.body.assignedCampaign;
+    if (req.body.lastContactDate !== undefined) updates.lastContactDate = req.body.lastContactDate;
     
     if (assignedRepId !== undefined && assignedRepId !== lead.assignedRepId) {
       if (!(await can(req.securityContext!, 'leads:delete', { teamId: lead.teamId || '', ownerId: lead.assignedRepId || '' }))) {
@@ -1036,9 +1116,11 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
     if (!tenantId && !req.securityContext!.isPlatformStaff) return res.status(403).json({ error: 'Tenant context required' });
 
     const requestedRepId = req.query.repId as string | undefined;
+    const requestedLeadId = req.query.leadId as string | undefined;
 
     const conditions = [];
     if (tenantId) conditions.push(eq(schema.calls.tenantId, tenantId));
+    if (requestedLeadId) conditions.push(eq(schema.calls.leadId, requestedLeadId));
     
     const scope = await getScope(req.securityContext!);
     if (scope === 'SELF') {
@@ -1117,8 +1199,11 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
     const tenantId = req.securityContext!.tenantId;
     if (!tenantId && !req.securityContext!.isPlatformStaff) return res.status(403).json({ error: 'Tenant context required' });
 
+    const requestedLeadId = req.query.leadId as string | undefined;
+
     const conditions = [];
     if (tenantId) conditions.push(eq(schema.messages.tenantId, tenantId));
+    if (requestedLeadId) conditions.push(eq(schema.messages.leadId, requestedLeadId));
     
     const scope = await getScope(req.securityContext!);
     if (scope === 'TEAM' && req.securityContext!.actorTeamId) {
