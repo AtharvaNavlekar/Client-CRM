@@ -5,7 +5,7 @@ import * as dotenv from 'dotenv';
 
 dotenv.config();
 
-const databaseUrl = process.env.DATABASE_URL;
+const databaseUrl = process.env.DATABASE_URL || 'postgres://postgres@localhost:5432/crm_local';
 
 if (!databaseUrl) {
   const errorMessage = '[DATABASE CRITICAL ERROR] DATABASE_URL environment variable is mandatory. DialPulse CRM requires PostgreSQL persistence and does not permit in-memory or mock database fallbacks.';

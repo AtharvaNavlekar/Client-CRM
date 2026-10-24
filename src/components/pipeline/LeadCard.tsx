@@ -66,7 +66,14 @@ export const LeadCard: React.FC<LeadCardProps> = ({
       id={`lead-card-${lead.id}`}
       draggable={isDraggable}
       onDragStart={(e) => onDragStart && onDragStart(e, lead.id)}
-      className={`group relative bg-white dark:bg-[#181F1D] rounded-xl p-3.5 border transition-all duration-150 cursor-grab active:cursor-grabbing shadow-xs hover:shadow-md ${
+      onClick={(e) => {
+        const target = e.target as HTMLElement;
+        if (target.closest('button, input, select, [role="button"], [role="combobox"]')) {
+          return;
+        }
+        onOpenDetail(lead);
+      }}
+      className={`group relative bg-white dark:bg-[#181F1D] rounded-xl p-3.5 border transition-all duration-150 cursor-pointer shadow-xs hover:shadow-md ${
         isSelected
           ? 'border-emerald-600 ring-2 ring-emerald-600/30 bg-emerald-50/20 dark:bg-emerald-950/20'
           : 'border-slate-200 dark:border-slate-800/80 hover:border-emerald-600/50'

@@ -1049,12 +1049,12 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
 
   // Bulk import leads from CSV (gated by EDIT authorization)
   app.post('/api/leads/import', async (req, res) => {
-    if (!(await can(req.securityContext!, 'leads:create'))) {
-      adapterLogAudit(req, 'ACCESS_DENIED', `Denied lead CSV import for ${req.user!.name}`, req.user, getClientIp(req), { actionType: 'EDIT' });
+    if (!(await can(req.securityContext!, 'leads:import' as any))) {
+      adapterLogAudit(req, 'ACCESS_DENIED', `Denied lead CSV import for ${req.user!.name}`, req.user, getClientIp(req), { actionType: 'REASSIGN' });
       return res.status(403).json({
         error: `Forbidden: Current role '${req.user!.role}' lacks permission to import leads.`,
         code: 'FORBIDDEN',
-        action: 'EDIT'
+        action: 'REASSIGN'
       });
     }
 
@@ -1224,21 +1224,30 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
   });
 
   app.post('/api/messages', async (req, res) => {
-    const { leadId, text, channel, direction = 'outbound' } = req.body;
+    const { leadId, text, channel, direction = 'outbound', overrideCompliance } = req.body;
     if (!leadId || !text) return res.status(400).json({ error: 'Lead ID and text required' });
 
     const leads = await db.select().from(schema.leads).where(eq(schema.leads.id, leadId)).limit(1);
     if (!leads.length) return res.status(404).json({ error: 'Lead not found' });
     const lead = leads[0];
 
+    const tenantId = req.securityContext?.tenantId;
+    if (lead.tenantId && tenantId && lead.tenantId !== tenantId && !req.securityContext?.isPlatformStaff) {
+      return res.status(403).json({ error: 'Forbidden: Lead belongs to another tenant', code: 'FORBIDDEN' });
+    }
+
     if (direction === 'outbound') {
-      const compliance = await checkCompliance(lead as any, channel === 'sms' ? 'SMS' : 'WhatsApp', { timestamp: new Date() });
-      if (!compliance.allowed) {
-        return res.status(compliance.statusCode || 403).json({
-          error: compliance.reason,
-          code: compliance.code,
-          details: compliance.details
-        });
+      const isManager = ['owner', 'cto', 'it', 'tl', 'tl_head', 'Admin'].includes(req.user?.role || '');
+      const shouldOverride = Boolean(overrideCompliance && isManager);
+      if (!shouldOverride) {
+        const compliance = await checkCompliance(lead as any, channel === 'sms' ? 'SMS' : 'WhatsApp', { timestamp: new Date() });
+        if (!compliance.allowed) {
+          return res.status(compliance.statusCode || 403).json({
+            error: compliance.reason,
+            code: compliance.code,
+            details: compliance.details
+          });
+        }
       }
     }
 
@@ -1257,6 +1266,7 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
     };
 
     await db.insert(schema.messages).values(newMsg);
+    await db.update(schema.leads).set({ lastContactDate: newMsg.timestamp }).where(eq(schema.leads.id, leadId));
     adapterLogAudit(req, 'MESSAGE_SENT', `Sent ${newMsg.channel} message to ${leadId}`, req.user, getClientIp(req));
     res.json(newMsg);
   });
@@ -1506,7 +1516,10 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
     const tenantId = req.securityContext!.tenantId;
     if (!tenantId && !req.securityContext!.isPlatformStaff) return res.status(403).json({ error: 'Tenant context required' });
 
-    if (!(await can(req.securityContext!, 'platform:manage')) && req.user!.role !== 'owner' && req.user!.role !== 'it') {
+    let role = req.user?.role as string;
+    if (role === 'Admin') role = 'owner';
+    const isAuthorized = ['owner', 'it', 'cto'].includes(role) || (await can(req.securityContext!, 'platform:manage'));
+    if (!isAuthorized) {
        return res.status(403).json({ error: 'Forbidden: Requires admin or IT privileges' });
     }
 
@@ -1563,24 +1576,29 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
 
   // 14. Settings APIs (Custom Fields, Role Permissions, Pipeline, Auto-Assignment)
   app.get('/api/settings', async (req, res) => {
-    if (req.user!.role !== 'owner' && req.user!.role !== 'it' && req.user!.role !== 'cto') {
-      return res.status(403).json({ error: 'Forbidden' });
-    }
     const tenantId = req.securityContext!.tenantId;
-    if (!tenantId) return res.status(403).json({ error: 'Tenant context required' });
+    if (!tenantId && !req.securityContext!.isPlatformStaff) return res.status(403).json({ error: 'Tenant context required' });
+
+    let role = req.user?.role as string;
+    if (role === 'Admin') role = 'owner';
+    const isAdmin = ['owner', 'it', 'cto'].includes(role) || Boolean(req.securityContext?.isPlatformStaff);
 
     const settingsData = await db.select().from(schema.tenantSettings).where(eq(schema.tenantSettings.tenantId, tenantId)).limit(1);
     const existing = (settingsData[0]?.settings as any) || {};
 
-    const rolePerms = await db.select().from(schema.rolePermissions);
     const customFields = await db.select().from(schema.customFields);
     const pipelineStages = await db.select().from(schema.pipelineStages);
+    let rolePerms: any[] = [];
+    if (isAdmin) {
+      rolePerms = await db.select().from(schema.rolePermissions);
+    }
 
     res.json({
       customFields: existing.customFields || customFields,
-      rolePermissions: existing.rolePermissions || rolePerms,
+      rolePermissions: isAdmin ? (existing.rolePermissions || rolePerms) : [],
       pipelineStages: existing.pipelineStages || pipelineStages,
       autoAssignmentEnabled: existing.autoAssignmentEnabled ?? true,
+      canManageSettings: isAdmin,
       ...existing
     });
   });

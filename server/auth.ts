@@ -168,8 +168,9 @@ export const authenticateToken: express.RequestHandler = async (req, res, next) 
   const knownPrefixes = [
     '/api/auth', '/api/leads', '/api/calls', '/api/messages', '/api/tickets',
     '/api/users', '/api/settings', '/api/teams', '/api/reports', '/api/compliance',
-    '/api/audit', '/api/security', '/api/platform', '/api/backups', '/api/reset-data',
-    '/api/jobs', '/api/features', '/api/health'
+    '/api/audit-logs', '/api/audit', '/api/crawler-telemetry', '/api/security',
+    '/api/platform', '/api/backups', '/api/reset-data', '/api/jobs',
+    '/api/features', '/api/health'
   ];
   const isKnownApi = knownPrefixes.some(prefix => path === prefix || path.startsWith(prefix + '/') || path.startsWith(prefix + '?'));
   if (path.startsWith('/api/') && !isKnownApi) {

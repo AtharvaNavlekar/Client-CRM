@@ -14,7 +14,7 @@ const actionMap: Record<Action, Action> = {
   'leads:reassign': 'REASSIGN',
   'leads:export': 'EXPORT',
   'leads:delete': 'DELETE',
-  'leads:import': 'EDIT',
+  'leads:import': 'REASSIGN',
   'calls:read': 'VIEW',
   'calls:create': 'EDIT',
   'messages:create': 'EDIT',
@@ -89,11 +89,20 @@ export async function can(
   // 3. Intra-tenant Hierarchical Scope Check
   switch (perm.scope) {
     case 'SELF':
-      return resource.ownerId === context.actorUserId;
+      if (resource.ownerId !== undefined) {
+        return resource.ownerId === context.actorUserId;
+      }
+      return true;
     case 'TEAM':
-      return Boolean(context.actorTeamId && resource.teamId === context.actorTeamId);
+      if (resource.teamId !== undefined) {
+        return Boolean(context.actorTeamId && resource.teamId === context.actorTeamId);
+      }
+      return true;
     case 'ALL_TEAMS':
-      return Boolean(resource.teamId && context.actorManagesTeamIds?.includes(resource.teamId));
+      if (resource.teamId !== undefined) {
+        return Boolean(resource.teamId && context.actorManagesTeamIds?.includes(resource.teamId));
+      }
+      return true;
     case 'SYSTEM':
     case 'COMPANY':
       return true; // Tenant isolation already verified above

@@ -44,16 +44,37 @@ export function setStoredToken(token: string | null): void {
   setStoredTokens(token);
 }
 
+export function extractErrorMessage(data: any, fallback: string = 'An error occurred'): string {
+  if (!data) return fallback;
+  if (typeof data === 'string') return data;
+  if (typeof data.error === 'string') return data.error;
+  if (data.error && typeof data.error.message === 'string') return data.error.message;
+  if (typeof data.message === 'string') return data.message;
+  if (Array.isArray(data.errors) && data.errors.length > 0) {
+    const first = data.errors[0];
+    if (typeof first === 'string') return first;
+    if (first && typeof first.message === 'string') return first.message;
+  }
+  if (typeof data.reason === 'string') return data.reason;
+  try {
+    const str = JSON.stringify(data);
+    return str !== '{}' ? str : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
 export class ApiError extends Error {
   status: number;
   data: any;
   code?: string;
-  constructor(message: string, status: number, data?: any) {
-    super(message);
+  constructor(message: any, status: number, data?: any) {
+    const cleanMessage = typeof message === 'string' ? message : extractErrorMessage(message || data, `Request failed with status ${status}`);
+    super(cleanMessage);
     this.name = 'ApiError';
     this.status = status;
     this.data = data;
-    this.code = data?.code;
+    this.code = data?.code || (data?.error && typeof data.error === 'object' ? data.error.code : undefined);
   }
 }
 
@@ -170,7 +191,8 @@ async function authFetch(url: string, options: RequestInit = {}): Promise<Respon
     } catch {
       errorData = { error: response.statusText || `Request failed with status ${response.status}` };
     }
-    const errorMessage = errorData.error || errorData.message || response.statusText || `Request failed (${response.status})`;
+    const fallbackMsg = response.statusText || `Request failed with status ${response.status}`;
+    const errorMessage = extractErrorMessage(errorData, fallbackMsg);
     throw new ApiError(errorMessage, response.status, errorData);
   }
 
@@ -194,9 +216,21 @@ export const api = {
 
     if (!res.ok) {
       const err = await res.json().catch(() => ({ error: 'Login failed' }));
-      throw new ApiError(err.error || 'Login failed', res.status, err);
+      const msg = extractErrorMessage(err, 'Login failed');
+      throw new ApiError(msg, res.status, err);
     }
 
+    const data = await res.json();
+    setStoredTokens(data.token);
+    return data;
+  },
+
+  async switchUser(userId: string): Promise<{ user: User; token: string }> {
+    const res = await authFetch('/api/auth/switch-user', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId })
+    });
     const data = await res.json();
     setStoredTokens(data.token);
     return data;

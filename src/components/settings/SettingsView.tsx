@@ -132,15 +132,18 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onDataReset }) => {
   const fetchAuditLogs = async () => {
     try {
       const data = await api.getAuditLogs();
-      setAuditLogs(data);
-    } catch (e) {
-      console.error(e);
+      setAuditLogs(Array.isArray(data) ? data : []);
+    } catch {
+      // Non-fatal if current user does not have permission to view audit logs
+      setAuditLogs([]);
     }
   };
 
   useEffect(() => {
     fetchSettings();
-    fetchAuditLogs();
+    if (activeTab === 'audit') {
+      fetchAuditLogs();
+    }
   }, [activeTab]);
 
   // Handler: Toggle Auto Assignment

@@ -46,6 +46,21 @@ export const ReportsView: React.FC = () => {
       .finally(() => setIsLoading(false));
   }, [isLeaderOrAdmin]);
 
+  const [switchError, setSwitchError] = useState<string | null>(null);
+  const [isSwitching, setIsSwitching] = useState(false);
+
+  const handleRoleSwitch = async (role: 'tl' | 'owner') => {
+    setSwitchError(null);
+    setIsSwitching(true);
+    try {
+      await updateCurrentRole(role);
+    } catch (err: any) {
+      setSwitchError(err?.message || 'Role promotion blocked: Admin authorization required.');
+    } finally {
+      setIsSwitching(false);
+    }
+  };
+
   // Role Gate Restriction
   if (!isLeaderOrAdmin) {
     return (
@@ -65,18 +80,25 @@ export const ReportsView: React.FC = () => {
           <p className="font-semibold mb-2">Want to evaluate the Reports module?</p>
           <div className="flex justify-center space-x-2">
             <button
-              onClick={() => updateCurrentRole('tl')}
-              className="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#1E293B] text-white hover:bg-[#162A45]"
+              onClick={() => handleRoleSwitch('tl')}
+              disabled={isSwitching}
+              className="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#1E293B] text-white hover:bg-[#162A45] disabled:opacity-50"
             >
-              Switch to Team Lead
+              {isSwitching ? 'Switching...' : 'Switch to Team Lead'}
             </button>
             <button
-              onClick={() => updateCurrentRole('owner')}
-              className="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#00695C] text-white hover:bg-[#235b4c]"
+              onClick={() => handleRoleSwitch('owner')}
+              disabled={isSwitching}
+              className="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#00695C] text-white hover:bg-[#235b4c] disabled:opacity-50"
             >
-              Switch to Owner
+              {isSwitching ? 'Switching...' : 'Switch to Owner'}
             </button>
           </div>
+          {switchError && (
+            <p className="mt-3 text-xs text-rose-600 dark:text-rose-400 font-medium">
+              {switchError}
+            </p>
+          )}
         </div>
       </div>
     );

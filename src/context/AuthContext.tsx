@@ -12,6 +12,7 @@ interface AuthContextType {
   login: (email: string, password?: string) => Promise<void>;
   logout: () => Promise<void>;
   refreshUsers: () => Promise<void>;
+  updateCurrentRole: (role: UserRole | string) => Promise<void>;
   clearSessionExpiredMessage: () => void;
 }
 
@@ -129,6 +130,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setSessionExpiredMessage(null);
   };
 
+  const updateCurrentRole = async (targetRole: UserRole | string) => {
+    let targetUser = users.find(u => u.role === targetRole);
+    if (!targetUser) {
+      const refreshed = await fetchUsers();
+      targetUser = refreshed.find(u => u.role === targetRole);
+    }
+    if (!targetUser) {
+      throw new Error(`No user with role "${targetRole}" found in the current workspace.`);
+    }
+
+    const { user } = await api.switchUser(targetUser.id);
+    setCurrentUser(user);
+    try {
+      const me = await api.getCurrentUser();
+      if (me.securityContext) setSecurityContext(me.securityContext);
+      if (me.permissions) setPermissions(me.permissions);
+    } catch {
+      // Non-fatal if me fails, user state is already updated
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -141,6 +163,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         login,
         logout,
         refreshUsers,
+        updateCurrentRole,
         clearSessionExpiredMessage
       }}
     >
@@ -187,7 +210,7 @@ export const usePolicy = () => {
       'leads:reassign': 'REASSIGN',
       'leads:export': 'EXPORT',
       'leads:delete': 'DELETE',
-      'leads:import': 'EDIT',
+      'leads:import': 'REASSIGN',
       'calls:read': 'VIEW',
       'calls:create': 'EDIT',
       'messages:create': 'EDIT',

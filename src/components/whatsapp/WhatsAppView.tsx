@@ -136,6 +136,7 @@ export const WhatsAppView: React.FC<WhatsAppViewProps> = ({
     } catch (e: any) {
       console.warn('WhatsApp message not sent:', e?.message || e);
       setFailedPendingText(textToSend);
+      if (!override) setInputText(textToSend);
       setSendError(e?.message || 'Failed to send WhatsApp message');
     } finally {
       setIsSending(false);
