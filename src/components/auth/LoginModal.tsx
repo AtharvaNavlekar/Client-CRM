@@ -8,11 +8,8 @@ import {
   ArrowLeft,
   Shield,
   ShieldCheck,
-  CheckCircle2,
   Activity,
-  Layers,
-  ArrowRight,
-  Headphones
+  ArrowRight
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
@@ -28,7 +25,7 @@ export const LoginModal: React.FC = () => {
         
         {/* Form Panel (Left) */}
         <div 
-          className={`absolute top-0 bottom-0 w-full sm:w-1/2 bg-white transition-transform duration-700 ease-in-out z-10 flex flex-col justify-center px-6 py-8 sm:px-10 md:px-12 overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${
+          className={`absolute top-0 bottom-0 left-0 w-full sm:w-1/2 bg-white transition-transform duration-700 ease-in-out z-10 flex flex-col justify-center px-6 py-8 sm:px-10 md:px-12 overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${
             isReversed ? 'sm:translate-x-full' : 'sm:translate-x-0'
           }`}
         >
@@ -39,87 +36,18 @@ export const LoginModal: React.FC = () => {
           </div>
         </div>
 
-        {/* Enterprise Brand & Capability Showcase Panel (Right) */}
+        {/* Image Section (Right) */}
         <div 
-          className={`hidden sm:block absolute top-0 bottom-0 w-1/2 transition-transform duration-700 ease-in-out p-3 ${
+          className={`hidden sm:block absolute top-0 bottom-0 left-0 w-1/2 transition-transform duration-700 ease-in-out p-3 ${
             isReversed ? 'translate-x-0' : 'translate-x-full'
           }`}
         >
-          <div className="w-full h-full relative rounded-2xl overflow-hidden bg-gradient-to-br from-[#003730] via-[#0A2621] to-[#041613] text-white p-8 flex flex-col justify-between border border-emerald-900/40 shadow-inner">
-            {/* Subtle decorative background glow */}
-            <div className="absolute -top-24 -right-24 w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
-            <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-teal-500/10 rounded-full blur-3xl pointer-events-none" />
-
-            {/* Top Brand Tag */}
-            <div className="relative z-10 flex items-center justify-between">
-              <div className="flex items-center space-x-2.5">
-                <div className="w-8 h-8 rounded-lg bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center text-emerald-300">
-                  <Activity className="w-4 h-4" />
-                </div>
-                <div>
-                  <span className="text-xs font-bold uppercase tracking-wider text-white">DialPulse</span>
-                  <span className="text-[10px] text-emerald-400/90 font-medium ml-1.5 uppercase tracking-widest">Enterprise</span>
-                </div>
-              </div>
-
-              <div className="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full bg-emerald-950/60 border border-emerald-700/40 text-[10px] text-emerald-300 font-medium">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                <span>System Operational</span>
-              </div>
-            </div>
-
-            {/* Core Capability Value Props */}
-            <div className="relative z-10 space-y-6 my-auto py-6">
-              <div className="space-y-2">
-                <h2 className="text-2xl font-bold tracking-tight text-white leading-snug">
-                  High-Velocity Telecalling & Telecom Intelligence
-                </h2>
-                <p className="text-xs text-emerald-100/70 leading-relaxed">
-                  Enterprise-grade lead distribution, TRAI-compliant outreach automation, and omnichannel customer communication.
-                </p>
-              </div>
-
-              <div className="space-y-3 pt-2">
-                <div className="flex items-start space-x-3 p-3 rounded-xl bg-white/[0.04] border border-white/[0.08]">
-                  <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                  <div>
-                    <h3 className="text-xs font-semibold text-white">Automated Compliance Guardrails</h3>
-                    <p className="text-[11px] text-emerald-200/60 leading-normal mt-0.5">
-                      Enforced 19:00–09:00 quiet hours, frequency capping, and instant DND exclusion.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-3 p-3 rounded-xl bg-white/[0.04] border border-white/[0.08]">
-                  <Layers className="w-4 h-4 text-teal-400 shrink-0 mt-0.5" />
-                  <div>
-                    <h3 className="text-xs font-semibold text-white">Multi-Tier Access Control</h3>
-                    <p className="text-[11px] text-emerald-200/60 leading-normal mt-0.5">
-                      Hierarchical role scoping across Organization, Branch, and Telecaller levels.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-3 p-3 rounded-xl bg-white/[0.04] border border-white/[0.08]">
-                  <Headphones className="w-4 h-4 text-emerald-300 shrink-0 mt-0.5" />
-                  <div>
-                    <h3 className="text-xs font-semibold text-white">Direct Telephony & WhatsApp API</h3>
-                    <p className="text-[11px] text-emerald-200/60 leading-normal mt-0.5">
-                      Integrated carrier calling with cloud WhatsApp delivery and activity tracking.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Trust Footnote */}
-            <div className="relative z-10 pt-4 border-t border-emerald-900/50 flex items-center justify-between text-[10px] text-emerald-200/50 font-mono">
-              <span className="flex items-center space-x-1">
-                <Lock className="w-3 h-3 text-emerald-400/80 inline" />
-                <span>256-Bit TLS 1.3 Encryption</span>
-              </span>
-              <span>SOC-2 &amp; TRAI Certified</span>
-            </div>
+          <div className="w-full h-full relative rounded-2xl sm:rounded-[2rem] overflow-hidden bg-slate-100 shadow-inner">
+            <img 
+              src="/login-illustration.jpg" 
+              alt="DialPulse CRM Portal" 
+              className="absolute inset-0 w-full h-full object-cover"
+            />
           </div>
         </div>
       </div>
