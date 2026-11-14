@@ -170,7 +170,7 @@ export const authenticateToken: express.RequestHandler = async (req, res, next) 
     '/api/users', '/api/settings', '/api/teams', '/api/reports', '/api/compliance',
     '/api/audit-logs', '/api/audit', '/api/crawler-telemetry', '/api/security',
     '/api/platform', '/api/backups', '/api/reset-data', '/api/jobs',
-    '/api/features', '/api/health'
+    '/api/features', '/api/health', '/api/transcribe'
   ];
   const isKnownApi = knownPrefixes.some(prefix => path === prefix || path.startsWith(prefix + '/') || path.startsWith(prefix + '?'));
   if (path.startsWith('/api/') && !isKnownApi) {
@@ -256,6 +256,54 @@ export const authenticateToken: express.RequestHandler = async (req, res, next) 
     });
   }
 };
+
+/**
+ * Protects Prometheus /metrics endpoints when METRICS_AUTH_TOKEN is configured or in production.
+ * Accepts either a matching Bearer METRICS_AUTH_TOKEN or an authenticated platform staff JWT.
+ */
+export const requireMetricsAuth: express.RequestHandler = async (req, res, next) => {
+  const configuredToken = process.env.METRICS_AUTH_TOKEN?.trim();
+  const isProd = process.env.NODE_ENV === 'production';
+
+  if (!configuredToken && !isProd) {
+    return next();
+  }
+
+  const authHeader = req.headers['authorization'];
+  const bearer = authHeader && authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : null;
+
+  if (configuredToken && bearer) {
+    const a = Buffer.from(bearer);
+    const b = Buffer.from(configuredToken);
+    if (a.length === b.length && crypto.timingSafeEqual(a, b)) {
+      return next();
+    }
+  }
+
+  if (bearer) {
+    try {
+      const decoded = jwt.verify(bearer, JWT_SECRET, {
+        algorithms: ['HS256'],
+        issuer: 'dialpulse-crm',
+        audience: 'dialpulse-client'
+      }) as { id?: string; role?: string; isPlatformStaff?: boolean };
+      if (
+        decoded.isPlatformStaff ||
+        (decoded.role && ['platform_admin', 'platform_support', 'platform_security'].includes(decoded.role))
+      ) {
+        return next();
+      }
+    } catch {
+      // Fall through to 401
+    }
+  }
+
+  return res.status(401).json({
+    error: 'Authentication required to access metrics endpoint.',
+    code: 'UNAUTHORIZED'
+  });
+};
+
 
 
 

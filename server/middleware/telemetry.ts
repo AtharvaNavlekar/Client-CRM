@@ -18,9 +18,9 @@ export function telemetryMiddleware(req: express.Request, res: express.Response,
 
   res.on('finish', () => {
     const duration = Date.now() - start;
-    const route = req.route?.path || req.path;
     const status = res.statusCode;
-    
+    const route = req.route?.path || (status === 404 ? '/_unmatched' : req.path);
+
     // Classify status (2xx, 4xx, 5xx)
     const statusClass = `${Math.floor(status / 100)}xx`;
 

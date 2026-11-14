@@ -1,297 +1,192 @@
 import React, { useState } from 'react';
-import {
-  Mail,
-  Lock,
-  Eye,
-  EyeOff,
-  AlertCircle,
-  ArrowLeft,
-  Shield,
-  ShieldCheck,
-  Activity,
-  ArrowRight
-} from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
-
-type AuthView = 'login' | 'signup' | 'forgot';
+import { ShieldCheck, ArrowLeft, ArrowRight } from 'lucide-react';
+import { AuthBrand } from './AuthBrand';
+import { LoginForm, AuthView } from './LoginForm';
+import { AuthVisualPanel } from './AuthVisualPanel';
 
 export const LoginModal: React.FC = () => {
   const [view, setView] = useState<AuthView>('login');
-  const isReversed = view === 'signup' || view === 'forgot';
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#090D0C]/90 backdrop-blur-sm p-4 sm:p-6 md:p-8 animate-in fade-in overflow-y-auto">
-      <div className="relative flex w-full max-w-4xl min-h-[520px] sm:min-h-[580px] max-h-[92vh] bg-white rounded-3xl overflow-hidden shadow-2xl border border-slate-200/80 outline-none">
-        
-        {/* Form Panel (Left) */}
-        <div 
-          className={`absolute top-0 bottom-0 left-0 w-full sm:w-1/2 bg-white transition-transform duration-700 ease-in-out z-10 flex flex-col justify-center px-6 py-8 sm:px-10 md:px-12 overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${
-            isReversed ? 'sm:translate-x-full' : 'sm:translate-x-0'
-          }`}
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#075B65] p-3 sm:p-6 lg:p-8 overflow-y-auto">
+      {/* Decorative Geometric Wave & Curve Background Pattern */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden select-none">
+        <svg
+          className="absolute inset-0 w-full h-full opacity-20"
+          xmlns="http://www.w3.org/2000/svg"
+          preserveAspectRatio="none"
+          viewBox="0 0 1920 1080"
         >
-          <div className="max-w-sm w-full mx-auto my-auto py-2">
-            {view === 'login' && <LoginForm setView={setView} />}
-            {view === 'signup' && <SignUpForm setView={setView} />}
-            {view === 'forgot' && <ForgotForm setView={setView} />}
-          </div>
-        </div>
+          <defs>
+            <linearGradient id="tealWaveGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#26C6DA" stopOpacity="0.7" />
+              <stop offset="100%" stopColor="#80DEEA" stopOpacity="0.25" />
+            </linearGradient>
+          </defs>
+          <path
+            d="M-100,200 C300,50 700,320 1100,140 C1500,-40 1700,200 2020,150"
+            fill="none"
+            stroke="url(#tealWaveGrad)"
+            strokeWidth="2"
+          />
+          <path
+            d="M-100,450 C400,250 850,550 1350,300 C1650,150 1850,420 2020,380"
+            fill="none"
+            stroke="url(#tealWaveGrad)"
+            strokeWidth="1.75"
+          />
+          <path
+            d="M-100,750 C350,900 850,550 1400,800 C1750,950 1900,650 2020,720"
+            fill="none"
+            stroke="url(#tealWaveGrad)"
+            strokeWidth="1.5"
+          />
+          <circle
+            cx="20%"
+            cy="25%"
+            r="380"
+            fill="none"
+            stroke="#26C6DA"
+            strokeWidth="1"
+            strokeDasharray="6 8"
+            opacity="0.3"
+          />
+          <circle
+            cx="80%"
+            cy="75%"
+            r="480"
+            fill="none"
+            stroke="#80DEEA"
+            strokeWidth="1"
+            strokeDasharray="8 10"
+            opacity="0.25"
+          />
+        </svg>
+      </div>
 
-        {/* Image Section (Right) */}
-        <div 
-          className={`hidden sm:block absolute top-0 bottom-0 left-0 w-1/2 transition-transform duration-700 ease-in-out p-3 ${
-            isReversed ? 'translate-x-0' : 'translate-x-full'
-          }`}
+      {/* Main Centered Authentication Container */}
+      <div className="relative z-10 flex flex-col lg:flex-row w-[94%] sm:w-[90%] max-w-[1450px] min-h-[580px] lg:h-[750px] max-h-[94vh] bg-white rounded-3xl lg:rounded-[36px] overflow-hidden shadow-2xl shadow-teal-950/40 border border-white/20">
+        
+        {/* Left Section: Authentication Form (~53% Desktop Width) */}
+        <section 
+          className="w-full lg:w-[53%] bg-white p-6 sm:p-10 lg:p-12 flex flex-col justify-between overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          aria-label="User Authentication Form"
         >
-          <div className="w-full h-full relative rounded-2xl sm:rounded-[2rem] overflow-hidden bg-slate-100 shadow-inner">
-            <img 
-              src="/login-illustration.jpg" 
-              alt="DialPulse CRM Portal" 
-              className="absolute inset-0 w-full h-full object-cover"
-            />
-          </div>
-        </div>
+          {view === 'login' && <LoginForm view={view} setView={setView} />}
+          {view === 'signup' && <SignUpForm view={view} setView={setView} />}
+          {view === 'forgot' && <ForgotForm setView={setView} />}
+        </section>
+
+        {/* Right Section: Immersive Visual Experience Panel (~47% Desktop Width) */}
+        <section 
+          className="hidden lg:flex lg:w-[47%] h-full p-3.5 pl-0 bg-white"
+          aria-label="Visual Overview and Enterprise Highlights"
+        >
+          <AuthVisualPanel />
+        </section>
+
       </div>
     </div>
   );
 };
 
-/* --- Sub-components for forms --- */
+/* --- Supplementary Flows: Sign Up & Password Recovery --- */
 
-const LoginForm: React.FC<{ setView: (v: AuthView) => void }> = ({ setView }) => {
-  const { login, sessionExpiredMessage, clearSessionExpiredMessage } = useAuth();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const handleSubmit = async (e?: React.FormEvent) => {
-    if (e) e.preventDefault();
-    setError(null);
-    clearSessionExpiredMessage();
-
-    if (!email.trim() || !password) {
-      setError('Please provide both your corporate email and password.');
-      return;
-    }
-
-    setIsSubmitting(true);
-    try {
-      await login(email.trim(), password);
-    } catch (err: any) {
-      setError(err?.data?.error || err?.message || 'Invalid authentication credentials. Please verify and try again.');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
+const SignUpForm: React.FC<{ view: AuthView; setView: (v: AuthView) => void }> = ({ view, setView }) => {
   return (
-    <div className="space-y-6">
-      {/* Brand Header */}
-      <div className="space-y-2">
-        <div className="inline-flex items-center space-x-2 px-2.5 py-1 rounded-md bg-emerald-50 text-[#00695C] border border-emerald-200/60 text-[11px] font-semibold tracking-wide uppercase">
-          <Activity className="w-3.5 h-3.5 text-[#00695C]" />
-          <span>DialPulse CRM Portal</span>
-        </div>
-        <h1 id="modal-login-title" className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
-          Sign In to Your Workspace
-        </h1>
-        <p className="text-xs text-slate-500 leading-relaxed">
-          Enter your corporate credentials to access the telecalling and customer intelligence platform.
-        </p>
-      </div>
-
-      {/* Notifications */}
-      {sessionExpiredMessage && (
-        <div className="flex items-start space-x-2.5 p-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs text-left animate-in fade-in">
-          <AlertCircle className="w-4 h-4 mt-0.5 shrink-0 text-amber-600" />
-          <span>{sessionExpiredMessage}</span>
-        </div>
-      )}
-
-      {error && (
-        <div className="flex items-start space-x-2.5 p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-900 text-xs text-left animate-in fade-in">
-          <AlertCircle className="w-4 h-4 mt-0.5 shrink-0 text-rose-600" />
-          <span>{error}</span>
-        </div>
-      )}
-
-      {/* Credentials Form */}
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="space-y-3.5">
-          {/* Email Field with Label */}
-          <div className="space-y-1.5 text-left">
-            <label htmlFor="login-email-input" className="block text-xs font-semibold text-slate-700">
-              Corporate Email Address
-            </label>
-            <div className="relative flex items-center">
-              <input
-                id="login-email-input"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="name@company.in"
-                autoComplete="email"
-                className="w-full pl-3.5 pr-10 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#00695C]/20 focus:border-[#00695C] transition-colors shadow-xs"
-                required
-              />
-              <Mail className="w-4 h-4 text-slate-400 absolute right-3.5 pointer-events-none" />
-            </div>
-          </div>
-
-          {/* Password Field with Label */}
-          <div className="space-y-1.5 text-left">
-            <label htmlFor="login-password-input" className="block text-xs font-semibold text-slate-700">
-              Account Password
-            </label>
-            <div className="relative flex items-center">
-              <input
-                id="login-password-input"
-                type={showPassword ? 'text' : 'password'}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••••••"
-                autoComplete="current-password"
-                className="w-full pl-3.5 pr-10 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#00695C]/20 focus:border-[#00695C] transition-colors shadow-xs"
-                required
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 text-slate-400 hover:text-slate-600 focus:outline-none p-1 cursor-pointer transition-colors"
-                aria-label={showPassword ? 'Hide password' : 'Show password'}
-              >
-                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Remember Me and Forgot Password */}
-        <div className="flex items-center justify-between pt-1">
-          <label className="flex items-center space-x-2 cursor-pointer group">
-            <div className="relative flex items-center justify-center w-4 h-4 rounded border border-slate-300 bg-white group-hover:border-[#00695C] transition-colors">
-              <input
-                type="checkbox"
-                checked={rememberMe}
-                onChange={(e) => setRememberMe(e.target.checked)}
-                className="sr-only"
-              />
-              {rememberMe && (
-                <svg viewBox="0 0 14 14" fill="none" className="w-3 h-3 text-[#00695C]">
-                  <path d="M3 7.5L5.5 10L11 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              )}
-            </div>
-            <span className="text-xs text-slate-600 font-medium select-none">Remember this device</span>
-          </label>
-          <button 
-            type="button" 
-            onClick={() => setView('forgot')}
-            className="text-xs text-[#00695C] font-semibold hover:text-[#005046] transition-colors cursor-pointer"
-          >
-            Forgot password?
-          </button>
-        </div>
-
-        {/* Primary Action Button */}
-        <button
-          id="btn-login-submit"
-          type="submit"
-          disabled={isSubmitting}
-          className="w-full flex items-center justify-center space-x-2 py-3 px-4 rounded-xl bg-[#00695C] hover:bg-[#005046] active:scale-[0.99] text-white font-semibold text-sm focus:outline-none focus:ring-2 focus:ring-[#00695C]/40 transition-all disabled:opacity-70 shadow-sm cursor-pointer mt-2"
-        >
-          <span>{isSubmitting ? 'Authenticating...' : 'Sign In'}</span>
-          {!isSubmitting && <ArrowRight className="w-4 h-4" />}
-        </button>
-        
-        {/* Footnote Access Help */}
-        <div className="text-center pt-3 border-t border-slate-100">
-          <p className="text-xs text-slate-500">
-            Need workspace access?{' '}
-            <button 
-              type="button" 
+    <div className="flex flex-col justify-between h-full w-full max-w-md mx-auto py-2 animate-in fade-in zoom-in-95 motion-reduce:animate-none duration-300">
+      <div>
+        {/* Top Header with Brand and Navigation Tabs */}
+        <div className="flex items-center justify-between pb-8">
+          <AuthBrand />
+          <nav className="flex items-center space-x-2" aria-label="Authentication Options">
+            <button
+              type="button"
               onClick={() => setView('signup')}
-              className="text-[#00695C] font-semibold hover:underline transition-colors cursor-pointer"
+              className={`px-4 sm:px-5 py-1.5 sm:py-2 rounded-full font-medium text-xs sm:text-sm transition-all duration-200 motion-reduce:transition-none cursor-pointer ${
+                view === 'signup'
+                  ? 'bg-black text-white shadow-sm'
+                  : 'bg-white border border-slate-300 text-slate-700 hover:border-slate-500'
+              }`}
             >
-              Request Account Provisioning
+              Sign Up
             </button>
+            <button
+              type="button"
+              onClick={() => setView('login')}
+              className={`px-4 sm:px-5 py-1.5 sm:py-2 rounded-full font-medium text-xs sm:text-sm transition-all duration-200 motion-reduce:transition-none cursor-pointer ${
+                view === 'login'
+                  ? 'bg-black text-white shadow-sm'
+                  : 'bg-white border border-slate-300 text-slate-700 hover:border-slate-500'
+              }`}
+            >
+              Log In
+            </button>
+          </nav>
+        </div>
+
+        <div className="space-y-1.5 mb-6 text-left">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+            Request Access
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-500 leading-relaxed font-normal">
+            Submit your professional details to initiate verified workspace provisioning.
           </p>
         </div>
-      </form>
-    </div>
-  );
-};
 
-const SignUpForm: React.FC<{ setView: (v: AuthView) => void }> = ({ setView }) => {
-  return (
-    <div className="space-y-6 animate-in fade-in zoom-in-95 duration-500">
-      <div className="space-y-2 text-left">
-        <div className="inline-flex items-center space-x-2 px-2.5 py-1 rounded-md bg-emerald-50 text-[#00695C] border border-emerald-200/60 text-[11px] font-semibold tracking-wide uppercase">
-          <Shield className="w-3.5 h-3.5 text-[#00695C]" />
-          <span>Account Provisioning</span>
-        </div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
-          Request Workspace Access
-        </h1>
-        <p className="text-xs text-slate-500 leading-relaxed">
-          Submit your professional credentials to initiate role-based onboarding with your organization administrator.
-        </p>
-      </div>
-
-      <div className="flex items-start space-x-2.5 p-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 text-xs text-left leading-relaxed">
-        <ShieldCheck className="w-4 h-4 mt-0.5 shrink-0 text-[#00695C]" />
-        <span>
-          <strong>Corporate Policy:</strong> User accounts are provisioned and audited by authorized organization owners and IT administrators.
-        </span>
-      </div>
-
-      <form className="space-y-3.5" onSubmit={(e) => e.preventDefault()}>
-        <div className="space-y-3 text-left">
-          <div className="space-y-1">
-            <label className="block text-xs font-semibold text-slate-700">Full Name</label>
-            <input
-              type="text"
-              placeholder="e.g. Priya Iyer"
-              className="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#00695C]/20 focus:border-[#00695C] transition-colors"
-            />
-          </div>
-          <div className="space-y-1">
-            <label className="block text-xs font-semibold text-slate-700">Corporate Email</label>
-            <input
-              type="email"
-              placeholder="priya@company.in"
-              className="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#00695C]/20 focus:border-[#00695C] transition-colors"
-            />
-          </div>
-          <div className="space-y-1">
-            <label className="block text-xs font-semibold text-slate-700">Proposed Department / Role</label>
-            <input
-              type="text"
-              placeholder="e.g. Sales Team Lead — Mumbai Branch"
-              className="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#00695C]/20 focus:border-[#00695C] transition-colors"
-            />
-          </div>
+        <div className="flex items-start space-x-2.5 p-3.5 mb-5 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 text-xs text-left leading-relaxed">
+          <ShieldCheck className="w-4 h-4 mt-0.5 shrink-0 text-[#075B65]" />
+          <span>
+            <strong>Corporate Governance:</strong> DialPulse user accounts are verified and provisioned by organization IT administrators.
+          </span>
         </div>
 
+        <form className="space-y-3.5" onSubmit={(e) => e.preventDefault()}>
+          <div className="space-y-3 text-left">
+            <div className="space-y-1">
+              <label className="block text-xs font-semibold text-slate-700">Full Name</label>
+              <input
+                type="text"
+                placeholder="e.g. Priya Iyer"
+                className="w-full px-4 py-2.5 text-xs sm:text-sm rounded-xl border border-cyan-400/80 bg-white text-slate-900 placeholder-slate-400 hover:border-cyan-500 hover:shadow-xs focus:outline-none focus:ring-2 focus:ring-[#075B65]/20 focus:border-[#075B65] focus:shadow-sm transition-all duration-200 ease-in-out motion-reduce:transition-none"
+              />
+            </div>
+            <div className="space-y-1">
+              <label className="block text-xs font-semibold text-slate-700">Corporate Email</label>
+              <input
+                type="email"
+                placeholder="priya@company.in"
+                className="w-full px-4 py-2.5 text-xs sm:text-sm rounded-xl border border-cyan-400/80 bg-white text-slate-900 placeholder-slate-400 hover:border-cyan-500 hover:shadow-xs focus:outline-none focus:ring-2 focus:ring-[#075B65]/20 focus:border-[#075B65] focus:shadow-sm transition-all duration-200 ease-in-out motion-reduce:transition-none"
+              />
+            </div>
+            <div className="space-y-1">
+              <label className="block text-xs font-semibold text-slate-700">Department / Role</label>
+              <input
+                type="text"
+                placeholder="e.g. Sales Team Lead — Mumbai Branch"
+                className="w-full px-4 py-2.5 text-xs sm:text-sm rounded-xl border border-cyan-400/80 bg-white text-slate-900 placeholder-slate-400 hover:border-cyan-500 hover:shadow-xs focus:outline-none focus:ring-2 focus:ring-[#075B65]/20 focus:border-[#075B65] focus:shadow-sm transition-all duration-200 ease-in-out motion-reduce:transition-none"
+              />
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            className="w-full flex items-center justify-center space-x-2 py-3.5 px-6 rounded-xl bg-black hover:bg-slate-900 active:scale-[0.99] text-white font-semibold text-sm focus:outline-none focus:ring-2 focus:ring-black/40 transition-all duration-200 ease-out motion-reduce:transition-none motion-reduce:transform-none motion-reduce:active:scale-100 shadow-md hover:shadow-lg cursor-pointer mt-3"
+          >
+            <span>Submit Access Request</span>
+            <ArrowRight className="w-4 h-4" />
+          </button>
+        </form>
+      </div>
+
+      <div className="pt-6 border-t border-slate-100 text-center">
         <button
-          type="submit"
-          className="w-full flex items-center justify-center space-x-2 py-3 px-4 rounded-xl bg-[#00695C] hover:bg-[#005046] active:scale-[0.99] text-white font-semibold text-sm focus:outline-none focus:ring-2 focus:ring-[#00695C]/40 transition-all shadow-sm cursor-pointer mt-2"
-        >
-          <span>Submit Access Request</span>
-          <ArrowRight className="w-4 h-4" />
-        </button>
-      </form>
-
-      <div className="text-center pt-2">
-        <button 
-          type="button" 
+          type="button"
           onClick={() => setView('login')}
-          className="inline-flex items-center space-x-1.5 text-xs text-slate-500 font-medium hover:text-slate-900 transition-colors cursor-pointer"
+          className="inline-flex items-center space-x-1.5 text-xs text-slate-500 font-medium hover:text-slate-900 transition-colors duration-150 motion-reduce:transition-none cursor-pointer"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
-          <span>Return to Sign In</span>
+          <span>Return to Log In</span>
         </button>
       </div>
     </div>
@@ -300,54 +195,64 @@ const SignUpForm: React.FC<{ setView: (v: AuthView) => void }> = ({ setView }) =
 
 const ForgotForm: React.FC<{ setView: (v: AuthView) => void }> = ({ setView }) => {
   return (
-    <div className="space-y-6 animate-in fade-in zoom-in-95 duration-500">
-      <div className="space-y-2 text-left">
-        <div className="inline-flex items-center space-x-2 px-2.5 py-1 rounded-md bg-amber-50 text-amber-800 border border-amber-200/60 text-[11px] font-semibold tracking-wide uppercase">
-          <Lock className="w-3.5 h-3.5 text-amber-700" />
-          <span>Security Administration</span>
-        </div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
-          Credential Recovery
-        </h1>
-        <p className="text-xs text-slate-500 leading-relaxed">
-          Initiate a verified password recovery request routed to your designated IT security administrator.
-        </p>
-      </div>
-
-      <div className="flex items-start space-x-2.5 p-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 text-xs text-left leading-relaxed">
-        <ShieldCheck className="w-4 h-4 mt-0.5 shrink-0 text-[#00695C]" />
-        <span>
-          <strong>Security Notice:</strong> In accordance with enterprise RBAC policy, password resets require domain authentication confirmation.
-        </span>
-      </div>
-
-      <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
-        <div className="space-y-1.5 text-left">
-          <label className="block text-xs font-semibold text-slate-700">Verified Corporate Email</label>
-          <input
-            type="email"
-            placeholder="name@company.in"
-            className="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#00695C]/20 focus:border-[#00695C] transition-colors"
-          />
+    <div className="flex flex-col justify-between h-full w-full max-w-md mx-auto py-2 animate-in fade-in zoom-in-95 motion-reduce:animate-none duration-300">
+      <div>
+        <div className="flex items-center justify-between pb-8">
+          <AuthBrand />
+          <button
+            type="button"
+            onClick={() => setView('login')}
+            className="px-4 sm:px-5 py-1.5 sm:py-2 rounded-full font-medium text-xs sm:text-sm bg-white border border-slate-300 text-slate-700 hover:border-slate-500 transition-all duration-200 motion-reduce:transition-none cursor-pointer"
+          >
+            Log In
+          </button>
         </div>
 
+        <div className="space-y-1.5 mb-6 text-left">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+            Reset Password
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-500 leading-relaxed font-normal">
+            Enter your verified corporate email to request a secure password reset link.
+          </p>
+        </div>
+
+        <div className="flex items-start space-x-2.5 p-3.5 mb-5 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 text-xs text-left leading-relaxed">
+          <ShieldCheck className="w-4 h-4 mt-0.5 shrink-0 text-[#075B65]" />
+          <span>
+            <strong>Security Notice:</strong> In accordance with enterprise RBAC policy, password resets require domain authentication confirmation.
+          </span>
+        </div>
+
+        <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+          <div className="space-y-1.5 text-left">
+            <label className="block text-xs font-semibold text-slate-700">Verified Corporate Email</label>
+            <input
+              type="email"
+              placeholder="name@company.in"
+              required
+              className="w-full px-4 py-3 text-xs sm:text-sm rounded-xl border border-cyan-400/80 bg-white text-slate-900 placeholder-slate-400 hover:border-cyan-500 hover:shadow-xs focus:outline-none focus:ring-2 focus:ring-[#075B65]/20 focus:border-[#075B65] focus:shadow-sm transition-all duration-200 ease-in-out motion-reduce:transition-none"
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="w-full flex items-center justify-center space-x-2 py-3.5 px-6 rounded-xl bg-black hover:bg-slate-900 active:scale-[0.99] text-white font-semibold text-sm focus:outline-none focus:ring-2 focus:ring-black/40 transition-all duration-200 ease-out motion-reduce:transition-none motion-reduce:transform-none motion-reduce:active:scale-100 shadow-md hover:shadow-lg cursor-pointer mt-3"
+          >
+            <span>Transmit Reset Instructions</span>
+            <ArrowRight className="w-4 h-4" />
+          </button>
+        </form>
+      </div>
+
+      <div className="pt-6 border-t border-slate-100 text-center">
         <button
-          type="submit"
-          className="w-full flex items-center justify-center space-x-2 py-3 px-4 rounded-xl bg-[#00695C] hover:bg-[#005046] active:scale-[0.99] text-white font-semibold text-sm focus:outline-none focus:ring-2 focus:ring-[#00695C]/40 transition-all shadow-sm cursor-pointer mt-2"
-        >
-          <span>Transmit Reset Instructions</span>
-          <ArrowRight className="w-4 h-4" />
-        </button>
-      </form>
-
-      <div className="text-center pt-2">
-        <button 
-          type="button" 
+          type="button"
           onClick={() => setView('login')}
-          className="inline-flex items-center space-x-1.5 text-xs text-slate-500 font-medium hover:text-slate-900 transition-colors cursor-pointer"
+          className="inline-flex items-center space-x-1.5 text-xs text-slate-500 font-medium hover:text-slate-900 transition-colors duration-150 motion-reduce:transition-none cursor-pointer"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
-          <span>Return to Sign In</span>
+          <span>Return to Log In</span>
         </button>
       </div>
     </div>

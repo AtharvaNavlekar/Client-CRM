@@ -46,6 +46,7 @@ DialPulse Client CRM adheres to a formal, auditable 12-phase SDLC framework:
 *   **[Requirement Traceability Matrix](docs/REQUIREMENT-TRACEABILITY.md)** — Real requirement IDs (`CRM-REQ-*`, `CRM-SEC-*`, etc.) and technical truth mappings.
 *   **[Multi-Tier Test Strategy](docs/TEST-STRATEGY.md)** — Unit, integration, and 38-check adversarial security harness.
 *   **[Production Release Checklist](docs/RELEASE-CHECKLIST.md)** — Mandatory pre-flight verification gate for deployments.
+*   **[Distributed Rate Limiting](docs/RATE_LIMITING.md)** — Redis-backed rate-limiting architecture, policy matrix, proxy topology, and operational tuning.
 *   **[GitHub & PR Workflow](docs/GITHUB-WORKFLOW.md)** — Branch naming, conventional commits, and pull request policies.
 
 ## Prerequisites

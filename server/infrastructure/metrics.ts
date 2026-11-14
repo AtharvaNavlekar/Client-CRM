@@ -124,3 +124,26 @@ export const aiLatency = metricsRegistry.createHistogram('ai_latency_ms', 'AI pr
 
 export const dbConnectionErrors = metricsRegistry.createCounter('db_connection_errors_total', 'Database connection errors');
 export const redisConnectionErrors = metricsRegistry.createCounter('redis_connection_errors_total', 'Redis connection errors');
+
+export const rateLimitRequestsTotal = metricsRegistry.createCounter(
+  'rate_limit_requests_total',
+  'Total HTTP requests evaluated by rate limiting policies'
+);
+export const rateLimitExceededTotal = metricsRegistry.createCounter(
+  'rate_limit_exceeded_total',
+  'Total HTTP requests rejected with 429 due to rate limits'
+);
+export const rateLimitStoreErrorsTotal = metricsRegistry.createCounter(
+  'rate_limit_store_errors_total',
+  'Total rate limit backing store errors'
+);
+export const rateLimitFallbackTotal = metricsRegistry.createCounter(
+  'rate_limit_fallback_total',
+  'Total rate limit requests processed under fallback/fail-open behavior'
+);
+export const rateLimitStoreLatencySeconds = metricsRegistry.createHistogram(
+  'rate_limit_store_latency_seconds',
+  'Rate limit store operation latency in seconds',
+  [0.001, 0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1]
+);
+

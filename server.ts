@@ -13,9 +13,13 @@ import path from 'path';
 import crypto from 'crypto';
 import helmet from 'helmet';
 import cors from 'cors';
-import rateLimit from 'express-rate-limit';
-import { RedisStore } from 'rate-limit-redis';
-import { redisService, createSafeKey } from './server/infrastructure/redis';
+import { redisService } from './server/infrastructure/redis';
+import {
+  createRateLimiters,
+  CreateRateLimitersOptions,
+  getTrustedClientIp,
+  loadRateLimitConfig
+} from './server/middleware/rateLimits';
 import jwt from 'jsonwebtoken';
 import bcryptjs from 'bcryptjs';
 import { createServer as createViteServer } from 'vite';
@@ -41,6 +45,7 @@ import {
   authenticateToken,
   actionRequiresApproval,
   getRolePermission,
+  requireMetricsAuth,
   JWT_SECRET,
   JWT_EXPIRY,
   hashPassword,
@@ -236,22 +241,30 @@ const sanitizeFormula = (val: any): string => {
 // Export app for testing
 export const app = express();
 
-async function startServer() {
+export interface ConfigureAppOptions {
+  skipDatabaseInit?: boolean;
+  rateLimiterOptions?: CreateRateLimitersOptions;
+}
+
+export async function configureApp(
+  targetApp: express.Express = app,
+  options: ConfigureAppOptions = {}
+) {
   const TEAMS: any[] = [];
-  const PORT = 3000;
+  const rlConfig = options.rateLimiterOptions?.config ?? loadRateLimitConfig();
 
-  // Trust proxy for reverse proxy environments (Cloud Run, Nginx)
-  app.set('trust proxy', 1);
+  // Trust proxy strictly validated (never permissive 'true')
+  targetApp.set('trust proxy', rlConfig.trustProxy);
 
-  // Initialize Database: Apply migrations and idempotent dev provisioning
-  await initializeDatabase();
+  if (!options.skipDatabaseInit) {
+    // Initialize Database: Apply migrations and idempotent dev provisioning
+    await initializeDatabase();
+  }
 
-  const getClientIp = (req: express.Request) => {
-    return (req.headers['x-forwarded-for'] as string) || req.socket.remoteAddress || '127.0.0.1';
-  };
+  const getClientIp = (req: express.Request) => getTrustedClientIp(req);
 
   // 0. Initialize Canonical Security Context
-  app.use((req, res, next) => {
+  targetApp.use((req, res, next) => {
     req.securityContext = {
       requestId: crypto.randomUUID(),
       ipAddress: getClientIp(req),
@@ -265,7 +278,7 @@ async function startServer() {
   });
 
   // 1. Network-Layer Hardening & Security Headers
-  app.use(helmet({
+  targetApp.use(helmet({
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
@@ -280,7 +293,7 @@ async function startServer() {
   }));
 
   // Remove legacy X-Frame-Options to allow AI Studio iframe while CSP frame-ancestors protects modern browsers
-  app.use((req, res, next) => {
+  targetApp.use((req, res, next) => {
     res.removeHeader('X-Frame-Options');
     next();
   });
@@ -293,7 +306,7 @@ async function startServer() {
     'https://ai.studio'
   ];
 
-  app.use(cors({
+  targetApp.use(cors({
     origin: (origin, callback) => {
       if (!origin) return callback(null, true);
       const isAllowed = allowedOrigins.some(allowed => {
@@ -308,18 +321,14 @@ async function startServer() {
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
-    exposedHeaders: ['Content-Disposition']
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Idempotency-Key', 'X-Idempotency-Key'],
+    exposedHeaders: ['Content-Disposition', 'RateLimit', 'RateLimit-Policy', 'Retry-After']
   }));
 
   // --------------------------------------------------------------------------
   // AI CRAWLER & SCRAPING AGENT BLOCKING MIDDLEWARE (Feature 2)
-  // Evaluates the incoming User-Agent against the centralized known AI crawler
-  // signatures list. Blocks automated bots with HTTP 403 and a dedicated warning
-  // HTML page before any static assets, SPA bundles, or API routes are processed.
   // --------------------------------------------------------------------------
-  app.use((req, res, next) => {
-    // Exempt robots.txt so crawlers and search indexers can parse rules
+  targetApp.use((req, res, next) => {
     if (req.path === '/robots.txt') {
       return next();
     }
@@ -344,25 +353,23 @@ async function startServer() {
     next();
   });
 
-  // Explicit robots.txt route (synchronized with AI_CRAWLER_USER_AGENTS)
-  app.get('/robots.txt', async (req, res) => {
+  targetApp.get('/robots.txt', async (req, res) => {
     res.type('text/plain').send(generateRobotsTxtContent());
   });
 
-  // Serve static public assets (favicon.ico, favicon.svg, robots.txt, etc.)
   const publicDir = path.join(process.cwd(), 'public');
-  app.use(express.static(publicDir));
-  app.get('/favicon.ico', (req, res) => {
+  targetApp.use(express.static(publicDir));
+  targetApp.get('/favicon.ico', (req, res) => {
     res.sendFile(path.join(publicDir, 'favicon.ico'));
   });
-  app.get('/favicon.svg', (req, res) => {
+  targetApp.get('/favicon.svg', (req, res) => {
     res.sendFile(path.join(publicDir, 'favicon.svg'));
   });
 
-  app.use(express.json({ limit: '5mb' }));
+  targetApp.use(express.json({ limit: '5mb' }));
 
   // Prototype Pollution Guard
-  app.use((req, res, next) => {
+  targetApp.use((req, res, next) => {
     if (req.body && typeof req.body === 'object') {
       const cleanObject = (obj: any) => {
         if (obj && typeof obj === 'object') {
@@ -382,59 +389,38 @@ async function startServer() {
   });
 
   // Mount Health & Metrics early (bypass typical middlewares)
-  app.use('/health', healthRouter);
-  app.get('/metrics', (req, res) => {
+  targetApp.use('/health', healthRouter);
+  targetApp.get('/metrics', requireMetricsAuth, (req, res) => {
     res.set('Content-Type', 'text/plain; version=0.0.4');
     res.send(metricsRegistry.metrics());
   });
 
   // 1. Observability & Telemetry
-  app.use(telemetryMiddleware);
+  targetApp.use(telemetryMiddleware);
 
-  // 2. Global Rate Limiting
-  let limiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
-    max: 30,
-    standardHeaders: true,
-    legacyHeaders: false,
-    skipSuccessfulRequests: true,
-    // Use Redis for rate limiting if available, otherwise it falls back to memory if store is omitted
-    ...(redisService.isAvailable() && redisService.getClient() ? {
-      store: new RedisStore({
-        // @ts-expect-error - rate-limit-redis types are slightly mismatched with ioredis but perfectly compatible
-        sendCommand: async (...args: string[]) => {
-          const client = redisService.getClient();
-          if (client && args.length > 0) {
-            const command = args[0];
-            const commandArgs = args.slice(1);
-            return client.call(command, ...commandArgs);
-          }
-          return null;
-        },
-      })
-    } : {}),
-    keyGenerator: (req) => {
-      const email = req.body?.email ? String(req.body.email).toLowerCase().trim() : '';
-      if (email && email !== 'unknown') {
-        return createSafeKey('rate-limit:login-account', 'global', email);
-      }
-      const rawIp = req.socket.remoteAddress || '127.0.0.1';
-      return createSafeKey('rate-limit:login-ip', 'global', rawIp);
-    },
-    message: { error: 'Too many login attempts. Please try again in 15 minutes.' }
+  // 2. Initialize Distributed Rate Limiting Suite (waits for Redis readiness if configured)
+  const rateLimiters = await createRateLimiters({
+    config: rlConfig,
+    ...(options.rateLimiterOptions || {})
   });
-  const loginLimiter = limiter;
+  logger.info('[INIT] Rate limiting initialized', {
+    storeType: rateLimiters.activeStoreType,
+    requireRedis: rlConfig.requireRedis
+  });
 
-  // 2. Global Authentication Middleware (validates JWT tokens in Authorization header)
-  app.use('/api', authenticateToken);
-  app.use('/api', enforceTenantScope);
-  app.use('/api', verifyTenantActive);
+  // 3. Global Authentication Middleware (validates JWT tokens in Authorization header)
+  targetApp.use('/api', authenticateToken);
+  targetApp.use('/api', enforceTenantScope);
+  targetApp.use('/api', verifyTenantActive);
+
+  // 4. General Authenticated API Rate Limiter (runs after verified tenant/user context)
+  targetApp.use('/api', rateLimiters.authenticatedApi);
 
   // Apply impersonation enforcement for raw data routes
-  app.use('/api/leads', enforceImpersonationForRawData);
-  app.use('/api/calls', enforceImpersonationForRawData);
-  app.use('/api/messages', enforceImpersonationForRawData);
-  app.use('/api/tickets', enforceImpersonationForRawData);
+  targetApp.use('/api/leads', enforceImpersonationForRawData);
+  targetApp.use('/api/calls', enforceImpersonationForRawData);
+  targetApp.use('/api/messages', enforceImpersonationForRawData);
+  targetApp.use('/api/tickets', enforceImpersonationForRawData);
 
 function parseCookies(cookieHeader?: string): Record<string, string> {
   const list: Record<string, string> = {};
@@ -447,7 +433,12 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
 }
 
   // 3. Auth Routes
-  app.post('/api/auth/login', loginLimiter, async (req, res) => {
+  targetApp.post(
+    '/api/auth/login',
+    rateLimiters.loginIpRequest,
+    rateLimiters.loginIpFailed,
+    rateLimiters.loginAccountFailed,
+    async (req, res) => {
     const requestId = req.securityContext?.requestId || crypto.randomUUID();
     const { email, password } = req.body;
     if (!email || !password) return res.status(400).json({ error: 'Email and password are required' });
@@ -567,7 +558,7 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
     });
   });
 
-  app.post('/api/auth/refresh', async (req, res) => {
+  targetApp.post('/api/auth/refresh', rateLimiters.sessionRefresh, async (req, res) => {
     const cookies = parseCookies(req.headers.cookie);
     const rawRefreshToken = cookies['refreshToken'];
     if (!rawRefreshToken) return res.status(401).json({ error: 'Refresh token is required', code: 'REFRESH_TOKEN_REQUIRED' });
@@ -627,7 +618,7 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
     res.json({ token, expiresIn: 900 });
   });
 
-  app.get('/api/auth/me', async (req, res) => {
+  targetApp.get('/api/auth/me', async (req, res) => {
     if (!req.user || !req.user.id) return res.status(401).json({ error: 'Not authenticated' });
     const usersData = await db.select().from(schema.users).where(eq(schema.users.id, req.user.id)).limit(1);
     const user = usersData[0];
@@ -649,7 +640,7 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
     });
   });
 
-  app.post('/api/auth/logout', async (req, res) => {
+  targetApp.post('/api/auth/logout', async (req, res) => {
     const cookies = parseCookies(req.headers.cookie);
     const rawRefreshToken = cookies['refreshToken'] || req.body?.refreshToken;
     
@@ -679,7 +670,7 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
   });
 
   
-  app.get('/api/auth/sessions', async (req, res) => {
+  targetApp.get('/api/auth/sessions', async (req, res) => {
     if (!req.user) return res.status(401).json({ error: 'Unauthorized' });
     const userSessions = await db.select().from(sessions).where(eq(sessions.userId, req.user.id));
     // Filter out active ones for display
@@ -687,7 +678,7 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
     res.json({ sessions: active.map(s => ({ id: s.id, createdAt: s.createdAt, lastUsedAt: s.lastUsedAt, lastUsedIp: s.lastUsedIp, current: s.id === req.securityContext?.sessionId })) });
   });
 
-  app.delete('/api/auth/sessions/:id', async (req, res) => {
+  targetApp.delete('/api/auth/sessions/:id', rateLimiters.sensitiveAdmin, async (req, res) => {
     if (!req.user) return res.status(401).json({ error: 'Unauthorized' });
     const sessionId = req.params.id;
     const sessionRecords = await db.select().from(sessions).where(eq(sessions.id, sessionId));
@@ -702,7 +693,7 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
   });
 
   // Switch user (Privilege Escalation Protected: Owner / CTO only)
-  app.post('/api/auth/switch-user', async (req, res) => {
+  targetApp.post('/api/auth/switch-user', rateLimiters.sensitiveAdmin, async (req, res) => {
     let role = req.user?.role as string;
     if (role === 'Admin') role = 'owner';
     if (role !== 'owner' && role !== 'cto') {
@@ -718,12 +709,12 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
     res.json({ user: sanitizeUser(targetUser as any), token });
   });
 
-  app.get('/api/teams', async (req, res) => {
+  targetApp.get('/api/teams', async (req, res) => {
     res.json(TEAMS);
   });
 
   // 4. User Directory APIs
-  app.get('/api/users', async (req, res) => {
+  targetApp.get('/api/users', async (req, res) => {
     const tenantId = req.securityContext!.tenantId;
     if (!tenantId && !req.securityContext!.isPlatformStaff) return res.status(403).json({ error: 'Tenant context required' });
 
@@ -744,7 +735,7 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
   });
 
   // Account creation is gated by MANAGE_USERS permission
-  app.post('/api/users', async (req, res) => {
+  targetApp.post('/api/users', async (req, res) => {
     if (!(await can(req.securityContext!, 'users:create'))) {
       adapterLogAudit(req, 'ACCESS_DENIED', `Denied MANAGE_USERS`, req.user, getClientIp(req), { actionType: 'MANAGE_USERS' });
       return res.status(403).json({ error: 'Forbidden' });
@@ -786,7 +777,7 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
   });
 
   // 5. Leads APIs
-  app.get('/api/leads', async (req, res) => {
+  targetApp.get('/api/leads', async (req, res) => {
     const tenantId = req.securityContext!.tenantId;
     if (!tenantId && !req.securityContext!.isPlatformStaff) return res.status(403).json({ error: 'Tenant context required' });
 
@@ -825,8 +816,12 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
     res.json(leads);
   });
 
-  // Data Export API (gated by EXPORT permission and approval workflow)
-  app.get('/api/leads/export', async (req, res) => {
+  // Data Export API (gated by EXPORT permission, approval workflow, rate limit, and duplicate job guard)
+  targetApp.get(
+    '/api/leads/export',
+    rateLimiters.duplicateSubmissionGuard('export'),
+    rateLimiters.leadExport,
+    async (req, res) => {
     if (!(await can(req.securityContext!, 'leads:export'))) {
       adapterLogAudit(req, 'ACCESS_DENIED', `Denied EXPORT to ${req.user!.name} (${req.user!.role})`, req.user, getClientIp(req), { actionType: 'EXPORT' });
       return res.status(403).json({
@@ -867,7 +862,7 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
   // Bulk Import API (gated by EDIT permission and approval workflow)
 
   // Single Lead Inspection (gated by VIEW authorization on lead scope)
-  app.get('/api/leads/:id', async (req, res) => {
+  targetApp.get('/api/leads/:id', async (req, res) => {
     const { id } = req.params;
     const leads = await db.select().from(schema.leads).where(eq(schema.leads.id, id)).limit(1);
     const lead = leads[0];
@@ -885,7 +880,7 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
     res.json(lead);
   });
 
-  app.get('/api/jobs/:id', async (req, res) => {
+  targetApp.get('/api/jobs/:id', async (req, res) => {
     try {
       const job = await jobRepository.getJobById(req.params.id, req.securityContext!.tenantId);
       if (!job) {
@@ -906,7 +901,7 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
     }
   });
 
-  app.post('/api/leads', async (req, res) => {
+  targetApp.post('/api/leads', async (req, res) => {
     if (!(await can(req.securityContext!, 'leads:create'))) {
       adapterLogAudit(req, 'ACCESS_DENIED', `Denied create access to ${req.user!.name}`, req.user, getClientIp(req), { actionType: 'CREATE_LEAD' });
       return res.status(403).json({ error: 'Forbidden: Lacks leads:create permission.' });
@@ -955,7 +950,7 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
   });
 
   // Optimistic Concurrency Update with Scope Authorization & Reassignment Control
-  app.put('/api/leads/:id', async (req, res) => {
+  targetApp.put('/api/leads/:id', async (req, res) => {
     const { id } = req.params;
     const leads = await db.select().from(schema.leads).where(eq(schema.leads.id, id)).limit(1);
     if (!leads.length) return res.status(404).json({ error: 'Lead not found' });
@@ -1026,7 +1021,7 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
   });
 
   // Lead deletion gated by DELETE permission and approval workflow
-  app.delete('/api/leads/:id', async (req, res) => {
+  targetApp.delete('/api/leads/:id', async (req, res) => {
     const { id } = req.params;
     if (!(await can(req.securityContext!, 'leads:delete'))) {
       adapterLogAudit(req, 'ACCESS_DENIED', `Denied delete lead ${id}`, req.user, getClientIp(req), { actionType: 'DELETE_LEAD' });
@@ -1047,8 +1042,13 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
     res.json({ success: true, message: 'Lead deleted permanently.' });
   });
 
-  // Bulk import leads from CSV (gated by EDIT authorization)
-  app.post('/api/leads/import', async (req, res) => {
+  // Bulk import leads from CSV (gated by EDIT authorization, rate limit, batch limit, and duplicate guard)
+  targetApp.post(
+    '/api/leads/import',
+    rateLimiters.duplicateSubmissionGuard('import'),
+    rateLimiters.leadImport,
+    rateLimiters.enforceImportBatchLimit,
+    async (req, res) => {
     if (!(await can(req.securityContext!, 'leads:import' as any))) {
       adapterLogAudit(req, 'ACCESS_DENIED', `Denied lead CSV import for ${req.user!.name}`, req.user, getClientIp(req), { actionType: 'REASSIGN' });
       return res.status(403).json({
@@ -1080,7 +1080,11 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
   });
 
   // Bulk edit (gated by EDIT & REASSIGN authorizations, restricted to Team Lead and Admin roles)
-  app.post('/api/leads/bulk-update', async (req, res) => {
+  targetApp.post(
+    '/api/leads/bulk-update',
+    rateLimiters.duplicateSubmissionGuard('bulk_update'),
+    rateLimiters.bulkUpdate,
+    async (req, res) => {
     if (req.user!.role === 'telecaller' || (req.user!.role as any) === 'Rep') {
       adapterLogAudit(req, 'ACCESS_DENIED', `Denied bulk-update for ${req.user!.name}`, req.user, getClientIp(req), { actionType: 'EDIT' });
       return res.status(403).json({
@@ -1111,7 +1115,7 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
   });
 
   // 6. Calls APIs
-  app.get('/api/calls', async (req, res) => {
+  targetApp.get('/api/calls', async (req, res) => {
     const tenantId = req.securityContext!.tenantId;
     if (!tenantId && !req.securityContext!.isPlatformStaff) return res.status(403).json({ error: 'Tenant context required' });
 
@@ -1149,7 +1153,7 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
     res.json(calls);
   });
 
-  app.post('/api/calls', async (req, res) => {
+  targetApp.post('/api/calls', async (req, res) => {
     const { leadId, disposition, duration, notes, timestamp } = req.body;
     if (!leadId) return res.status(400).json({ error: 'Lead ID required' });
     
@@ -1195,7 +1199,7 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
   });
 
   // 7. WhatsApp Messaging APIs
-  app.get('/api/messages', async (req, res) => {
+  targetApp.get('/api/messages', async (req, res) => {
     const tenantId = req.securityContext!.tenantId;
     if (!tenantId && !req.securityContext!.isPlatformStaff) return res.status(403).json({ error: 'Tenant context required' });
 
@@ -1218,12 +1222,17 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
     res.json(msgs);
   });
 
-  app.get('/api/messages/health', async (req, res) => {
+  targetApp.get('/api/messages/health', async (req, res) => {
     // Legacy placeholder
     res.json({ status: 'ok', provider: 'whatsapp-cloud' });
   });
 
-  app.post('/api/messages', async (req, res) => {
+  targetApp.post(
+    '/api/messages',
+    rateLimiters.duplicateSubmissionGuard('message'),
+    rateLimiters.messageSending,
+    rateLimiters.messageRecipient,
+    async (req, res) => {
     const { leadId, text, channel, direction = 'outbound', overrideCompliance } = req.body;
     if (!leadId || !text) return res.status(400).json({ error: 'Lead ID and text required' });
 
@@ -1271,7 +1280,7 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
     res.json(newMsg);
   });
 
-  app.post('/api/messages/simulate-reply', async (req, res) => {
+  targetApp.post('/api/messages/simulate-reply', async (req, res) => {
     const { leadId, text } = req.body;
     if (!leadId || !text) return res.status(400).json({ error: 'Lead ID and text required' });
 
@@ -1301,13 +1310,13 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
   });
 
   // 8. Compliance Rules & Verification APIs
-  app.get('/api/compliance/rules', async (req, res) => {
+  targetApp.get('/api/compliance/rules', async (req, res) => {
     const tenantId = req.tenantId || req.securityContext?.tenantId || 'tenant-apex';
     const rules = await compliancePolicyRepository.getEffectivePolicy(tenantId);
     res.json(rules);
   });
 
-  app.put('/api/compliance/rules', async (req, res) => {
+  targetApp.put('/api/compliance/rules', async (req, res) => {
     if (!(await can(req.securityContext!, 'compliance:manage'))) {
       adapterLogAudit(req, 'ACCESS_DENIED', `Denied MANAGE_COMPLIANCE_RULES to ${req.user!.name}`, req.user, getClientIp(req), { actionType: 'MANAGE_COMPLIANCE_RULES' });
       return res.status(403).json({
@@ -1353,7 +1362,7 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
     }
   });
 
-  app.get('/api/compliance/check', async (req, res) => {
+  targetApp.get('/api/compliance/check', async (req, res) => {
     const { entityType, entityId } = req.query;
     if (!entityType || !entityId) return res.status(400).json({ error: 'Missing parameters' });
 
@@ -1378,7 +1387,7 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
   });
 
   // 9. Support Tickets APIs
-  app.get('/api/tickets', async (req, res) => {
+  targetApp.get('/api/tickets', async (req, res) => {
     const tenantId = req.securityContext!.tenantId;
     if (!tenantId && !req.securityContext!.isPlatformStaff) return res.status(403).json({ error: 'Tenant context required' });
     
@@ -1401,7 +1410,7 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
     res.json(ticketsWithReplies);
   });
 
-  app.post('/api/tickets', async (req, res) => {
+  targetApp.post('/api/tickets', async (req, res) => {
     const { subject, priority, leadId, initialMessage, assignedRepId } = req.body;
     if (!subject || !validateText(subject, 1, 200)) return res.status(400).json({ error: 'Invalid ticket subject' });
 
@@ -1446,7 +1455,7 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
     res.json({ ...newTicket, replies });
   });
 
-  app.post('/api/tickets/:id/replies', async (req, res) => {
+  targetApp.post('/api/tickets/:id/replies', async (req, res) => {
     const { id } = req.params;
     const { text, updateStatus } = req.body;
     if (!text) return res.status(400).json({ error: 'Invalid reply text' });
@@ -1483,7 +1492,7 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
     res.json({ ...ticket, replies: repliesData });
   });
 
-  app.put('/api/tickets/:id', async (req, res) => {
+  targetApp.put('/api/tickets/:id', async (req, res) => {
     const { id } = req.params;
     const ticketsData = await db.select().from(schema.tickets).where(eq(schema.tickets.id, id)).limit(1);
     if (!ticketsData.length) return res.status(404).json({ error: 'Ticket not found' });
@@ -1506,13 +1515,13 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
   });
 
   // 10. Reports & Analytics
-  app.get('/api/reports', async (req, res) => {
+  targetApp.get('/api/reports', async (req, res) => {
     const stats = calculateReports();
     res.json(stats);
   });
 
   // 11. Audit Logs (Business actions)
-  app.get('/api/audit-logs', async (req, res) => {
+  targetApp.get('/api/audit-logs', async (req, res) => {
     const tenantId = req.securityContext!.tenantId;
     if (!tenantId && !req.securityContext!.isPlatformStaff) return res.status(403).json({ error: 'Tenant context required' });
 
@@ -1536,7 +1545,7 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
   });
 
   // Dedicated Infrastructure Telemetry: Blocked AI Crawler attempts (separate from business audit log)
-  app.get('/api/crawler-telemetry', async (req, res) => {
+  targetApp.get('/api/crawler-telemetry', async (req, res) => {
     if (!['owner', 'cto', 'it', 'Admin'].includes(req.user!.role)) {
       return res.status(403).json({ error: 'Forbidden: Insufficient privileges to view infrastructure telemetry.' });
     }
@@ -1545,17 +1554,17 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
   });
 
   // 12. Automated Backups & Snapshots
-  app.get('/api/backups', async (req, res) => {
+  targetApp.get('/api/backups', async (req, res) => {
     // Backups are now managed externally via infrastructure. Return empty array to keep UI from crashing.
     res.json([]);
   });
 
-  app.post('/api/backups', async (req, res) => {
+  targetApp.post('/api/backups', async (req, res) => {
     return res.status(501).json({ error: 'Not Implemented: Backups are now managed by infrastructure scripts (pg_dump). Application identity no longer has backup privileges.' });
   });
 
   // Admin & IT restore
-  app.post('/api/backups/:id/restore', async (req, res) => {
+  targetApp.post('/api/backups/:id/restore', rateLimiters.sensitiveAdmin, async (req, res) => {
     let role = req.user?.role as string;
     if (role === 'Admin') role = 'owner';
     if (role !== 'owner' && role !== 'it' && role !== 'cto' && role !== 'platform_admin') {
@@ -1565,7 +1574,7 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
   });
 
   // Database Reset (Owner, CTO, IT only)
-  app.post('/api/reset-data', async (req, res) => {
+  targetApp.post('/api/reset-data', rateLimiters.sensitiveAdmin, async (req, res) => {
     let role = req.user?.role as string;
     if (role === 'Admin') role = 'owner';
     if (role !== 'owner' && role !== 'it' && role !== 'cto') {
@@ -1575,7 +1584,7 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
   });
 
   // 14. Settings APIs (Custom Fields, Role Permissions, Pipeline, Auto-Assignment)
-  app.get('/api/settings', async (req, res) => {
+  targetApp.get('/api/settings', async (req, res) => {
     const tenantId = req.securityContext!.tenantId;
     if (!tenantId && !req.securityContext!.isPlatformStaff) return res.status(403).json({ error: 'Tenant context required' });
 
@@ -1603,7 +1612,7 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
     });
   });
 
-  app.put('/api/settings/fields', async (req, res) => {
+  targetApp.put('/api/settings/fields', async (req, res) => {
     let role = req.user?.role as string;
     if (role === 'Admin') role = 'owner';
     if (role !== 'owner' && role !== 'it' && role !== 'cto') {
@@ -1627,7 +1636,7 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
     res.json({ success: true, customFields: customFields || [] });
   });
 
-  app.put('/api/settings/roles', async (req, res) => {
+  targetApp.put('/api/settings/roles', async (req, res) => {
     if (req.user!.role !== 'owner' && req.user!.role !== 'it' && req.user!.role !== 'cto') {
       return res.status(403).json({ error: 'Forbidden' });
     }
@@ -1651,16 +1660,20 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
     res.json({ success: true, rolePermissions: updatedRoles });
   });
 
-  app.put('/api/settings/pipeline', async (req, res) => {
+  targetApp.put('/api/settings/pipeline', async (req, res) => {
     res.status(400).json({ error: 'Not implemented in v2' });
   });
 
-  app.put('/api/settings/auto-assignment', async (req, res) => {
+  targetApp.put('/api/settings/auto-assignment', async (req, res) => {
     res.status(400).json({ error: 'Not implemented in v2' });
   });
 
   // 15. Audio Transcription API via aiService
-  app.post('/api/transcribe', async (req, res) => {
+  targetApp.post(
+    '/api/transcribe',
+    rateLimiters.aiTranscription,
+    rateLimiters.aiTranscriptionConcurrency,
+    async (req, res) => {
     const { audioBase64, mimeType } = req.body;
     if (!audioBase64 || typeof audioBase64 !== 'string') {
       return res.status(400).json({ error: 'audioBase64 string is required.' });
@@ -1685,9 +1698,7 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
         model: 'gemini-3.5-transcribe' // Hardcoded placeholder to keep UI compatible for now
       });
     } catch (err: any) {
-        logger.warn('[REDIS] Fallback to in-memory rate limiting', {
-          errorDetail: err instanceof Error ? { message: err.message, stack: err.stack } : err
-        });
+      logger.error('Audio transcription endpoint error', err, { route: '/api/transcribe' }, req.securityContext);
       // aiService will throw if unauthorized, quota exceeded, or provider error.
       const status = err.message.includes('Unauthorized') ? 403 : 500;
       res.status(status).json({
@@ -1702,13 +1713,13 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
   // ==========================================
 
   // Step 1: Tenant directory and lifecycle control
-  app.get('/api/platform/tenants', async (req, res) => {
+  targetApp.get('/api/platform/tenants', async (req, res) => {
     if (!req.securityContext!.isPlatformStaff) return res.status(403).json({ error: 'Forbidden' });
     const tenants = await db.select().from(schema.tenants);
     res.json(tenants);
   });
 
-  app.get('/api/platform/tenants/:id', async (req, res) => {
+  targetApp.get('/api/platform/tenants/:id', async (req, res) => {
     if (!req.securityContext!.isPlatformStaff) return res.status(403).json({ error: 'Forbidden' });
     const { id } = req.params;
     const tenants = await db.select().from(schema.tenants).where(eq(schema.tenants.id, id)).limit(1);
@@ -1716,7 +1727,7 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
     res.json(tenants[0]);
   });
 
-  app.post('/api/platform/tenants/:id/suspend', async (req, res) => {
+  targetApp.post('/api/platform/tenants/:id/suspend', async (req, res) => {
     if (!req.securityContext!.isPlatformStaff) return res.status(403).json({ error: 'Forbidden' });
     const { id } = req.params;
     await db.update(schema.tenants).set({ status: 'suspended' }).where(eq(schema.tenants.id, id));
@@ -1724,7 +1735,7 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
     res.json({ success: true });
   });
 
-  app.post('/api/platform/tenants/:id/reactivate', async (req, res) => {
+  targetApp.post('/api/platform/tenants/:id/reactivate', async (req, res) => {
     if (!req.securityContext!.isPlatformStaff) return res.status(403).json({ error: 'Forbidden' });
     const { id } = req.params;
     await db.update(schema.tenants).set({ status: 'active' }).where(eq(schema.tenants.id, id));
@@ -1733,13 +1744,13 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
   });
 
   // Step 2: Cross-tenant Security Operations Center
-  app.get('/api/platform/soc/alerts', async (req, res) => {
+  targetApp.get('/api/platform/soc/alerts', async (req, res) => {
     if (!req.securityContext!.isPlatformStaff) return res.status(403).json({ error: 'Forbidden' });
     res.json([]);
   });
 
   // Step 3: Impersonation
-  app.post('/api/platform/impersonate', async (req, res) => {
+  targetApp.post('/api/platform/impersonate', rateLimiters.sensitiveAdmin, async (req, res) => {
     if (!req.securityContext!.isPlatformStaff) return res.status(403).json({ error: 'Forbidden' });
     const { targetUserId, reason } = req.body;
     if (!targetUserId || !reason) return res.status(400).json({ error: 'Target User ID and reason are required' });
@@ -1756,7 +1767,7 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
     res.json({ token, impersonating: targetUser });
   });
 
-  app.post('/api/platform/impersonate/end', async (req, res) => {
+  targetApp.post('/api/platform/impersonate/end', async (req, res) => {
     if (!req.isPlatformStaff) return res.status(403).json({ error: 'Forbidden' });
     
     // Find active session in postgres
@@ -1781,46 +1792,52 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
   });
 
   // Step 4: Billing across tenants
-  app.get('/api/platform/billing', async (req, res) => {
+  targetApp.get('/api/platform/billing', async (req, res) => {
     if (!req.securityContext!.isPlatformStaff) return res.status(403).json({ error: 'Forbidden' });
     res.json([]);
   });
 
-  app.post('/api/platform/billing/:id/mark-paid', async (req, res) => {
+  targetApp.post('/api/platform/billing/:id/mark-paid', async (req, res) => {
     if (!req.securityContext!.isPlatformStaff) return res.status(403).json({ error: 'Forbidden' });
     res.json({ success: true });
   });
 
   // Step 5: Feature-flag / release control
-  app.get('/api/platform/features', async (req, res) => {
+  targetApp.get('/api/platform/features', async (req, res) => {
     if (!req.securityContext!.isPlatformStaff) return res.status(403).json({ error: 'Forbidden' });
     res.json([]);
   });
 
-  app.put('/api/platform/features/:id', async (req, res) => {
+  targetApp.put('/api/platform/features/:id', async (req, res) => {
     if (!req.securityContext!.isPlatformStaff) return res.status(403).json({ error: 'Forbidden' });
     res.json({ success: true });
   });
 
   // Helper endpoint to check a flag for a specific tenant (can be called by frontend)
-  app.get('/api/features/check', async (req, res) => {
+  targetApp.get('/api/features/check', async (req, res) => {
     const tenantId = req.securityContext!.tenantId;
     if (!tenantId) return res.status(403).json({ error: 'Tenant context required' });
     res.json({ ok: true });
   });
 
   // Health check for testing
-  app.get('/api/health', (req, res) => {
+  targetApp.get('/api/health', (req, res) => {
     res.json({ status: 'ok' });
   });
 
   // 404 handler for API routes
-  app.all('/api/*', (req, res, next) => {
+  targetApp.all('/api/*', (req, res, next) => {
     next(new AppError('NOT_FOUND', 404, `Route ${req.method} ${req.path} not found`));
   });
 
   // Global Error Handler
-  app.use(globalErrorHandler);
+  targetApp.use(globalErrorHandler);
+
+  return { rateLimiters, config: rlConfig };
+}
+
+async function startServer() {
+  await configureApp(app);
 
   // Vite middleware for development & static serving for production
   if (process.env.NODE_ENV !== 'production') {
@@ -1847,4 +1864,6 @@ function parseCookies(cookieHeader?: string): Record<string, string> {
   });
 }
 
-startServer().catch(err => { console.error(err); process.exit(1); });
+if (process.env.DIALPULSE_NO_AUTOSTART !== 'true') {
+  startServer().catch(err => { console.error(err); process.exit(1); });
+}

@@ -71,12 +71,13 @@ A comprehensive, defense-in-depth security and resilience hardening audit was co
   - Frontend components preserve React automatic text escaping; zero instances of `dangerouslySetInnerHTML` exist in `src/`.
 
 ### 7. API Rate Limiting & Abuse Prevention
-- **Audit Findings:** Authentication endpoints were susceptible to spoofed `X-Forwarded-For` headers rotating IPs to bypass rate limits.
-- **Threat Vector:** Distributed credential stuffing against `/api/auth/login`.
+- **Audit Findings:** Authentication endpoints previously relied on a single inline limiter with `MemoryStore` startup fallback risk, Email-OR-IP key bypasses, and no coverage on API, messaging, AI transcription, export/import, or admin routes.
+- **Threat Vector:** Credential stuffing, IP/header rotation, AI quota exhaustion, bulk export/import abuse, and message flooding.
 - **Hardening Enacted:**
-  - `loginLimiter` keys rate limiting primarily by normalized account email (`rate-limit:login-account:global:<email>`), preventing header rotation from bypassing login attempt thresholds.
-  - Global API rate limiter configured with Redis-backed distributed storage for multi-instance scaling.
-  - Express configured with `trust proxy: 1` to prevent reverse-proxy header spoofing.
+  - Centralized multi-policy distributed rate limiting (`server/middleware/rateLimits.ts`) backed by `ResilientRedisStore` (`rate-limit-redis` + `ioredis`) with explicit startup readiness synchronization (`redisService.ensureReady()`).
+  - Three independent login limiters (`login_ip_request`, `login_ip_failed`, `login_account_failed`) using HMAC-SHA256 keys (`RATE_LIMIT_KEY_SECRET`), Unicode `NFKC` email normalization, and `requestWasSuccessful` (`statusCode !== 401`).
+  - Route-specific protections for `/api/auth/refresh`, general `/api/*`, `/api/messages` (per-user + recipient burst + `Idempotency-Key`), `/api/transcribe` (rate + concurrency), `/api/leads/export`, `/api/leads/import` (rate + batch cap + duplicate guard), `/api/leads/bulk-update`, and sensitive admin/platform routes.
+  - Strict proxy trust validation (`TRUST_PROXY`, never `true`) and trusted `req.ip` extraction with IPv6 `/56` subnet normalization. See [docs/RATE_LIMITING.md](./RATE_LIMITING.md).
 
 ### 8. File Uploads & Batch Processing Limits
 - **Audit Findings:** Bulk lead imports (`POST /api/leads/import`) could exhaust server resources synchronously.

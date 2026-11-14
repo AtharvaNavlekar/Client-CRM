@@ -9,6 +9,7 @@ export type ErrorCategory =
   | 'NOT_FOUND'
   | 'CONFLICT'
   | 'RATE_LIMITED'
+  | 'RATE_LIMIT_STORE_UNAVAILABLE'
   | 'DEPENDENCY_ERROR'
   | 'TIMEOUT'
   | 'DATABASE_ERROR'
@@ -58,8 +59,8 @@ export function globalErrorHandler(err: any, req: express.Request, res: express.
     }
   }
 
-  // Ensure 500 errors don't leak internals
-  if (statusCode >= 500) {
+  // Ensure unexpected 500+ errors don't leak internals while keeping safe operational 503 messages
+  if (statusCode >= 500 && !(err instanceof AppError && err.isOperational && statusCode === 503)) {
     message = 'An unexpected internal error occurred';
   }
 
@@ -72,6 +73,10 @@ export function globalErrorHandler(err: any, req: express.Request, res: express.
       requestId
     }
   };
+
+  if (category === 'RATE_LIMIT_STORE_UNAVAILABLE' && !res.getHeader('Retry-After')) {
+    res.setHeader('Retry-After', '5');
+  }
 
   res.status(statusCode).json(errorResponse);
 }

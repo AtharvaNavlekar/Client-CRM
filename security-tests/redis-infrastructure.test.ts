@@ -16,6 +16,7 @@ async function runRedisTests() {
   };
 
   try {
+    await redisService.ensureReady(2000);
     // Note: in local environments without REDIS_URL, redisService.getClient() is null
     const client = redisService.getClient();
     

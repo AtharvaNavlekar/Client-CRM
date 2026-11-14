@@ -460,6 +460,55 @@
   animation: pulse-ring 2s cubic-bezier(0.2, 0, 0, 1) infinite;
 }
 
+/* ==========================================================================
+   Login Form Accessible Animations & Transitions
+   ========================================================================== */
+
+/* Motion effects enabled when user has no preference for reduced motion */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes input-focus-scale {
+    0% {
+      transform: scale(1);
+    }
+    100% {
+      transform: scale(1.012);
+    }
+  }
+
+  /* Subtle border-color transition and slight scale-up animation on focus for email & password */
+  #login-email-input,
+  #login-password-input,
+  .login-input {
+    transition: border-color 0.2s ease-in-out, transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  }
+
+  #login-email-input:focus,
+  #login-password-input:focus,
+  .login-input:focus {
+    border-color: var(--color-primary, #00695C);
+    animation: input-focus-scale 0.2s cubic-bezier(0.2, 0, 0, 1) forwards;
+    transform: scale(1.012);
+  }
+
+  /* Smooth transition for login button background-color and transform property on hover and active states */
+  #btn-login-submit,
+  .login-submit-btn {
+    transition: background-color 0.2s ease-out, transform 0.15s ease-out, box-shadow 0.2s ease-out;
+  }
+
+  #btn-login-submit:hover:not(:disabled),
+  .login-submit-btn:hover:not(:disabled) {
+    background-color: var(--color-navy-hover, #0F172A);
+    transform: translateY(-1px);
+  }
+
+  #btn-login-submit:active:not(:disabled),
+  .login-submit-btn:active:not(:disabled) {
+    background-color: var(--color-navy, #1E293B);
+    transform: translateY(0px) scale(0.99);
+  }
+}
+
 /* Prefers-reduced-motion accessibility safeguard */
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -474,5 +523,33 @@
   .animate-pulse-ring {
     animation: none !important;
     box-shadow: 0 0 0 4px rgba(0, 105, 92, 0.8) !important;
+  }
+
+  #login-email-input,
+  #login-password-input,
+  .login-input {
+    transition: none !important;
+    animation: none !important;
+    transform: none !important;
+  }
+
+  #login-email-input:focus,
+  #login-password-input:focus,
+  .login-input:focus {
+    animation: none !important;
+    transform: none !important;
+  }
+
+  #btn-login-submit,
+  .login-submit-btn {
+    transition: none !important;
+    transform: none !important;
+  }
+
+  #btn-login-submit:hover,
+  #btn-login-submit:active,
+  .login-submit-btn:hover,
+  .login-submit-btn:active {
+    transform: none !important;
   }
 }

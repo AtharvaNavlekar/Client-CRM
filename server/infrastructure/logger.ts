@@ -20,10 +20,14 @@ export interface LogFormat {
   [key: string]: any;
 }
 
-const SENSITIVE_KEYS = [
+const SENSITIVE_SUBSTRINGS = [
   'password', 'token', 'authorization', 'api_key', 'secret',
-  'refreshtoken', 'accesstoken', 'creditcard', 'ssn', 'session'
+  'refreshtoken', 'accesstoken', 'creditcard', 'ssn', 'session',
+  'cookie', 'x-forwarded-for', 'ipaddress', 'ip_address', 'clientip',
+  'email', 'phone'
 ];
+
+const SENSITIVE_EXACT_KEYS = new Set(['ip', 'forwarded']);
 
 export class Logger {
   private service: string;
@@ -44,7 +48,10 @@ export class Logger {
 
     const redactedObj: any = {};
     for (const [key, value] of Object.entries(obj)) {
-      const isSensitive = SENSITIVE_KEYS.some(sk => key.toLowerCase().includes(sk));
+      const lowerKey = key.toLowerCase();
+      const isSensitive =
+        SENSITIVE_EXACT_KEYS.has(lowerKey) ||
+        SENSITIVE_SUBSTRINGS.some(sk => lowerKey.includes(sk));
       if (isSensitive) {
         redactedObj[key] = '[REDACTED]';
       } else if (typeof value === 'object' && value !== null) {

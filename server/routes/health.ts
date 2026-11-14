@@ -3,6 +3,7 @@ import { db } from '../db/client';
 import { sql } from 'drizzle-orm';
 import { redisService } from '../infrastructure/redis';
 import { metricsRegistry } from '../infrastructure/metrics';
+import { requireMetricsAuth } from '../auth';
 
 export const healthRouter = express.Router();
 
@@ -13,7 +14,7 @@ healthRouter.get('/live', (req, res) => {
 });
 
 // READINESS: "Can this instance safely serve traffic?"
-// Checks critical dependencies (DB, Redis)
+// Checks critical dependencies (DB, Redis / Rate Limit Store)
 healthRouter.get('/ready', async (req, res) => {
   let isReady = true;
   const checks: any = {};
@@ -27,13 +28,31 @@ healthRouter.get('/ready', async (req, res) => {
     isReady = false;
   }
 
-  // Check Redis (optional infrastructure with in-memory fallback)
+  const requireRedis =
+    process.env.RATE_LIMIT_REQUIRE_REDIS === 'true' ||
+    (process.env.NODE_ENV === 'production' && process.env.RATE_LIMIT_REQUIRE_REDIS !== 'false');
+
+  // Check Redis
   if (redisService.isAvailable()) {
-    checks.redis = 'UP';
+    const pingOk = await redisService.ping();
+    if (pingOk) {
+      checks.redis = 'UP';
+      checks.rateLimitStore = 'redis';
+    } else {
+      checks.redis = 'DOWN';
+      checks.rateLimitStore = requireRedis ? 'UNAVAILABLE' : 'IN_MEMORY_FALLBACK';
+      if (requireRedis) isReady = false;
+    }
+  } else if (requireRedis) {
+    checks.redis = 'DOWN';
+    checks.rateLimitStore = 'UNAVAILABLE';
+    isReady = false;
   } else if (redisService.isDegraded()) {
     checks.redis = 'IN_MEMORY_FALLBACK';
+    checks.rateLimitStore = 'memory';
   } else {
     checks.redis = 'DOWN';
+    checks.rateLimitStore = 'UNAVAILABLE';
     isReady = false;
   }
 
@@ -48,9 +67,8 @@ healthRouter.get('/ready', async (req, res) => {
 });
 
 // METRICS EXPORT
-healthRouter.get('/metrics', (req, res) => {
-  // Normally protected by internal network or basic auth.
-  // Assuming network isolation for this endpoint.
+healthRouter.get('/metrics', requireMetricsAuth, (req, res) => {
   res.set('Content-Type', 'text/plain; version=0.0.4');
   res.send(metricsRegistry.metrics());
 });
+

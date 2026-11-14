@@ -7,80 +7,102 @@ import { redisConnectionErrors } from './metrics';
  * ------------------------------------------------------------------
  * Redis Shared Infrastructure Abstraction
  * ------------------------------------------------------------------
- * This module provides the authoritative Redis client abstraction
- * for the application. It handles connection lifecycle, reconnections,
- * and exposes primitive operations for rate limiting, locking, and 
- * transient state coordination.
- * 
- * In environments where Redis is unavailable (e.g. local dev, test,
- * container preview), it seamlessly degrades to in-memory coordination
- * without continuous reconnection spam or application crashes.
+ * Provides the authoritative Redis client abstraction for the application.
+ * Handles connection lifecycle, bounded retries, explicit startup readiness,
+ * and exposes both graceful-fallback primitives and strict distributed
+ * coordination primitives for rate limiting and idempotency.
  */
 
-const REDIS_URL = process.env.REDIS_URL;
-
-// Base options focusing on safe retry and timeout behavior
-const baseOptions: RedisOptions = {
-  maxRetriesPerRequest: 1, // Don't block requests indefinitely if Redis is down
-  enableReadyCheck: true,
-  lazyConnect: true, // Connect explicitly so we can catch initial failures gracefully
-  connectTimeout: 3000,
-  retryStrategy(times) {
-    // If Redis is unreachable, avoid infinite error loops
-    if (times > 3) {
-      return null; // Stop reconnecting after 3 attempts
+function buildOptions(connectTimeoutMs = 3000): RedisOptions {
+  return {
+    maxRetriesPerRequest: 1, // Fail fast when Redis is down instead of hanging requests
+    enableReadyCheck: true,
+    lazyConnect: true,
+    connectTimeout: connectTimeoutMs,
+    retryStrategy(times) {
+      if (times > 5) {
+        return null; // Bounded retry ceiling to prevent infinite log spam
+      }
+      return Math.min(times * 250, 2000);
+    },
+    reconnectOnError(err) {
+      if (err.message.includes('READONLY')) {
+        return true;
+      }
+      return false;
     }
-    return Math.min(times * 300, 2000);
-  },
-  reconnectOnError(err) {
-    const targetError = 'READONLY';
-    if (err.message.includes(targetError)) {
-      return true;
-    }
-    return false;
-  }
-};
+  };
+}
 
 interface MemoryEntry {
   value: string;
   expiresAt?: number;
 }
 
-class RedisService {
+export class RedisService {
+  private redisUrl: string | undefined;
   private client: Redis | null = null;
-  private isConnecting: boolean = false;
   private connectionError: Error | null = null;
   private isDegradedMode: boolean = false;
   private hasLoggedWarning: boolean = false;
+  private readyPromise: Promise<boolean> | null = null;
   private memoryStore = new Map<string, MemoryEntry>();
 
-  constructor() {
+  constructor(redisUrl: string | undefined = process.env.REDIS_URL) {
+    this.redisUrl = redisUrl?.trim() || undefined;
     this.init();
   }
 
   private init() {
-    if (!REDIS_URL || REDIS_URL.trim() === '') {
+    if (!this.redisUrl) {
       this.isDegradedMode = true;
+      this.readyPromise = Promise.resolve(false);
       logger.info('[REDIS] No REDIS_URL provided. Running in degraded mode with in-memory fallback.');
       return;
     }
 
     try {
-      this.client = new Redis(REDIS_URL, baseOptions);
+      this.client = new Redis(this.redisUrl, buildOptions());
       this.setupListeners();
 
-      // Initiate connection explicitly with catch handler
-      this.client.connect().catch((err: any) => {
-        if (!this.hasLoggedWarning) {
-          this.hasLoggedWarning = true;
-          logger.warn(`[REDIS] Connection to ${REDIS_URL} could not be established (${err.message}). Using in-memory fallback.`);
+      this.readyPromise = new Promise<boolean>((resolve) => {
+        if (!this.client) {
+          resolve(false);
+          return;
         }
-        this.isDegradedMode = true;
+
+        const onReady = () => {
+          cleanup();
+          resolve(true);
+        };
+        const onEnd = () => {
+          cleanup();
+          resolve(false);
+        };
+        const cleanup = () => {
+          this.client?.off('ready', onReady);
+          this.client?.off('end', onEnd);
+        };
+
+        this.client.once('ready', onReady);
+        this.client.once('end', onEnd);
+
+        this.client.connect().catch((err: any) => {
+          this.connectionError = err;
+          if (!this.hasLoggedWarning) {
+            this.hasLoggedWarning = true;
+            logger.warn(`[REDIS] Connection to Redis could not be established (${err.message}).`);
+          }
+          this.isDegradedMode = true;
+          cleanup();
+          resolve(false);
+        });
       });
     } catch (err: any) {
-      logger.warn(`[REDIS] Failed to initialize Redis client: ${err.message}. Operating with in-memory fallback.`);
+      logger.warn(`[REDIS] Failed to initialize Redis client: ${err.message}.`);
       this.client = null;
       this.isDegradedMode = true;
+      this.readyPromise = Promise.resolve(false);
     }
   }
 
@@ -92,7 +114,6 @@ class RedisService {
     });
 
     this.client.on('ready', () => {
-      this.isConnecting = false;
       this.connectionError = null;
       this.isDegradedMode = false;
       this.hasLoggedWarning = false;
@@ -106,7 +127,7 @@ class RedisService {
       if (err?.code === 'ECONNREFUSED' || err?.message?.includes('ECONNREFUSED')) {
         if (!this.hasLoggedWarning) {
           this.hasLoggedWarning = true;
-          logger.warn(`[REDIS] Connection refused at ${REDIS_URL}. Falling back to in-memory store.`);
+          logger.warn('[REDIS] Connection refused by Redis server.');
         }
       } else {
         logger.error('[REDIS] Connection error', err);
@@ -114,12 +135,13 @@ class RedisService {
     });
 
     this.client.on('close', () => {
+      this.isDegradedMode = true;
       logger.warn('[REDIS] Connection closed.');
     });
 
     this.client.on('end', () => {
       this.isDegradedMode = true;
-      logger.info('[REDIS] Connection ended. In-memory fallback active.');
+      logger.info('[REDIS] Connection ended.');
     });
 
     this.client.on('reconnecting', () => {
@@ -127,6 +149,62 @@ class RedisService {
         logger.info('[REDIS] Attempting to reconnect...');
       }
     });
+  }
+
+  public isConfigured(): boolean {
+    return Boolean(this.redisUrl);
+  }
+
+  public getLastError(): Error | null {
+    return this.connectionError;
+  }
+
+  /**
+   * Wait for initial Redis readiness (up to timeoutMs) before mounting rate limiters.
+   */
+  public async ensureReady(timeoutMs = 3000): Promise<boolean> {
+    if (this.isAvailable()) return true;
+    if (!this.redisUrl) return false;
+
+    if (this.client && (this.client.status === 'end' || this.client.status === 'close')) {
+      return this.reconnect(timeoutMs);
+    }
+
+    if (!this.readyPromise) return false;
+
+    let timer: NodeJS.Timeout | undefined;
+    try {
+      const timeoutPromise = new Promise<boolean>((resolve) => {
+        timer = setTimeout(() => resolve(this.isAvailable()), timeoutMs);
+        timer.unref?.();
+      });
+      return await Promise.race([this.readyPromise, timeoutPromise]);
+    } finally {
+      if (timer) clearTimeout(timer);
+    }
+  }
+
+  /**
+   * Re-initializes the Redis connection if the previous client ended.
+   */
+  public async reconnect(timeoutMs = 3000): Promise<boolean> {
+    if (!this.redisUrl) return false;
+    if (this.isAvailable()) return true;
+
+    if (this.client) {
+      try {
+        this.client.removeAllListeners();
+        this.client.disconnect(false);
+      } catch {
+        // Ignore cleanup errors
+      }
+      this.client = null;
+    }
+
+    this.isDegradedMode = false;
+    this.hasLoggedWarning = false;
+    this.init();
+    return this.ensureReady(timeoutMs);
   }
 
   /**
@@ -154,16 +232,60 @@ class RedisService {
   }
 
   /**
-   * Health check for readiness probes
+   * Returns the underlying ioredis client regardless of transient status (for stores managing own error propagation).
+   */
+  public getRawClient(): Redis | null {
+    return this.client;
+  }
+
+  /**
+   * Health check for readiness probes.
+   * Accurately returns false when Redis is unconfigured, disconnected, or unreachable.
    */
   public async ping(): Promise<boolean> {
-    if (!this.isAvailable()) return true;
+    if (!this.isAvailable()) return false;
     try {
       const res = await this.client!.ping();
       return res === 'PONG';
     } catch {
-      return true;
+      return false;
     }
+  }
+
+  /**
+   * Strict distributed SET NX EX operation for idempotency / duplicate guards.
+   * Throws when Redis is unavailable so callers can decide fail-closed vs fallback.
+   */
+  public async setNxStrict(key: string, value: string, ttlSeconds: number): Promise<boolean> {
+    const client = this.getClient();
+    if (!client) {
+      throw new Error('Redis client unavailable for strict SET NX operation');
+    }
+    const result = await client.set(key, value, 'EX', ttlSeconds, 'NX');
+    return result === 'OK';
+  }
+
+  /**
+   * Best-effort SET NX EX with in-memory fallback for non-strict local dev mode.
+   */
+  public async setNx(key: string, value: string, ttlSeconds: number): Promise<boolean> {
+    if (this.isAvailable()) {
+      try {
+        return await this.setNxStrict(key, value, ttlSeconds);
+      } catch {
+        // Fall through to in-memory fallback below
+      }
+    }
+    const now = Date.now();
+    const existing = this.memoryStore.get(key);
+    if (existing && (!existing.expiresAt || existing.expiresAt > now)) {
+      return false;
+    }
+    this.memoryStore.set(key, {
+      value,
+      expiresAt: now + ttlSeconds * 1000
+    });
+    return true;
   }
 
   // -------------------------------------------------------------
@@ -243,7 +365,7 @@ class RedisService {
           .incr(key)
           .expire(key, ttlSeconds, 'NX')
           .exec();
-        
+
         if (!res || !res[0]) throw new Error('Increment failed');
         return res[0][1] as number;
       } else {
@@ -264,7 +386,7 @@ class RedisService {
   // -------------------------------------------------------------
   // Clean Shutdown
   // -------------------------------------------------------------
-  
+
   public async disconnect(): Promise<void> {
     if (this.client) {
       try {
@@ -288,3 +410,17 @@ export function createSafeKey(namespace: string, tenantId: string, sensitiveIden
   const hash = crypto.createHash('sha256').update(sensitiveIdentifier).digest('hex');
   return `dp:${namespace}:${tenantId}:${hash}`;
 }
+
+/**
+ * Keyed HMAC-SHA256 key builder so PII (emails, tokens, IPs) cannot be probed via offline dictionary hashing.
+ */
+export function createHmacSafeKey(
+  namespace: string,
+  tenantId: string,
+  sensitiveIdentifier: string,
+  secret: string
+): string {
+  const hmac = crypto.createHmac('sha256', secret).update(sensitiveIdentifier).digest('hex');
+  return `dp:${namespace}:${tenantId}:${hmac}`;
+}
+
