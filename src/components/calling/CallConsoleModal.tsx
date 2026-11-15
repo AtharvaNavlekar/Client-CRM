@@ -211,21 +211,21 @@ export const CallConsoleModal: React.FC<CallConsoleModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-xs animate-in fade-in">
       <div
         id="modal-call-console"
         ref={modalRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-call-console-title"
-        className="bg-[#0F172A] text-[#F1F5F9] w-full max-w-md rounded-[28px] shadow-2xl border border-[#475569]/50 overflow-hidden flex flex-col outline-none"
+        className="bg-[#0F172A] text-[#F1F5F9] w-full max-w-md max-h-[92dvh] rounded-2xl sm:rounded-[28px] shadow-2xl border border-[#475569]/50 overflow-hidden flex flex-col outline-none"
         tabIndex={-1}
       >
         {/* Header Bar */}
-        <div className="px-6 py-4 bg-[#00201B] flex items-center justify-between border-b border-[#475569]/30">
-          <div className="flex items-center space-x-2.5">
-            <div className="w-2.5 h-2.5 rounded-full bg-[#80D5C4] animate-pulse" />
-            <span id="modal-call-console-title" className="text-xs font-semibold tracking-wide uppercase text-[#80D5C4] m3-label-large">
+        <div className="px-4 sm:px-6 py-3.5 sm:py-4 bg-[#00201B] flex items-center justify-between border-b border-[#475569]/30 shrink-0">
+          <div className="flex items-center space-x-2.5 min-w-0">
+            <div className="w-2.5 h-2.5 rounded-full bg-[#80D5C4] animate-pulse shrink-0" />
+            <span id="modal-call-console-title" className="text-xs font-semibold tracking-wide uppercase text-[#80D5C4] m3-label-large truncate">
               TeleCRM In-App Telecaller
             </span>
           </div>
@@ -233,7 +233,7 @@ export const CallConsoleModal: React.FC<CallConsoleModalProps> = ({
             type="button"
             onClick={handleClose}
             aria-label="Close call console"
-            className="w-8 h-8 rounded-full flex items-center justify-center text-[#A2ADA9] hover:text-white hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#80D5C4] transition-colors"
+            className="min-w-[40px] min-h-[40px] sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-[#A2ADA9] hover:text-white hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#80D5C4] transition-colors shrink-0"
           >
             <X className="w-4 h-4" />
           </button>
@@ -241,11 +241,11 @@ export const CallConsoleModal: React.FC<CallConsoleModalProps> = ({
 
         {/* Dialing / Ringing / Active Screen */}
         {callState !== 'ended_disposition' ? (
-          <div className="p-8 flex flex-col items-center text-center">
+          <div className="p-5 sm:p-8 flex flex-col items-center text-center overflow-y-auto flex-1">
             {/* Contact Avatar with simulated pulse ring */}
-            <div className="relative my-4">
+            <div className="relative my-3 sm:my-4">
               <div
-                className={`w-28 h-28 rounded-full flex items-center justify-center text-3xl font-bold shadow-xl ${
+                className={`w-24 h-24 sm:w-28 sm:h-28 rounded-full flex items-center justify-center text-3xl font-bold shadow-xl ${
                   callState === 'ringing'
                     ? 'bg-[#00695C] text-white ring-8 ring-[#00695C]/30 animate-pulse'
                     : 'bg-[#00695C] text-white ring-4 ring-[#80D5C4]/40'
@@ -276,7 +276,7 @@ export const CallConsoleModal: React.FC<CallConsoleModalProps> = ({
                 </div>
                 <button
                   onClick={handleManualAnswer}
-                  className="px-5 py-2 rounded-full bg-[#00695C] hover:bg-[#005449] text-xs font-medium text-white transition-all shadow-md min-h-[38px]"
+                  className="px-5 py-2.5 rounded-full bg-[#00695C] hover:bg-[#005449] text-xs font-medium text-white transition-all shadow-md min-h-[44px]"
                 >
                   ⚡ Simulate Customer Pickup
                 </button>
@@ -345,13 +345,13 @@ export const CallConsoleModal: React.FC<CallConsoleModalProps> = ({
           </div>
         ) : (
           /* Post-Call Wrap-up & Outcome Disposition Screen */
-          <div className="p-6 space-y-4 animate-in fade-in">
+          <div className="p-4 sm:p-6 space-y-4 animate-in fade-in overflow-y-auto flex-1">
             <div className="flex items-center justify-between pb-3 border-b border-white/10">
-              <div>
+              <div className="min-w-0">
                 <h3 className="text-base font-semibold text-[#F1F5F9] m3-title-medium">Call Wrap-Up Disposition</h3>
-                <p className="text-xs text-[#A2ADA9]">Duration: {formatTimer(durationSeconds)} with {lead.name}</p>
+                <p className="text-xs text-[#A2ADA9] truncate">Duration: {formatTimer(durationSeconds)} with {lead.name}</p>
               </div>
-              <div className="w-8 h-8 rounded-full bg-[#004F46] text-[#80D5C4] flex items-center justify-center">
+              <div className="w-8 h-8 rounded-full bg-[#004F46] text-[#80D5C4] flex items-center justify-center shrink-0">
                 <CheckCircle2 className="w-4 h-4" />
               </div>
             </div>
@@ -365,7 +365,7 @@ export const CallConsoleModal: React.FC<CallConsoleModalProps> = ({
                 id="select-call-outcome"
                 value={outcome}
                 onChange={(e) => setOutcome(e.target.value as CallOutcome)}
-                className="w-full px-4 py-2.5 bg-[#272B2A] rounded-full text-xs font-medium text-white focus:ring-[#80D5C4] m3-select"
+                className="w-full min-h-[44px] sm:min-h-[38px] px-4 py-2.5 bg-[#272B2A] rounded-full text-base sm:text-xs font-medium text-white focus:ring-[#80D5C4] m3-select"
               >
                 <option value="Interested">Interested (Ready for demo / quote)</option>
                 <option value="Follow-up">Follow-up (Schedule callback)</option>
@@ -385,13 +385,13 @@ export const CallConsoleModal: React.FC<CallConsoleModalProps> = ({
                 placeholder="e.g. Client requested customized pricing sheet, asked to call back post lunch..."
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
-                className="w-full p-3.5 bg-[#272B2A] border border-transparent rounded-[18px] text-xs text-white placeholder-[#475569] focus:outline-none focus:ring-2 focus:ring-[#80D5C4]"
+                className="w-full p-3.5 bg-[#272B2A] border border-transparent rounded-[18px] text-base sm:text-xs text-white placeholder-[#475569] focus:outline-none focus:ring-2 focus:ring-[#80D5C4]"
               />
             </div>
 
             {/* Callback Reminder Date/Time */}
             <div>
-              <label className="block text-xs font-medium text-[#C4C7C5] mb-1.5 flex items-center justify-between">
+              <label className="block text-xs font-medium text-[#C4C7C5] mb-1.5 flex flex-wrap items-center justify-between gap-1">
                 <span>Set Callback Reminder (Optional)</span>
                 <span className="text-[10px] text-[#80D5C4] font-normal">Adds to Callbacks Due list</span>
               </label>
@@ -400,7 +400,7 @@ export const CallConsoleModal: React.FC<CallConsoleModalProps> = ({
                 type="datetime-local"
                 value={callbackTime}
                 onChange={(e) => setCallbackTime(e.target.value)}
-                className="w-full px-4 py-2.5 bg-[#272B2A] border border-transparent rounded-full text-xs text-white focus:outline-none focus:ring-2 focus:ring-[#80D5C4]"
+                className="w-full min-h-[44px] sm:min-h-[38px] px-4 py-2.5 bg-[#272B2A] border border-transparent rounded-full text-base sm:text-xs text-white focus:outline-none focus:ring-2 focus:ring-[#80D5C4]"
               />
             </div>
 

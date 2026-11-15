@@ -67,39 +67,39 @@ export const AddLeadModal: React.FC<AddLeadModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-xs animate-in fade-in">
       <div
         id="modal-add-lead"
         ref={modalRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-add-lead-title"
-        className="bg-white dark:bg-slate-900 w-full max-w-lg rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden outline-none"
+        className="bg-white dark:bg-slate-900 w-full max-w-lg max-h-[90dvh] flex flex-col rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden outline-none"
         tabIndex={-1}
       >
         {/* Modal Header */}
-        <div className="px-6 py-4 bg-[#1E293B] text-white flex items-center justify-between">
-          <div className="flex items-center space-x-2.5">
-            <div className="w-8 h-8 rounded-lg bg-[#00695C] flex items-center justify-center text-white">
+        <div className="px-4 sm:px-6 py-4 bg-[#1E293B] text-white flex items-center justify-between shrink-0">
+          <div className="flex items-center space-x-2.5 min-w-0">
+            <div className="w-8 h-8 rounded-lg bg-[#00695C] flex items-center justify-center text-white shrink-0">
               <UserPlus className="w-4 h-4" />
             </div>
-            <div>
-              <h2 id="modal-add-lead-title" className="text-base font-bold">Add New Sales Lead</h2>
-              <p className="text-xs text-slate-300">Enter customer details for telecalling & WhatsApp outreach</p>
+            <div className="min-w-0">
+              <h2 id="modal-add-lead-title" className="text-base font-bold truncate">Add New Sales Lead</h2>
+              <p className="text-xs text-slate-300 truncate">Enter customer details for telecalling &amp; WhatsApp outreach</p>
             </div>
           </div>
           <button
             type="button"
             onClick={onClose}
             aria-label="Close add lead dialog"
-            className="p-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white transition-colors"
+            className="min-w-[40px] min-h-[40px] flex items-center justify-center rounded-lg text-slate-300 hover:text-white hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white transition-colors shrink-0"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Modal Form */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+        <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-4 overflow-y-auto flex-1">
           {error && (
             <div className="p-3 rounded-xl bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-800 text-xs text-rose-700 dark:text-rose-300 font-medium">
               {error}
@@ -121,7 +121,7 @@ export const AddLeadModal: React.FC<AddLeadModalProps> = ({
                   placeholder="e.g. Vikram Malhotra"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#00695C]"
+                  className="w-full min-h-[44px] sm:min-h-[38px] pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-base sm:text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#00695C]"
                 />
               </div>
             </div>
@@ -140,7 +140,7 @@ export const AddLeadModal: React.FC<AddLeadModalProps> = ({
                   placeholder="+91 98201 12345"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  className="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-mono text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#00695C]"
+                  className="w-full min-h-[44px] sm:min-h-[38px] pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-base sm:text-xs font-mono text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#00695C]"
                 />
               </div>
             </div>
@@ -210,7 +210,7 @@ export const AddLeadModal: React.FC<AddLeadModalProps> = ({
                   placeholder="1500000"
                   value={value}
                   onChange={(e) => setValue(e.target.value)}
-                  className="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#00695C]"
+                  className="w-full min-h-[44px] sm:min-h-[38px] pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-base sm:text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#00695C]"
                 />
               </div>
             </div>
@@ -243,7 +243,7 @@ export const AddLeadModal: React.FC<AddLeadModalProps> = ({
                 placeholder="e.g. Inquired about loan eligibility, prefers morning 11 AM calls on WhatsApp..."
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
-                className="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#00695C]"
+                className="w-full pl-9 pr-3 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-base sm:text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#00695C]"
               />
             </div>
           </div>
@@ -253,7 +253,7 @@ export const AddLeadModal: React.FC<AddLeadModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 transition-colors"
+              className="min-h-[44px] px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 transition-colors"
             >
               Cancel
             </button>
@@ -261,7 +261,7 @@ export const AddLeadModal: React.FC<AddLeadModalProps> = ({
               id="btn-submit-lead"
               type="submit"
               disabled={isSubmitting}
-              className="px-5 py-2 rounded-xl text-xs font-bold text-white bg-[#00695C] hover:bg-[#245b4c] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00695C] focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 disabled:opacity-50 transition-all shadow-xs"
+              className="min-h-[44px] px-5 py-2 rounded-xl text-xs font-bold text-white bg-[#00695C] hover:bg-[#245b4c] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00695C] focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 disabled:opacity-50 transition-all shadow-xs"
             >
               {isSubmitting ? 'Saving Lead...' : 'Create Lead'}
             </button>

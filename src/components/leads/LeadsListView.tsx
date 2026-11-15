@@ -405,16 +405,16 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
     <div className="flex-1 flex flex-col h-full bg-[#F8FAF9] dark:bg-[#111514] overflow-hidden">
       {/* Top Toolbar */}
       <div className={`bg-[#F8FAF9] dark:bg-[#111514] border-b border-[#E2E8F0]/40 dark:border-[#334155]/40 shrink-0 ${isMobile ? 'p-3 space-y-2.5' : 'p-4 space-y-3.5'}`}>
-        <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex flex-wrap items-center justify-between gap-2.5 sm:gap-3">
           {/* Left: Search with Field-Picker - Material Design 3 Pill Bar */}
-          <div className={`flex items-center space-x-2 flex-1 ${isMobile ? 'min-w-0' : 'min-w-[280px] max-w-lg'}`}>
-            <div className="relative flex-1 flex items-center bg-[#F1F5F4] dark:bg-[#161A19] rounded-full border border-transparent hover:border-[#E2E8F0] dark:hover:border-[#475569] focus-within:border-[#00695C] focus-within:ring-2 focus-within:ring-[#00695C]/20 transition-all min-h-[46px] px-2">
+          <div className="flex items-center space-x-2 flex-1 min-w-0 w-full lg:w-auto lg:min-w-[260px] max-w-lg">
+            <div className="relative flex-1 flex items-center min-w-0 bg-[#F1F5F4] dark:bg-[#161A19] rounded-full border border-transparent hover:border-[#E2E8F0] dark:hover:border-[#475569] focus-within:border-[#00695C] focus-within:ring-2 focus-within:ring-[#00695C]/20 transition-all min-h-[46px] px-2">
               <MaterialDropdown
                 value={searchField}
                 onChange={(val) => setSearchField(val as any)}
                 ariaLabel="Filter search by field"
                 variant="chip"
-                triggerClassName="h-8 pl-2 pr-1 border-r border-[#E2E8F0]/60 dark:border-[#334155]/60"
+                triggerClassName="h-8 pl-2 pr-1 border-r border-[#E2E8F0]/60 dark:border-[#334155]/60 shrink-0"
                 options={[
                   { value: 'name', label: 'Name' },
                   { value: 'phone', label: 'Phone' },
@@ -422,7 +422,7 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
                   { value: 'company', label: 'Company' },
                 ]}
               />
-              <div className="relative flex-1 flex items-center">
+              <div className="relative flex-1 flex items-center min-w-0">
                 <Search className="w-4 h-4 text-[#475569] dark:text-[#94A3B8] ml-2.5 shrink-0" />
                 <input
                   type="text"
@@ -432,7 +432,7 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
                     setSearchQuery(e.target.value);
                     setCurrentPage(1);
                   }}
-                  className="w-full h-9 pl-2 pr-3 text-xs bg-transparent text-[#0F172A] dark:text-[#F1F5F9] placeholder-[#475569] dark:placeholder-[#94A3B8] focus:outline-none font-sans"
+                  className="w-full min-w-0 h-9 pl-2 pr-3 text-base sm:text-xs bg-transparent text-[#0F172A] dark:text-[#F1F5F9] placeholder-[#475569] dark:placeholder-[#94A3B8] focus:outline-none font-sans"
                 />
               </div>
               {searchQuery && (
@@ -440,7 +440,7 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
                   type="button"
                   onClick={() => setSearchQuery('')}
                   aria-label="Clear search text"
-                  className="p-1 text-[#475569] hover:text-[#0F172A] dark:hover:text-[#F1F5F9] rounded-full"
+                  className="p-1.5 text-[#475569] hover:text-[#0F172A] dark:hover:text-[#F1F5F9] rounded-full shrink-0"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -449,21 +449,22 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
           </div>
 
           {/* Right: Primary Action Buttons */}
-          <div className="flex items-center space-x-2.5">
+          <div className="flex flex-wrap items-center gap-2 shrink-0">
             {/* Bulk Edit Button */}
             <button
               type="button"
               id="btn-bulk-edit"
               disabled={selectedIds.size === 0}
               onClick={() => setIsBulkEditOpen(true)}
-              className={`min-h-[44px] px-4 text-xs font-medium rounded-full flex items-center space-x-2 transition-all ${
+              className={`min-h-[44px] px-3 sm:px-4 text-xs font-medium rounded-full flex items-center space-x-1.5 sm:space-x-2 whitespace-nowrap shrink-0 transition-all ${
                 selectedIds.size > 0
                   ? 'bg-[#1E293B] text-white hover:bg-[#0F172A] shadow-sm'
                   : 'bg-[#F1F5F4] dark:bg-[#161A19] text-[#475569] dark:text-[#94A3B8] cursor-not-allowed border border-transparent'
               }`}
             >
-              <Edit3 className="w-4 h-4" />
-              <span>Bulk Edit</span>
+              <Edit3 className="w-4 h-4 shrink-0" />
+              <span className="hidden sm:inline">Bulk Edit</span>
+              <span className="sm:hidden">Edit</span>
               {selectedIds.size > 0 && (
                 <span className="ml-1 px-2 py-0.5 rounded-full bg-[#CCE8E1] text-[#00201B] text-[10px] font-mono font-bold">
                   {selectedIds.size}
@@ -477,14 +478,15 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
               id="btn-bulk-waca"
               disabled={selectedIds.size === 0}
               onClick={() => setIsBulkWacaOpen(true)}
-              className={`min-h-[44px] px-4 text-xs font-medium rounded-full flex items-center space-x-2 transition-all ${
+              className={`min-h-[44px] px-3 sm:px-4 text-xs font-medium rounded-full flex items-center space-x-1.5 sm:space-x-2 whitespace-nowrap shrink-0 transition-all ${
                 selectedIds.size > 0
                   ? 'bg-[#00695C] text-white hover:bg-[#005449] shadow-sm'
                   : 'bg-[#F1F5F4] dark:bg-[#161A19] text-[#475569] dark:text-[#94A3B8] cursor-not-allowed border border-transparent'
               }`}
             >
-              <MessageSquare className="w-4 h-4" />
-              <span>WhatsApp Broadcast</span>
+              <MessageSquare className="w-4 h-4 shrink-0" />
+              <span className="hidden sm:inline">WhatsApp Broadcast</span>
+              <span className="sm:hidden">Broadcast</span>
             </button>
 
             {/* Column Customizer Pill */}
@@ -502,7 +504,7 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
                 </button>
 
                 {isColumnDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-52 bg-[#F8FAF9] dark:bg-[#161A19] rounded-2xl shadow-xl border border-[#E2E8F0]/60 dark:border-[#334155]/60 p-3 z-30 space-y-2">
+                  <div className="absolute right-0 mt-2 w-52 max-w-[calc(100vw-1.5rem)] bg-[#F8FAF9] dark:bg-[#161A19] rounded-2xl shadow-xl border border-[#E2E8F0]/60 dark:border-[#334155]/60 p-3 z-30 space-y-2">
                     <p className="text-xs font-semibold text-[#0F172A] dark:text-[#F1F5F9] px-1 mb-1">
                       Toggle Columns
                     </p>
@@ -561,7 +563,7 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
               </button>
 
               {isMoreMenuOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-[#F8FAF9] dark:bg-[#161A19] rounded-2xl shadow-xl border border-[#E2E8F0]/60 dark:border-[#334155]/60 p-2 z-30 space-y-1">
+                <div className="absolute right-0 mt-2 w-48 max-w-[calc(100vw-1.5rem)] bg-[#F8FAF9] dark:bg-[#161A19] rounded-2xl shadow-xl border border-[#E2E8F0]/60 dark:border-[#334155]/60 p-2 z-30 space-y-1">
                   <button
                     type="button"
                     onClick={handleExportCsv}
@@ -712,46 +714,48 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
         {/* Row 2: Material Design 3 Segmented Button for Sorting (Desktop) */}
         {!isMobile && (
           <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-[#E2E8F0]/30 dark:border-[#334155]/30">
-            <div className="flex items-center space-x-3">
-              <div className="flex items-center space-x-1.5 text-[#475569] dark:text-[#94A3B8] text-xs font-medium">
+            <div className="flex items-center space-x-2.5 min-w-0 max-w-full">
+              <div className="flex items-center space-x-1.5 text-[#475569] dark:text-[#94A3B8] text-xs font-medium shrink-0">
                 <ArrowUpDown className="w-3.5 h-3.5 text-[#00695C] dark:text-[#80D5C4]" />
                 <span>Sort by:</span>
               </div>
 
-              {/* M3 Segmented Button Group */}
-              <div className="inline-flex items-center p-1 rounded-full bg-[#F1F5F4] dark:bg-[#161A19] border border-[#E2E8F0]/50 dark:border-[#334155]/50">
-                {[
-                  { id: 'stage' as SortField, label: 'Stage' },
-                  { id: 'assignee' as SortField, label: 'Assignee' },
-                  { id: 'source' as SortField, label: 'Source' },
-                  { id: 'value' as SortField, label: 'Deal Value' },
-                  { id: 'rating' as SortField, label: 'Rating' },
-                  { id: 'createdDate' as SortField, label: 'Recent' }
-                ].map((s) => {
-                  const isCur = sortField === s.id;
-                  return (
-                    <button
-                      key={s.id}
-                      type="button"
-                      onClick={() => handleSort(s.id)}
-                      className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all flex items-center space-x-1.5 min-h-[32px] ${
-                        isCur
-                          ? 'bg-[#00695C] text-white shadow-xs'
-                          : 'text-[#475569] dark:text-[#94A3B8] hover:text-[#0F172A] dark:hover:text-white'
-                      }`}
-                    >
-                      <span>{s.label}</span>
-                      {isCur && (
-                        sortOrder === 'asc' ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />
-                      )}
-                    </button>
-                  );
-                })}
+              {/* M3 Segmented Button Group (horizontally scrollable on narrow tablets) */}
+              <div className="overflow-x-auto max-w-full scrollbar-none">
+                <div className="inline-flex w-max items-center p-1 rounded-full bg-[#F1F5F4] dark:bg-[#161A19] border border-[#E2E8F0]/50 dark:border-[#334155]/50">
+                  {[
+                    { id: 'stage' as SortField, label: 'Stage' },
+                    { id: 'assignee' as SortField, label: 'Assignee' },
+                    { id: 'source' as SortField, label: 'Source' },
+                    { id: 'value' as SortField, label: 'Deal Value' },
+                    { id: 'rating' as SortField, label: 'Rating' },
+                    { id: 'createdDate' as SortField, label: 'Recent' }
+                  ].map((s) => {
+                    const isCur = sortField === s.id;
+                    return (
+                      <button
+                        key={s.id}
+                        type="button"
+                        onClick={() => handleSort(s.id)}
+                        className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all flex items-center space-x-1.5 min-h-[32px] whitespace-nowrap shrink-0 ${
+                          isCur
+                            ? 'bg-[#00695C] text-white shadow-xs'
+                            : 'text-[#475569] dark:text-[#94A3B8] hover:text-[#0F172A] dark:hover:text-white'
+                        }`}
+                      >
+                        <span>{s.label}</span>
+                        {isCur && (
+                          sortOrder === 'asc' ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
             </div>
 
             {/* Real Filtered Records Count */}
-            <div className="text-xs text-[#475569] dark:text-[#94A3B8] font-medium">
+            <div className="text-xs text-[#475569] dark:text-[#94A3B8] font-medium shrink-0 tabular-nums">
               Showing <span className="font-semibold text-[#0F172A] dark:text-[#F1F5F9]">{totalCount > 0 ? startIndex + 1 : 0}</span> to <span className="font-semibold text-[#0F172A] dark:text-[#F1F5F9]">{endIndex}</span> of <span className="font-semibold text-[#0F172A] dark:text-[#F1F5F9]">{totalCount}</span> filtered leads
             </div>
           </div>
@@ -825,7 +829,7 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
 
       {/* Main Content Area */}
       {!isLoading && leads.length > 0 && (
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 min-h-0 overflow-auto">
           {/* Mobile View: LeadCardList */}
           {isMobile ? (
             <LeadCardList
@@ -838,8 +842,8 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
               onOpenChat={onOpenChat}
             />
           ) : (
-            /* Desktop Data Table */
-            <table className="w-full text-left border-collapse">
+            /* Desktop & Tablet Data Table */
+            <table className="w-full min-w-[780px] text-left border-collapse">
               {/* Table Header */}
               <thead className="sticky top-0 z-10 bg-[#F8FAF9] dark:bg-[#111514] border-b border-[#E2E8F0]/50 dark:border-[#334155]/50 text-[#475569] dark:text-[#94A3B8] text-xs font-semibold uppercase tracking-wider select-none shadow-xs">
                 <tr>
@@ -1015,7 +1019,7 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
                         onClick={() => onSelectLead?.(lead)}
                         className={`group cursor-pointer transition-colors ${
                           isSelected
-                            ? 'bg-[#CCE8E1]/35 dark:bg-[#004F46]/30 border-l-4 border-l-[#00695C]'
+                            ? 'bg-[#CCE8E1]/35 dark:bg-[#004F46]/30 ring-1 ring-inset ring-[#00695C]/40'
                             : 'hover:bg-[#F1F5F4]/60 dark:hover:bg-[#161A19]/70'
                         }`}
                       >
@@ -1237,11 +1241,11 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
 
       {/* Pagination Footer */}
       {!isLoading && leads.length > 0 && (
-        <div className="bg-[#F8FAF9] dark:bg-[#111514] border-t border-[#E2E8F0]/40 dark:border-[#334155]/40 px-4 py-2.5 flex items-center justify-between shrink-0">
-          <div className="flex items-center space-x-2 text-xs text-[#475569] dark:text-[#94A3B8]">
+        <div className="bg-[#F8FAF9] dark:bg-[#111514] border-t border-[#E2E8F0]/40 dark:border-[#334155]/40 px-3 sm:px-4 py-2 sm:py-2.5 flex flex-wrap items-center justify-between gap-2 shrink-0">
+          <div className="flex items-center space-x-2 text-xs text-[#475569] dark:text-[#94A3B8] tabular-nums">
             <span>Page {currentPage} of {totalPages}</span>
-            <span>•</span>
-            <span>{pageSize} rows per page</span>
+            <span className="hidden sm:inline">•</span>
+            <span className="hidden sm:inline">{pageSize} rows per page</span>
           </div>
 
           <div className="flex items-center space-x-1.5">
@@ -1338,7 +1342,7 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
             role="dialog"
             aria-modal="true"
             aria-labelledby="bulk-edit-title"
-            className="bg-[#F8FAF9] dark:bg-[#161A19] rounded-3xl p-6 max-w-md w-full border border-[#E2E8F0]/60 dark:border-[#334155]/60 shadow-2xl space-y-4"
+            className="bg-[#F8FAF9] dark:bg-[#161A19] rounded-3xl p-5 sm:p-6 max-w-md w-full max-h-[90dvh] overflow-y-auto border border-[#E2E8F0]/60 dark:border-[#334155]/60 shadow-2xl space-y-4"
           >
             <div className="flex items-center justify-between pb-2 border-b border-[#E2E8F0]/30">
               <h3 id="bulk-edit-title" className="text-base font-semibold text-[#0F172A] dark:text-[#F1F5F9] flex items-center gap-2 m3-title-medium">
@@ -1449,7 +1453,7 @@ export const LeadsListView: React.FC<LeadsListViewProps> = ({
             role="dialog"
             aria-modal="true"
             aria-labelledby="bulk-waca-title"
-            className="bg-[#F8FAF9] dark:bg-[#161A19] rounded-3xl p-6 max-w-md w-full border border-[#E2E8F0]/60 dark:border-[#334155]/60 shadow-2xl space-y-4"
+            className="bg-[#F8FAF9] dark:bg-[#161A19] rounded-3xl p-5 sm:p-6 max-w-md w-full max-h-[90dvh] overflow-y-auto border border-[#E2E8F0]/60 dark:border-[#334155]/60 shadow-2xl space-y-4"
           >
             <div className="flex items-center justify-between pb-2 border-b border-[#E2E8F0]/30">
               <h3 id="bulk-waca-title" className="text-base font-semibold text-[#0F172A] dark:text-[#F1F5F9] flex items-center gap-2 m3-title-medium">

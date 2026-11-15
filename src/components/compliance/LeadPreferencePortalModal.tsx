@@ -130,44 +130,46 @@ export const LeadPreferencePortalModal: React.FC<LeadPreferencePortalModalProps>
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/65 backdrop-blur-xs animate-in fade-in">
       <div
         id="modal-lead-preference-portal"
-        className="bg-white dark:bg-slate-900 w-full max-w-lg rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden flex flex-col max-h-[90vh]"
+        className="bg-white dark:bg-slate-900 w-full max-w-lg rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden flex flex-col max-h-[90dvh]"
       >
         {/* Mobile Portal Device Header Banner */}
-        <div className="bg-gradient-to-r from-[#1E293B] to-[#00695C] text-white p-5">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white">
+        <div className="bg-gradient-to-r from-[#1E293B] to-[#00695C] text-white p-4 sm:p-5 shrink-0">
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center space-x-2 min-w-0">
+              <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white shrink-0">
                 <ShieldCheck className="w-5 h-5 text-emerald-300" />
               </div>
-              <div>
-                <span className="text-[10px] tracking-wider uppercase font-semibold text-emerald-300">
-                  Customer Privacy & Preference Center
+              <div className="min-w-0">
+                <span className="text-[10px] tracking-wider uppercase font-semibold text-emerald-300 block truncate">
+                  Customer Privacy &amp; Preference Center
                 </span>
-                <h2 className="text-base font-bold text-white">Communications Choices</h2>
+                <h2 className="text-base font-bold text-white truncate">Communications Choices</h2>
               </div>
             </div>
             <button
+              type="button"
               onClick={onClose}
-              className="p-1 rounded-lg text-slate-300 hover:text-white hover:bg-white/10"
+              aria-label="Close portal preview"
+              className="min-w-[40px] min-h-[40px] flex items-center justify-center rounded-lg text-slate-300 hover:text-white hover:bg-white/10 shrink-0"
               title="Close portal preview"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
 
-          <div className="mt-3 p-3 rounded-xl bg-white/10 backdrop-blur-xs border border-white/15 flex items-center justify-between text-xs">
-            <div>
-              <p className="font-semibold text-white">{leadName}</p>
-              <p className="text-[11px] text-slate-200 font-mono">{leadPhone} • {leadCompanyOrProject}</p>
+          <div className="mt-3 p-3 rounded-xl bg-white/10 backdrop-blur-xs border border-white/15 flex flex-wrap items-center justify-between gap-2 text-xs">
+            <div className="min-w-0">
+              <p className="font-semibold text-white truncate">{leadName}</p>
+              <p className="text-[11px] text-slate-200 font-mono truncate">{leadPhone} • {leadCompanyOrProject}</p>
             </div>
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/30 text-emerald-200 border border-emerald-400/30">
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/30 text-emerald-200 border border-emerald-400/30 shrink-0">
               Verified Lead Portal
             </span>
           </div>
         </div>
 
         {/* Form Body */}
-        <form onSubmit={handleSaveAll} className="p-5 overflow-y-auto space-y-5 flex-1 text-slate-800 dark:text-slate-100">
+        <form onSubmit={handleSaveAll} className="p-4 sm:p-5 overflow-y-auto space-y-5 flex-1 text-slate-800 dark:text-slate-100">
           {savedSuccess && (
             <div className="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-300 dark:border-emerald-800 text-xs text-emerald-800 dark:text-emerald-200 font-semibold flex items-center space-x-2 animate-in fade-in">
               <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
@@ -335,17 +337,17 @@ export const LeadPreferencePortalModal: React.FC<LeadPreferencePortalModalProps>
           </div>
 
           {/* Bottom Actions */}
-          <div className="pt-2 flex items-center justify-between border-t border-slate-200 dark:border-slate-800">
+          <div className="pt-2 flex items-center justify-between gap-2 border-t border-slate-200 dark:border-slate-800">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+              className="min-h-[44px] px-4 py-2 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-5 py-2 rounded-xl text-xs font-bold bg-[#1E293B] hover:bg-[#182f4d] text-white flex items-center space-x-1.5 shadow-sm transition-all"
+              className="min-h-[44px] px-5 py-2 rounded-xl text-xs font-bold bg-[#1E293B] hover:bg-[#182f4d] text-white flex items-center space-x-1.5 shadow-sm transition-all"
             >
               <span>Save My Preferences</span>
               <ChevronRight className="w-4 h-4" />

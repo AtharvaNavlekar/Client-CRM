@@ -147,11 +147,11 @@ export const LeaderboardView: React.FC = () => {
   };
 
   return (
-    <div className="flex-1 flex flex-col lg:flex-row h-full bg-[#F8FAF9] dark:bg-[#111514] overflow-hidden rounded-[28px] border border-[#E2E8F0]/40 dark:border-[#334155]/40 shadow-xs">
+    <div className="flex-1 flex flex-col lg:flex-row min-h-0 h-full bg-[#F8FAF9] dark:bg-[#111514] overflow-y-auto lg:overflow-hidden rounded-[24px] lg:rounded-[28px] border border-[#E2E8F0]/40 dark:border-[#334155]/40 shadow-xs">
       {/* LEFT PANEL: Filters, Summary & Ranked Team Member List */}
-      <div className="w-full lg:w-[58%] border-r border-[#E2E8F0]/30 dark:border-[#334155]/30 flex flex-col h-full bg-[#F8FAF9] dark:bg-[#161A19] shrink-0">
+      <div className="w-full lg:w-[58%] border-b lg:border-b-0 lg:border-r border-[#E2E8F0]/30 dark:border-[#334155]/30 flex flex-col lg:h-full bg-[#F8FAF9] dark:bg-[#161A19] lg:shrink-0">
         {/* Top Controls Toolbar */}
-        <div className="p-4 border-b border-[#E2E8F0]/30 dark:border-[#334155]/30 space-y-3 bg-[#F8FAF9] dark:bg-[#161A19]">
+        <div className="p-3.5 sm:p-4 border-b border-[#E2E8F0]/30 dark:border-[#334155]/30 space-y-3 bg-[#F8FAF9] dark:bg-[#161A19]">
           <div className="flex flex-wrap items-center justify-between gap-2.5">
             {/* Day / Week / Month / Year Segmented Tabs */}
             <div className="flex items-center p-1 bg-[#F1F5F4] dark:bg-[#1E293B] rounded-full space-x-1">
@@ -160,7 +160,7 @@ export const LeaderboardView: React.FC = () => {
                   key={tab}
                   type="button"
                   onClick={() => setPeriodTab(tab)}
-                  className={`px-3.5 py-1 text-xs font-medium rounded-full transition-all ${
+                  className={`px-3.5 min-h-[36px] sm:min-h-[30px] text-xs font-medium rounded-full transition-all whitespace-nowrap ${
                     periodTab === tab
                       ? 'bg-[#00695C] text-white shadow-xs'
                       : 'text-[#475569] hover:text-[#0F172A] dark:hover:text-[#F1F5F9]'
@@ -172,20 +172,20 @@ export const LeaderboardView: React.FC = () => {
             </div>
 
             {/* Date Picker & Category Filter */}
-            <div className="flex items-center space-x-2">
+            <div className="flex flex-wrap items-center gap-2">
               <div className="relative">
                 <input
                   type="date"
                   value={dateValue}
                   onChange={(e) => setDateValue(e.target.value)}
-                  className="h-8 px-3 text-xs font-medium rounded-full bg-[#F1F5F4] dark:bg-[#1E293B] border-none text-[#0F172A] dark:text-[#F1F5F9] focus:outline-none focus:ring-1 focus:ring-[#00695C]"
+                  className="min-h-[40px] sm:h-8 px-3 text-base sm:text-xs font-medium rounded-full bg-[#F1F5F4] dark:bg-[#1E293B] border-none text-[#0F172A] dark:text-[#F1F5F9] focus:outline-none focus:ring-1 focus:ring-[#00695C]"
                 />
               </div>
 
               <select
                 value={categoryFilter}
                 onChange={(e) => setCategoryFilter(e.target.value)}
-                className="h-8 px-3 text-xs font-medium rounded-full border-none m3-select"
+                className="min-h-[40px] sm:h-8 px-3 text-base sm:text-xs font-medium rounded-full border-none m3-select"
               >
                 <option value="Sales">Sales (All)</option>
                 <option value="Inbound">Inbound Telesales</option>
@@ -203,7 +203,7 @@ export const LeaderboardView: React.FC = () => {
               placeholder="Search teammate by name or role..."
               value={teammateSearch}
               onChange={(e) => setTeammateSearch(e.target.value)}
-              className="w-full h-9 pl-9 pr-3.5 text-xs rounded-full bg-[#F1F5F4] dark:bg-[#1E293B] border-none text-[#0F172A] dark:text-[#F1F5F9] placeholder-[#475569] focus:outline-none focus:ring-2 focus:ring-[#00695C]"
+              className="w-full min-h-[42px] sm:h-9 pl-9 pr-3.5 text-base sm:text-xs rounded-full bg-[#F1F5F4] dark:bg-[#1E293B] border-none text-[#0F172A] dark:text-[#F1F5F9] placeholder-[#475569] focus:outline-none focus:ring-2 focus:ring-[#00695C]"
             />
           </div>
 
@@ -237,7 +237,7 @@ export const LeaderboardView: React.FC = () => {
               )}
             </div>
 
-            <div className="grid grid-cols-3 gap-2 text-center pt-2 border-t border-[#E2E8F0]/30 dark:border-[#334155]/30 font-mono">
+            <div className="grid grid-cols-3 gap-2 text-center pt-2 border-t border-[#E2E8F0]/30 dark:border-[#334155]/30 font-mono tabular-nums">
               <div>
                 <div className="text-[10px] uppercase font-medium text-[#475569]">Calls</div>
                 <div className="text-xs font-bold text-[#0F172A] dark:text-[#F1F5F9]">
@@ -261,7 +261,7 @@ export const LeaderboardView: React.FC = () => {
         </div>
 
         {/* Ranked, Scrollable List of Team Members */}
-        <div className="flex-1 overflow-y-auto p-2 space-y-1">
+        <div className="lg:flex-1 lg:overflow-y-auto p-2 space-y-1">
           {displayedMembers.map((member, index) => {
             const isSelected = selectedMemberId === member.id;
             const rank = index + 1;
@@ -317,7 +317,7 @@ export const LeaderboardView: React.FC = () => {
                 </div>
 
                 {/* Right: Calls / Duration / Sales Numbers */}
-                <div className="text-right shrink-0 pl-3 font-mono space-y-0.5">
+                <div className="text-right shrink-0 pl-3 font-mono tabular-nums space-y-0.5">
                   <div className="text-xs font-bold">
                     {member.calls} calls
                   </div>
@@ -333,15 +333,15 @@ export const LeaderboardView: React.FC = () => {
       </div>
 
       {/* RIGHT PANEL: Grouped Detail View */}
-      <div className="w-full lg:w-[42%] flex flex-col h-full bg-[#F8FAF9] dark:bg-[#111514] overflow-y-auto">
+      <div className="w-full lg:w-[42%] flex flex-col lg:h-full bg-[#F8FAF9] dark:bg-[#111514] lg:overflow-y-auto">
         {/* Header with Export/Download Icon */}
-        <div className="p-4 border-b border-[#E2E8F0]/30 dark:border-[#334155]/30 flex items-center justify-between bg-[#F8FAF9] dark:bg-[#161A19]">
-          <div>
+        <div className="p-4 border-b border-[#E2E8F0]/30 dark:border-[#334155]/30 flex items-center justify-between gap-2 bg-[#F8FAF9] dark:bg-[#161A19]">
+          <div className="min-w-0">
             <span className="text-[10px] font-medium uppercase tracking-wider text-[#475569]">
               Metric Drilldown &amp; Deep Stats
             </span>
-            <h2 className="text-sm font-semibold text-[#0F172A] dark:text-[#F1F5F9] flex items-center space-x-2 mt-0.5 m3-title-medium">
-              <span>{selectedMember ? selectedMember.name : 'Total Team Stats'}</span>
+            <h2 className="text-sm font-semibold text-[#0F172A] dark:text-[#F1F5F9] flex flex-wrap items-center gap-2 mt-0.5 m3-title-medium">
+              <span className="truncate">{selectedMember ? selectedMember.name : 'Total Team Stats'}</span>
               {selectedMember && (
                 <span className="text-[10px] font-medium px-2.5 py-0.5 rounded-full bg-[#F1F5F4] dark:bg-[#1E293B] text-[#0F172A] dark:text-[#F1F5F9]">
                   Rank #{selectedMember.rank}
@@ -353,7 +353,8 @@ export const LeaderboardView: React.FC = () => {
           <button
             type="button"
             onClick={handleExportData}
-            className="w-9 h-9 rounded-full flex items-center justify-center bg-[#F1F5F4] dark:bg-[#1E293B] hover:bg-[#CCE8E1] text-[#0F172A] dark:text-[#F1F5F9] transition-colors"
+            aria-label="Export leaderboard data as CSV"
+            className="min-w-[44px] min-h-[44px] sm:w-9 sm:h-9 rounded-full flex items-center justify-center bg-[#F1F5F4] dark:bg-[#1E293B] hover:bg-[#CCE8E1] text-[#0F172A] dark:text-[#F1F5F9] transition-colors shrink-0"
             title="Export this data as CSV"
           >
             <Download className="w-4 h-4" />
@@ -390,7 +391,7 @@ export const LeaderboardView: React.FC = () => {
             </div>
 
             {/* Calls Breakdown Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 font-mono">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 font-mono tabular-nums">
               {/* All Calls with secondary distinct reps count */}
               <div className="p-3 rounded-[16px] bg-[#F1F5F4]/60 dark:bg-[#1E293B]/60">
                 <span className="text-[#475569] block text-[10px] uppercase font-medium">All Calls</span>
@@ -448,7 +449,7 @@ export const LeaderboardView: React.FC = () => {
               <span>Tasks &amp; Follow-up Fulfillment</span>
             </h3>
 
-            <div className="grid grid-cols-4 gap-2 font-mono text-center">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 font-mono text-center tabular-nums">
               {/* Late (red) */}
               <div className="p-2.5 rounded-[16px] bg-[#FFDAD6]/40 dark:bg-[#93000A]/30">
                 <span className="text-[10px] uppercase font-medium text-[#BA1A1A] dark:text-[#FFB4AB]">Late</span>
@@ -495,7 +496,7 @@ export const LeaderboardView: React.FC = () => {
               </span>
             </div>
 
-            <div className="grid grid-cols-2 gap-2 font-mono">
+            <div className="grid grid-cols-2 gap-2 font-mono tabular-nums">
               <div className="p-3.5 rounded-[16px] bg-[#F1F5F4]/60 dark:bg-[#1E293B]/60">
                 <span className="text-[#475569] block text-[10px] uppercase font-medium">Incoming Messages</span>
                 <div className="text-base font-bold text-[#0F172A] dark:text-[#F1F5F9]">

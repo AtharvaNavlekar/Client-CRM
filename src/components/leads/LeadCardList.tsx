@@ -57,7 +57,7 @@ export const LeadCardList: React.FC<LeadCardListProps> = ({
   }
 
   return (
-    <div className="space-y-3 px-4 py-3 pb-28">
+    <div className="space-y-3 px-3 sm:px-4 py-3 pb-6">
       {/* Selection summary (if any selected) */}
       {selectedIds.size > 0 && (
         <div className="flex items-center justify-between px-4 py-2.5 rounded-2xl bg-[#CCE8E1]/50 dark:bg-[#005046]/30 border border-[#00695C]/30">

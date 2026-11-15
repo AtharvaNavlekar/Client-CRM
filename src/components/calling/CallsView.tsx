@@ -65,15 +65,15 @@ export const CallsView: React.FC<CallsViewProps> = ({
   const totalMinutes = Math.round(calls.reduce((acc, c) => acc + (c.duration || 0), 0) / 60);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5 sm:space-y-6">
       {/* Top Header & Stats */}
-      <div className="flex flex-wrap items-center justify-between gap-4 bg-[#F8FAF9] dark:bg-[#161A19] p-4 sm:p-5 rounded-[24px] border border-[#E2E8F0]/40 dark:border-[#334155]/40 shadow-xs">
-        <div>
+      <div className="flex flex-wrap items-center justify-between gap-4 bg-[#F8FAF9] dark:bg-[#161A19] p-4 sm:p-5 rounded-2xl sm:rounded-[24px] border border-[#E2E8F0]/40 dark:border-[#334155]/40 shadow-xs">
+        <div className="min-w-0">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-full bg-[#00695C] text-white flex items-center justify-center font-bold shadow-xs">
+            <div className="w-10 h-10 rounded-full bg-[#00695C] text-white flex items-center justify-center font-bold shadow-xs shrink-0">
               <PhoneCall className="w-5 h-5 text-[#80D5C4]" />
             </div>
-            <div>
+            <div className="min-w-0">
               <h2 className="text-base font-semibold text-[#0F172A] dark:text-[#F1F5F9] tracking-tight m3-title-medium">
                 Telecalling Console &amp; Logs
               </h2>
@@ -84,24 +84,24 @@ export const CallsView: React.FC<CallsViewProps> = ({
           </div>
         </div>
 
-        <div className="flex items-center space-x-4">
-          <div className="text-right">
+        <div className="flex items-center justify-between sm:justify-end space-x-4 w-full sm:w-auto pt-2 sm:pt-0 border-t sm:border-t-0 border-[#E2E8F0]/40 dark:border-[#334155]/40">
+          <div className="text-left sm:text-right">
             <p className="text-[10px] font-medium text-[#475569] uppercase tracking-wider">Total Calls</p>
-            <p className="text-lg font-bold text-[#0F172A] dark:text-[#F1F5F9] font-mono">{calls.length}</p>
+            <p className="text-lg font-bold text-[#0F172A] dark:text-[#F1F5F9] font-mono tabular-nums">{calls.length}</p>
           </div>
           <div className="h-8 w-px bg-[#E2E8F0]/40 dark:bg-[#475569]/40" />
           <div className="text-right">
             <p className="text-[10px] font-medium text-[#475569] uppercase tracking-wider">Total Talktime</p>
-            <p className="text-lg font-bold text-[#00695C] dark:text-[#80D5C4] font-mono">{totalMinutes} mins</p>
+            <p className="text-lg font-bold text-[#00695C] dark:text-[#80D5C4] font-mono tabular-nums">{totalMinutes} mins</p>
           </div>
         </div>
       </div>
 
       {/* Callbacks Due section */}
-      <div className="bg-amber-500/10 dark:bg-amber-950/20 rounded-[24px] p-4 sm:p-5 border border-amber-500/30 dark:border-amber-900/50 shadow-xs">
-        <div className="flex items-center justify-between mb-3.5">
+      <div className="bg-amber-500/10 dark:bg-amber-950/20 rounded-2xl sm:rounded-[24px] p-4 sm:p-5 border border-amber-500/30 dark:border-amber-900/50 shadow-xs">
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-3.5">
           <div className="flex items-center space-x-2">
-            <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+            <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
             <h3 className="text-sm font-semibold text-amber-950 dark:text-amber-200 m3-title-small">
               Callbacks Due ({leadsWithCallback.length} Scheduled)
             </h3>
@@ -116,7 +116,7 @@ export const CallsView: React.FC<CallsViewProps> = ({
             No pending callbacks scheduled. When you log a call with a callback reminder, it will appear here.
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
             {leadsWithCallback.map((l) => {
               const callbackTime = new Date(l.callbackReminder!).getTime();
               const isOverdue = callbackTime < Date.now();
@@ -158,11 +158,11 @@ export const CallsView: React.FC<CallsViewProps> = ({
                     </p>
                   </div>
 
-                  <div className="pt-2.5 border-t border-[#E2E8F0]/30 dark:border-[#334155]/30 flex items-center justify-between">
-                    <span className="text-[10px] text-[#475569]">Rep: {l.assignedRepName}</span>
+                  <div className="pt-2.5 border-t border-[#E2E8F0]/30 dark:border-[#334155]/30 flex items-center justify-between gap-2">
+                    <span className="text-[10px] text-[#475569] truncate">Rep: {l.assignedRepName}</span>
                     <button
                       onClick={() => onStartCall(l)}
-                      className="px-3.5 py-1.5 rounded-full text-xs font-medium bg-[#00695C] hover:bg-[#005449] text-white flex items-center space-x-1.5 shadow-xs transition-colors min-h-[36px]"
+                      className="px-3.5 py-1.5 rounded-full text-xs font-medium bg-[#00695C] hover:bg-[#005449] text-white flex items-center space-x-1.5 shadow-xs transition-colors min-h-[40px] sm:min-h-[36px] shrink-0 whitespace-nowrap"
                     >
                       <Phone className="w-3.5 h-3.5 text-[#80D5C4]" />
                       <span>Call Now</span>
@@ -176,19 +176,20 @@ export const CallsView: React.FC<CallsViewProps> = ({
       </div>
 
       {/* Call History Table & Filters */}
-      <div className="bg-[#F8FAF9] dark:bg-[#161A19] rounded-[24px] border border-[#E2E8F0]/40 dark:border-[#334155]/40 shadow-xs overflow-hidden">
+      <div className="bg-[#F8FAF9] dark:bg-[#161A19] rounded-2xl sm:rounded-[24px] border border-[#E2E8F0]/40 dark:border-[#334155]/40 shadow-xs overflow-hidden">
         {/* Table Filters */}
-        <div className="p-4 border-b border-[#E2E8F0]/30 dark:border-[#334155]/30 flex flex-wrap items-center justify-between gap-3">
-          <div className="flex flex-wrap items-center gap-2.5">
-            <span className="text-xs font-medium text-[#0F172A] dark:text-[#F1F5F9]">Filter Calls:</span>
+        <div className="p-3.5 sm:p-4 border-b border-[#E2E8F0]/30 dark:border-[#334155]/30 flex flex-wrap items-center justify-between gap-3">
+          <div className="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
+            <span className="text-xs font-medium text-[#0F172A] dark:text-[#F1F5F9] hidden sm:inline">Filter Calls:</span>
 
             {/* Rep filter */}
-            <div className="flex items-center space-x-2 bg-[#F1F5F4] dark:bg-[#1E293B] px-3.5 py-1.5 rounded-full text-xs">
-              <User className="w-3.5 h-3.5 text-[#475569]" />
+            <div className="flex items-center space-x-2 bg-[#F1F5F4] dark:bg-[#1E293B] px-3.5 py-1.5 rounded-full text-xs min-h-[40px]">
+              <User className="w-3.5 h-3.5 text-[#475569] shrink-0" />
               <select
                 value={selectedRep}
                 onChange={(e) => setSelectedRep(e.target.value)}
-                className="text-xs font-medium m3-select"
+                className="text-base sm:text-xs font-medium m3-select"
+                aria-label="Filter by telecaller"
               >
                 <option value="all">All Telecallers</option>
                 {users.map((u) => (
@@ -200,12 +201,13 @@ export const CallsView: React.FC<CallsViewProps> = ({
             </div>
 
             {/* Outcome filter */}
-            <div className="flex items-center space-x-2 bg-[#F1F5F4] dark:bg-[#1E293B] px-3.5 py-1.5 rounded-full text-xs">
-              <Filter className="w-3.5 h-3.5 text-[#475569]" />
+            <div className="flex items-center space-x-2 bg-[#F1F5F4] dark:bg-[#1E293B] px-3.5 py-1.5 rounded-full text-xs min-h-[40px]">
+              <Filter className="w-3.5 h-3.5 text-[#475569] shrink-0" />
               <select
                 value={selectedOutcome}
                 onChange={(e) => setSelectedOutcome(e.target.value)}
-                className="text-xs font-medium m3-select"
+                className="text-base sm:text-xs font-medium m3-select"
+                aria-label="Filter by call outcome"
               >
                 <option value="all">All Outcomes</option>
                 <option value="Interested">Interested</option>
@@ -216,14 +218,14 @@ export const CallsView: React.FC<CallsViewProps> = ({
             </div>
           </div>
 
-          <span className="text-xs text-[#475569] font-normal">
+          <span className="text-xs text-[#475569] font-normal tabular-nums">
             Showing {filteredCalls.length} of {calls.length} calls
           </span>
         </div>
 
         {/* Table */}
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
+          <table className="w-full min-w-[700px] text-left text-xs tabular-nums">
             <thead className="bg-[#F1F5F4]/60 dark:bg-[#1E293B]/60 text-[#475569] font-medium border-b border-[#E2E8F0]/30 dark:border-[#334155]/30">
               <tr>
                 <th className="p-3.5">Lead / Phone</th>
@@ -276,15 +278,17 @@ export const CallsView: React.FC<CallsViewProps> = ({
                         <div className="flex items-center justify-end space-x-1">
                           <button
                             onClick={() => onStartCall(lead)}
-                            className="w-8 h-8 rounded-full flex items-center justify-center text-[#00695C] hover:bg-[#CCE8E1] dark:text-[#80D5C4] dark:hover:bg-[#004F46] transition-colors"
+                            className="w-10 h-10 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-[#00695C] hover:bg-[#CCE8E1] dark:text-[#80D5C4] dark:hover:bg-[#004F46] transition-colors"
                             title="Call again"
+                            aria-label="Call again"
                           >
                             <Phone className="w-3.5 h-3.5" />
                           </button>
                           <button
                             onClick={() => onOpenWhatsApp(lead)}
-                            className="w-8 h-8 rounded-full flex items-center justify-center text-[#00695C] hover:bg-[#CCE8E1] dark:text-[#80D5C4] dark:hover:bg-[#004F46] transition-colors"
+                            className="w-10 h-10 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-[#00695C] hover:bg-[#CCE8E1] dark:text-[#80D5C4] dark:hover:bg-[#004F46] transition-colors"
                             title="Message on WhatsApp"
+                            aria-label="Message on WhatsApp"
                           >
                             <MessageSquare className="w-3.5 h-3.5" />
                           </button>

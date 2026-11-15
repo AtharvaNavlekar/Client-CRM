@@ -52,76 +52,79 @@ export const AuthVisualPanel: React.FC<{ className?: string }> = ({ className = 
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/10 pointer-events-none" />
       <div className="absolute inset-0 bg-[#075B65]/20 mix-blend-multiply pointer-events-none" />
 
-      {/* Floating Translucent Information Card (Upper Right) */}
-      <div className="absolute top-6 right-6 sm:top-8 sm:right-8 z-10 max-w-[270px] sm:max-w-[300px]">
-        <div className="backdrop-blur-md bg-white/15 border border-white/25 rounded-2xl p-4 sm:p-5 text-white shadow-2xl transition-all duration-500 animate-in fade-in slide-in-from-top-4">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-cyan-200">
-              Insight
-            </span>
-            <div className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center text-cyan-200 shadow-inner">
-              {activeSlide.badgeIcon === 'heart' ? (
-                <Heart className="w-4 h-4 fill-cyan-300 text-cyan-300" />
-              ) : (
-                <ShieldCheck className="w-4 h-4 text-cyan-300" />
-              )}
+      {/* Inner Flex Column to Guarantee Clean Separation on Short Laptops */}
+      <div className="relative z-10 h-full flex flex-col justify-between gap-4 p-6 xl:p-9 text-white">
+        {/* Floating Translucent Information Card (Upper Right) */}
+        <div className="flex justify-end">
+          <div className="max-w-[270px] xl:max-w-[300px] backdrop-blur-md bg-white/15 border border-white/25 rounded-2xl p-4 xl:p-5 text-white shadow-2xl transition-all duration-500 animate-in fade-in slide-in-from-top-4">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-cyan-200">
+                Insight
+              </span>
+              <div className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center text-cyan-200 shadow-inner">
+                {activeSlide.badgeIcon === 'heart' ? (
+                  <Heart className="w-4 h-4 fill-cyan-300 text-cyan-300" />
+                ) : (
+                  <ShieldCheck className="w-4 h-4 text-cyan-300" />
+                )}
+              </div>
             </div>
+            <h4 className="text-sm xl:text-base font-bold text-white mb-1.5 tracking-tight">
+              {activeSlide.floatingTitle}
+            </h4>
+            <p className="text-xs text-slate-100/90 leading-relaxed font-normal">
+              {activeSlide.floatingDesc}
+            </p>
           </div>
-          <h4 className="text-sm sm:text-base font-bold text-white mb-1.5 tracking-tight">
-            {activeSlide.floatingTitle}
-          </h4>
-          <p className="text-xs text-slate-100/90 leading-relaxed font-normal">
-            {activeSlide.floatingDesc}
-          </p>
-        </div>
-      </div>
-
-      {/* Bottom Editorial Content Area */}
-      <div className="absolute bottom-6 left-6 right-6 sm:bottom-10 sm:left-10 sm:right-10 z-10 text-white">
-        <div className="space-y-2 mb-6 max-w-lg">
-          <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white leading-tight drop-shadow-md">
-            {activeSlide.headline}
-          </h3>
-          <p className="text-sm sm:text-base text-slate-200 leading-relaxed drop-shadow-sm font-normal">
-            "{activeSlide.tagline}"
-          </p>
         </div>
 
-        {/* Carousel Slide Indicators & Functional Navigation Controls */}
-        <div className="flex items-center justify-between pt-3 border-t border-white/20">
-          <div className="flex items-center space-x-2">
-            {SLIDES.map((_, idx) => (
+        {/* Bottom Editorial Content Area */}
+        <div className="text-white">
+          <div className="space-y-2 mb-5 max-w-lg">
+            <h3 className="text-2xl xl:text-3xl font-extrabold tracking-tight text-white leading-tight drop-shadow-md">
+              {activeSlide.headline}
+            </h3>
+            <p className="text-sm xl:text-base text-slate-200 leading-relaxed drop-shadow-sm font-normal">
+              "{activeSlide.tagline}"
+            </p>
+          </div>
+
+          {/* Carousel Slide Indicators & Functional Navigation Controls */}
+          <div className="flex items-center justify-between pt-3 border-t border-white/20">
+            <div className="flex items-center space-x-2">
+              {SLIDES.map((_, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => setCurrentSlideIndex(idx)}
+                  aria-label={`Go to slide ${idx + 1}`}
+                  className={`h-1.5 rounded-full transition-all duration-300 ${
+                    idx === currentSlideIndex
+                      ? 'w-7 bg-cyan-400'
+                      : 'w-2 bg-white/40 hover:bg-white/60'
+                  }`}
+                />
+              ))}
+            </div>
+
+            <div className="flex items-center space-x-2">
               <button
-                key={idx}
                 type="button"
-                onClick={() => setCurrentSlideIndex(idx)}
-                aria-label={`Go to slide ${idx + 1}`}
-                className={`h-1.5 rounded-full transition-all duration-300 ${
-                  idx === currentSlideIndex
-                    ? 'w-7 bg-cyan-400'
-                    : 'w-2 bg-white/40 hover:bg-white/60'
-                }`}
-              />
-            ))}
-          </div>
-
-          <div className="flex items-center space-x-2">
-            <button
-              type="button"
-              onClick={prevSlide}
-              aria-label="Previous slide"
-              className="w-8 h-8 rounded-full bg-white/15 hover:bg-white/30 border border-white/20 flex items-center justify-center text-white transition-colors cursor-pointer"
-            >
-              <ChevronLeft className="w-4 h-4" />
-            </button>
-            <button
-              type="button"
-              onClick={nextSlide}
-              aria-label="Next slide"
-              className="w-8 h-8 rounded-full bg-white/15 hover:bg-white/30 border border-white/20 flex items-center justify-center text-white transition-colors cursor-pointer"
-            >
-              <ChevronRight className="w-4 h-4" />
-            </button>
+                onClick={prevSlide}
+                aria-label="Previous slide"
+                className="w-8 h-8 rounded-full bg-white/15 hover:bg-white/30 border border-white/20 flex items-center justify-center text-white transition-colors cursor-pointer"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <button
+                type="button"
+                onClick={nextSlide}
+                aria-label="Next slide"
+                className="w-8 h-8 rounded-full bg-white/15 hover:bg-white/30 border border-white/20 flex items-center justify-center text-white transition-colors cursor-pointer"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         </div>
       </div>

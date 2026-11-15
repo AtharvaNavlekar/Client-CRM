@@ -18,7 +18,8 @@ import {
   AlertTriangle,
   RotateCw,
   Activity,
-  ShieldCheck
+  ShieldCheck,
+  ArrowLeft
 } from 'lucide-react';
 import { Lead, Message, DeliveryStatus } from '../../types';
 import { api } from '../../services/api';
@@ -69,6 +70,7 @@ export const WhatsAppView: React.FC<WhatsAppViewProps> = ({
   const [sendError, setSendError] = useState<string | null>(null);
   const [failedPendingText, setFailedPendingText] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [mobileShowChat, setMobileShowChat] = useState(false);
   const [messageHealth, setMessageHealth] = useState<{
     totalOutbound: number;
     delivered: number;
@@ -205,16 +207,16 @@ export const WhatsAppView: React.FC<WhatsAppViewProps> = ({
   );
 
   return (
-    <div className="h-[calc(100vh-140px)] min-h-[550px] bg-[#F8FAF9] dark:bg-[#161A19] rounded-[28px] border border-[#E2E8F0]/40 dark:border-[#334155]/40 shadow-xs overflow-hidden flex flex-col">
+    <div className="flex-1 h-full min-h-0 bg-[#F8FAF9] dark:bg-[#161A19] rounded-2xl sm:rounded-[28px] border border-[#E2E8F0]/40 dark:border-[#334155]/40 shadow-xs overflow-hidden flex flex-col">
       {/* Top Persistent Message Delivery Health Header */}
-      <div className="flex flex-wrap items-center justify-between px-5 py-3 bg-[#00201B] text-[#F1F5F9] border-b border-[#475569]/30 text-xs gap-2">
-        <div className="flex items-center space-x-2.5">
+      <div className="flex flex-wrap items-center justify-between px-3 sm:px-5 py-2.5 sm:py-3 bg-[#00201B] text-[#F1F5F9] border-b border-[#475569]/30 text-xs gap-2 shrink-0">
+        <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1">
           <div className="flex items-center space-x-1.5 text-[#80D5C4] font-medium">
-            <ShieldCheck className="w-4 h-4" />
-            <span>Delivery Reliability Engine:</span>
+            <ShieldCheck className="w-4 h-4 shrink-0" />
+            <span>Delivery Engine:</span>
           </div>
-          <span className="font-mono text-[#C4C7C5]">
-            {messageHealth.delivered} / {messageHealth.totalOutbound || messageHealth.delivered} delivered
+          <span className="font-mono tabular-nums text-[#C4C7C5]">
+            {messageHealth.delivered}/{messageHealth.totalOutbound || messageHealth.delivered} delivered
           </span>
           {messageHealth.retrying > 0 && (
             <span className="text-[11px] text-amber-300 font-medium bg-amber-900/60 px-2.5 py-0.5 rounded-full border border-amber-500/40 animate-pulse flex items-center space-x-1">
@@ -230,23 +232,23 @@ export const WhatsAppView: React.FC<WhatsAppViewProps> = ({
           )}
         </div>
         <div className="flex items-center space-x-3 text-[#A2ADA9] text-xs">
-          <span className="font-medium text-[#80D5C4] bg-[#004F46] px-2.5 py-0.5 rounded-full font-mono">
-            {messageHealth.deliveryRate}% Queue Health
+          <span className="font-medium text-[#80D5C4] bg-[#004F46] px-2.5 py-0.5 rounded-full font-mono tabular-nums whitespace-nowrap">
+            {messageHealth.deliveryRate}% Health
           </span>
-          <span className="hidden sm:inline text-[#A2ADA9] text-[11px]">
+          <span className="hidden lg:inline text-[#A2ADA9] text-[11px]">
             Zero Silent Drops · Queue + Auto-Retry Guaranteed
           </span>
         </div>
       </div>
 
-      <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
+      <div className="flex-1 min-h-0 flex flex-col md:flex-row overflow-hidden">
       {/* Left Column: Lead Conversations List */}
-      <div className="w-full md:w-80 border-r border-[#E2E8F0]/30 dark:border-[#334155]/30 flex flex-col bg-[#F8FAF9] dark:bg-[#161A19]">
+      <div className={`${mobileShowChat && activeLead ? 'hidden md:flex' : 'flex'} w-full md:w-72 lg:w-80 flex-1 md:flex-none min-h-0 border-r border-[#E2E8F0]/30 dark:border-[#334155]/30 flex-col bg-[#F8FAF9] dark:bg-[#161A19]`}>
         {/* Header */}
-        <div className="p-4 border-b border-[#E2E8F0]/30 dark:border-[#334155]/30 bg-[#F8FAF9] dark:bg-[#161A19]">
+        <div className="p-3 sm:p-4 border-b border-[#E2E8F0]/30 dark:border-[#334155]/30 bg-[#F8FAF9] dark:bg-[#161A19] shrink-0">
           <div className="flex items-center justify-between mb-2.5">
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 rounded-full bg-[#00695C] flex items-center justify-center">
+              <div className="w-8 h-8 rounded-full bg-[#00695C] flex items-center justify-center shrink-0">
                 <MessageSquare className="w-4 h-4 text-white" />
               </div>
               <h2 className="text-sm font-semibold tracking-tight text-[#0F172A] dark:text-[#F1F5F9] m3-title-small">WhatsApp Chats</h2>
@@ -263,7 +265,7 @@ export const WhatsAppView: React.FC<WhatsAppViewProps> = ({
               placeholder="Search chat or phone..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-3.5 py-2 bg-[#F1F5F4] dark:bg-[#1E293B] border-none rounded-full text-xs text-[#0F172A] dark:text-[#F1F5F9] placeholder-[#475569] focus:outline-none focus:ring-2 focus:ring-[#00695C]"
+              className="w-full min-h-[44px] sm:min-h-[38px] pl-9 pr-3.5 py-2 bg-[#F1F5F4] dark:bg-[#1E293B] border-none rounded-full text-base sm:text-xs text-[#0F172A] dark:text-[#F1F5F9] placeholder-[#475569] focus:outline-none focus:ring-2 focus:ring-[#00695C]"
             />
           </div>
         </div>
@@ -276,8 +278,11 @@ export const WhatsAppView: React.FC<WhatsAppViewProps> = ({
               <button
                 key={lead.id}
                 id={`btn-select-chat-${lead.id}`}
-                onClick={() => onSelectLead(lead.id)}
-                className={`w-full p-3 rounded-[20px] text-left transition-all flex items-center space-x-3 ${
+                onClick={() => {
+                  onSelectLead(lead.id);
+                  setMobileShowChat(true);
+                }}
+                className={`w-full min-h-[56px] p-3 rounded-[20px] text-left transition-all flex items-center space-x-3 ${
                   isSelected
                     ? 'bg-[#CCE8E1] dark:bg-[#004F46] text-[#00201B] dark:text-[#F1F5F9] shadow-xs'
                     : 'hover:bg-[#F1F5F4]/60 dark:hover:bg-[#1E293B]/60 text-[#0F172A] dark:text-[#F1F5F9]'
@@ -306,52 +311,62 @@ export const WhatsAppView: React.FC<WhatsAppViewProps> = ({
 
       {/* Right Column: Active WhatsApp Conversation Thread */}
       {activeLead ? (
-        <div className="flex-1 flex flex-col h-full bg-[#EFEAE2] dark:bg-[#0b141a]">
+        <div className={`${mobileShowChat ? 'flex' : 'hidden md:flex'} flex-1 min-w-0 min-h-0 flex-col h-full bg-[#EFEAE2] dark:bg-[#0b141a]`}>
           {/* Chat Header */}
-          <div className="h-16 px-5 bg-[#00201B] text-[#F1F5F9] flex items-center justify-between border-b border-[#475569]/30 z-10">
-            <div className="flex items-center space-x-3 min-w-0">
-              <div className="w-10 h-10 rounded-full bg-[#00695C] text-white font-semibold text-sm flex items-center justify-center shadow-xs">
+          <div className="h-16 px-2.5 sm:px-5 bg-[#00201B] text-[#F1F5F9] flex items-center justify-between gap-2 border-b border-[#475569]/30 z-10 shrink-0">
+            <div className="flex items-center space-x-2 sm:space-x-3 min-w-0">
+              <button
+                type="button"
+                onClick={() => setMobileShowChat(false)}
+                className="md:hidden min-w-[44px] min-h-[44px] -ml-1 rounded-full text-white hover:bg-white/10 flex items-center justify-center shrink-0"
+                aria-label="Back to chat list"
+              >
+                <ArrowLeft className="w-5 h-5" />
+              </button>
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#00695C] text-white font-semibold text-sm flex items-center justify-center shadow-xs shrink-0">
                 {activeLead.name.charAt(0)}
               </div>
               <div className="min-w-0">
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 min-w-0">
                   <h3 className="font-semibold text-sm truncate text-[#F1F5F9] m3-title-small">{activeLead.name}</h3>
-                  <span className="text-[10px] bg-[#004F46] text-[#80D5C4] px-2 py-0.5 rounded-full font-medium">
+                  <span className="hidden sm:inline-block shrink-0 text-[10px] bg-[#004F46] text-[#80D5C4] px-2 py-0.5 rounded-full font-medium">
                     {activeLead.stage}
                   </span>
                 </div>
-                <div className="flex items-center space-x-2 text-xs text-[#A2ADA9] font-mono">
-                  <span>{activeLead.phone}</span>
-                  <span>•</span>
-                  <span className="text-[11px] text-[#80D5C4]">WhatsApp Verified</span>
+                <div className="flex items-center space-x-1.5 text-[11px] sm:text-xs text-[#A2ADA9] font-mono truncate">
+                  <span className="truncate">{activeLead.phone}</span>
+                  <span className="hidden sm:inline">·</span>
+                  <span className="hidden sm:inline text-[11px] text-[#80D5C4]">WhatsApp Verified</span>
                 </div>
               </div>
             </div>
 
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-1 sm:space-x-2 shrink-0">
               {/* Simulate Inbound Reply */}
               <button
                 id="btn-simulate-reply"
                 onClick={handleSimulateReply}
-                className="px-3.5 py-1.5 rounded-full text-xs font-medium bg-[#00695C]/40 hover:bg-[#00695C] text-[#80D5C4] hover:text-white flex items-center space-x-1.5 transition-colors min-h-[36px]"
+                className="px-2.5 sm:px-3.5 py-1.5 rounded-full text-xs font-medium bg-[#00695C]/40 hover:bg-[#00695C] text-[#80D5C4] hover:text-white flex items-center space-x-1.5 transition-colors min-h-[40px] sm:min-h-[36px] shrink-0"
                 title="Simulate incoming customer message on WhatsApp"
               >
                 <Bot className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">Simulate Reply</span>
+                <span className="hidden sm:inline whitespace-nowrap">Simulate Reply</span>
               </button>
 
               <button
                 onClick={() => onStartCall(activeLead)}
-                className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors"
+                className="min-w-[40px] min-h-[40px] sm:w-9 sm:h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors shrink-0"
                 title="Call lead"
+                aria-label="Call lead"
               >
                 <Phone className="w-4 h-4 text-[#80D5C4]" />
               </button>
 
               <button
                 onClick={() => onOpenDetail(activeLead)}
-                className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors"
+                className="min-w-[40px] min-h-[40px] sm:w-9 sm:h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors shrink-0"
                 title="View Full Profile"
+                aria-label="View lead profile"
               >
                 <Info className="w-4 h-4 text-[#F1F5F9]" />
               </button>
@@ -359,8 +374,8 @@ export const WhatsAppView: React.FC<WhatsAppViewProps> = ({
           </div>
 
           {/* Quick Reply Canned Templates Bar */}
-          <div className="bg-[#F8FAF9]/95 dark:bg-[#161A19]/95 border-b border-[#E2E8F0]/30 dark:border-[#334155]/30 px-4 py-2.5 flex items-center space-x-2 overflow-x-auto">
-            <span className="text-[10px] font-medium uppercase tracking-wider text-[#475569] whitespace-nowrap flex items-center space-x-1">
+          <div className="bg-[#F8FAF9]/95 dark:bg-[#161A19]/95 border-b border-[#E2E8F0]/30 dark:border-[#334155]/30 px-3 sm:px-4 py-2 flex items-center space-x-2 overflow-x-auto no-scrollbar shrink-0">
+            <span className="text-[10px] font-medium uppercase tracking-wider text-[#475569] whitespace-nowrap flex items-center space-x-1 shrink-0">
               <Zap className="w-3 h-3 text-amber-500" />
               <span>Quick Templates:</span>
             </span>
@@ -368,7 +383,7 @@ export const WhatsAppView: React.FC<WhatsAppViewProps> = ({
               <button
                 key={idx}
                 onClick={() => setInputText(tmpl.text)}
-                className="text-xs px-3.5 py-1 rounded-full bg-[#F1F5F4] dark:bg-[#1E293B] hover:bg-[#CCE8E1] dark:hover:bg-[#004F46] hover:text-[#00201B] dark:hover:text-[#80D5C4] transition-colors whitespace-nowrap font-medium text-[#0F172A] dark:text-[#F1F5F9]"
+                className="text-xs px-3.5 py-1.5 min-h-[34px] rounded-full bg-[#F1F5F4] dark:bg-[#1E293B] hover:bg-[#CCE8E1] dark:hover:bg-[#004F46] hover:text-[#00201B] dark:hover:text-[#80D5C4] transition-colors whitespace-nowrap shrink-0 font-medium text-[#0F172A] dark:text-[#F1F5F9]"
               >
                 {tmpl.label}
               </button>
@@ -376,7 +391,7 @@ export const WhatsAppView: React.FC<WhatsAppViewProps> = ({
           </div>
 
           {/* Messages Scroll Area */}
-          <div className="flex-1 p-4 overflow-y-auto space-y-3">
+          <div className="flex-1 min-h-0 p-3 sm:p-4 overflow-y-auto space-y-3">
             {/* System Encryption Notice */}
             <div className="flex justify-center">
               <div className="bg-amber-50/90 dark:bg-amber-950/60 text-amber-900 dark:text-amber-200 text-[11px] px-4 py-1.5 rounded-full border border-amber-200 dark:border-amber-900/60 shadow-2xs max-w-md text-center">
@@ -392,13 +407,13 @@ export const WhatsAppView: React.FC<WhatsAppViewProps> = ({
                   className={`flex ${isOutbound ? 'justify-end' : 'justify-start'}`}
                 >
                   <div
-                    className={`max-w-md sm:max-w-lg rounded-[22px] px-4 py-2.5 shadow-xs relative text-xs leading-relaxed ${
+                    className={`max-w-[85%] sm:max-w-md lg:max-w-lg break-words rounded-[22px] px-4 py-2.5 shadow-xs relative text-xs leading-relaxed ${
                       isOutbound
                         ? 'bg-[#d9fdd3] dark:bg-[#005c4b] text-[#0F172A] dark:text-[#F1F5F9] rounded-tr-xs'
                         : 'bg-white dark:bg-[#202c33] text-[#0F172A] dark:text-[#F1F5F9] rounded-tl-xs'
                     }`}
                   >
-                    <p className="whitespace-pre-wrap">{msg.text}</p>
+                    <p className="whitespace-pre-wrap break-words">{msg.text}</p>
                     <div className="flex items-center justify-end space-x-1.5 mt-1 text-[10px] text-[#475569] dark:text-[#94A3B8]">
                       <span>
                         {new Date(msg.timestamp).toLocaleTimeString('en-IN', {
@@ -424,17 +439,17 @@ export const WhatsAppView: React.FC<WhatsAppViewProps> = ({
 
           {/* Error Banner */}
           {sendError && (
-            <div className="px-4 py-2 bg-rose-50 dark:bg-rose-950/60 border-t border-rose-200 dark:border-rose-900/50 flex flex-wrap items-center justify-between gap-2 text-xs text-rose-700 dark:text-rose-300">
-              <div className="flex items-center space-x-2">
+            <div className="px-3 sm:px-4 py-2 bg-rose-50 dark:bg-rose-950/60 border-t border-rose-200 dark:border-rose-900/50 flex flex-wrap items-center justify-between gap-2 text-xs text-rose-700 dark:text-rose-300 shrink-0">
+              <div className="flex items-center space-x-2 min-w-0">
                 <AlertTriangle className="w-4 h-4 shrink-0 text-rose-500" />
-                <span>{sendError}</span>
+                <span className="break-words">{sendError}</span>
               </div>
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2 shrink-0">
                 {(sendError.toLowerCase().includes('cap') || sendError.includes('429')) && (
                   <button
                     type="button"
                     onClick={() => handleSendMessage(undefined, true)}
-                    className="px-2.5 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded text-[11px] font-semibold transition-colors"
+                    className="px-2.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded text-[11px] font-semibold transition-colors min-h-[34px]"
                   >
                     Send with Manager Override
                   </button>
@@ -442,7 +457,8 @@ export const WhatsAppView: React.FC<WhatsAppViewProps> = ({
                 <button
                   type="button"
                   onClick={() => { setSendError(null); setFailedPendingText(null); }}
-                  className="text-rose-500 hover:text-rose-700 dark:hover:text-rose-200 font-bold text-xs ml-2"
+                  className="text-rose-500 hover:text-rose-700 dark:hover:text-rose-200 font-bold text-xs p-2"
+                  aria-label="Dismiss error"
                 >
                   ✕
                 </button>
@@ -453,15 +469,15 @@ export const WhatsAppView: React.FC<WhatsAppViewProps> = ({
           {/* Message Input Box */}
           <form
             onSubmit={handleSendMessage}
-            className="p-3 bg-[#F8FAF9] dark:bg-[#161A19] border-t border-[#E2E8F0]/30 dark:border-[#334155]/30 flex items-center space-x-2"
+            className="p-2.5 sm:p-3 bg-[#F8FAF9] dark:bg-[#161A19] border-t border-[#E2E8F0]/30 dark:border-[#334155]/30 flex items-center space-x-2 shrink-0"
           >
             <input
               id="input-whatsapp-message"
               type="text"
-              placeholder={`Message ${activeLead.name} on WhatsApp...`}
+              placeholder={`Message ${activeLead.name}...`}
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
-              className="flex-1 px-5 py-3 bg-[#F1F5F4] dark:bg-[#1E293B] border-none rounded-full text-xs text-[#0F172A] dark:text-[#F1F5F9] focus:outline-none focus:ring-2 focus:ring-[#00695C]"
+              className="flex-1 min-w-0 min-h-[44px] px-4 sm:px-5 py-2.5 bg-[#F1F5F4] dark:bg-[#1E293B] border-none rounded-full text-base sm:text-xs text-[#0F172A] dark:text-[#F1F5F9] focus:outline-none focus:ring-2 focus:ring-[#00695C]"
             />
             <button
               id="btn-send-whatsapp-message"
@@ -469,13 +485,14 @@ export const WhatsAppView: React.FC<WhatsAppViewProps> = ({
               disabled={isSending || !inputText.trim()}
               className="w-11 h-11 rounded-full bg-[#00695C] hover:bg-[#005449] disabled:opacity-50 text-white flex items-center justify-center shadow-xs transition-colors flex-shrink-0"
               title="Send WhatsApp message"
+              aria-label="Send WhatsApp message"
             >
               <Send className="w-4 h-4" />
             </button>
           </form>
         </div>
       ) : (
-        <div className="flex-1 flex flex-col items-center justify-center p-8 text-center text-[#475569]">
+        <div className={`${mobileShowChat ? 'flex' : 'hidden md:flex'} flex-1 flex-col items-center justify-center p-8 text-center text-[#475569]`}>
           <MessageSquare className="w-12 h-12 text-[#E2E8F0] dark:text-[#475569] mb-3" />
           <h3 className="text-base font-semibold text-[#0F172A] dark:text-[#F1F5F9]">
             No Lead Selected

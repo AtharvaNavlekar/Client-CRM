@@ -24,6 +24,7 @@ export const LeadCard: React.FC<LeadCardProps> = ({
   onOpenDetail,
   onStartCall,
   onOpenWhatsApp,
+  onUpdateStage,
   onAssignRep = (_leadId: string, _repId: string) => {},
   isDraggable = true,
   onDragStart,
@@ -160,21 +161,43 @@ export const LeadCard: React.FC<LeadCardProps> = ({
         </div>
       )}
 
-      {/* Rep Assignment Row */}
-      <div className="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800 text-xs mb-3">
-        <div className="flex items-center gap-1 text-slate-500">
-          <UserCheck className="w-3.5 h-3.5 text-slate-400" />
-          <span className="text-[11px]">Owner:</span>
+      {/* Rep Assignment & Stage Row */}
+      <div className="space-y-1.5 pt-2 border-t border-slate-100 dark:border-slate-800 text-xs mb-3">
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-1 text-slate-500 shrink-0">
+            <UserCheck className="w-3.5 h-3.5 text-slate-400" />
+            <span className="text-[11px]">Owner:</span>
+          </div>
+          <MaterialDropdown
+            id={`select-rep-${lead.id}`}
+            value={lead.assignedRepId}
+            ariaLabel={`Assign sales representative for ${lead.name}`}
+            onChange={(val) => onAssignRep(lead.id, val)}
+            variant="chip"
+            triggerClassName="text-[11px] max-w-[150px] font-medium text-slate-700 dark:text-slate-200"
+            options={users.map((u) => ({ value: u.id, label: `${u.name} (${u.role})` }))}
+          />
         </div>
-        <MaterialDropdown
-          id={`select-rep-${lead.id}`}
-          value={lead.assignedRepId}
-          ariaLabel={`Assign sales representative for ${lead.name}`}
-          onChange={(val) => onAssignRep(lead.id, val)}
-          variant="chip"
-          triggerClassName="text-[11px] max-w-[150px] font-medium text-slate-700 dark:text-slate-200"
-          options={users.map((u) => ({ value: u.id, label: `${u.name} (${u.role})` }))}
-        />
+
+        <div className="flex items-center justify-between gap-2 lg:hidden">
+          <span className="text-[11px] text-slate-500 shrink-0">Stage:</span>
+          <MaterialDropdown
+            id={`select-stage-${lead.id}`}
+            value={lead.stage}
+            ariaLabel={`Move ${lead.name} to stage`}
+            onChange={(val) => onUpdateStage(lead.id, val as LeadStage)}
+            variant="chip"
+            triggerClassName="text-[11px] max-w-[150px] font-semibold text-[#00695C] dark:text-[#80D5C4]"
+            options={[
+              { value: 'New', label: 'New' },
+              { value: 'Contacted', label: 'Contacted' },
+              { value: 'Follow-up', label: 'Follow-up' },
+              { value: 'Negotiation', label: 'Negotiation' },
+              { value: 'Won', label: 'Won' },
+              { value: 'Lost', label: 'Lost' },
+            ]}
+          />
+        </div>
       </div>
 
       {/* Action Buttons: Quick Call & WhatsApp */}
@@ -187,7 +210,7 @@ export const LeadCard: React.FC<LeadCardProps> = ({
             onStartCall(lead);
           }}
           aria-label={`Start phone call to ${lead.name}`}
-          className="flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-lg text-xs font-medium bg-slate-900 hover:bg-slate-800 text-white dark:bg-slate-800 dark:hover:bg-slate-700 transition-colors shadow-xs active:scale-[0.98]"
+          className="min-h-[40px] sm:min-h-[36px] flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-lg text-xs font-medium bg-slate-900 hover:bg-slate-800 text-white dark:bg-slate-800 dark:hover:bg-slate-700 transition-colors shadow-xs active:scale-[0.98]"
         >
           <Phone className="w-3.5 h-3.5 text-teal-400" />
           <span>Call</span>
@@ -201,7 +224,7 @@ export const LeadCard: React.FC<LeadCardProps> = ({
             onOpenWhatsApp(lead);
           }}
           aria-label={`Open WhatsApp chat with ${lead.name}`}
-          className="flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-lg text-xs font-medium bg-emerald-600 hover:bg-emerald-700 text-white transition-colors shadow-xs active:scale-[0.98]"
+          className="min-h-[40px] sm:min-h-[36px] flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-lg text-xs font-medium bg-emerald-600 hover:bg-emerald-700 text-white transition-colors shadow-xs active:scale-[0.98]"
         >
           <MessageSquare className="w-3.5 h-3.5 text-emerald-200" />
           <span>WhatsApp</span>

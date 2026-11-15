@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   Menu,
   PhoneCall,
@@ -43,6 +43,25 @@ export const TopBar: React.FC<TopBarProps> = ({
   const { currentUser, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const userMenuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!showUserMenu) return;
+    const handleOutside = (e: MouseEvent) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(e.target as Node)) {
+        setShowUserMenu(false);
+      }
+    };
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setShowUserMenu(false);
+    };
+    document.addEventListener('mousedown', handleOutside);
+    window.addEventListener('keydown', handleKey);
+    return () => {
+      document.removeEventListener('mousedown', handleOutside);
+      window.removeEventListener('keydown', handleKey);
+    };
+  }, [showUserMenu]);
 
   const getRoleDisplayName = (role?: UserRole) => {
     switch (role) {
@@ -83,16 +102,16 @@ export const TopBar: React.FC<TopBarProps> = ({
   };
 
   return (
-    <header className="h-16 bg-[#FFFFFF]/95 dark:bg-[#111514]/95 backdrop-blur-md border-b border-[#E2E8F0] dark:border-[#334155] px-4 sm:px-6 flex items-center justify-between sticky top-0 z-30 transition-colors font-body select-none">
+    <header className="h-14 sm:h-16 bg-[#FFFFFF]/95 dark:bg-[#111514]/95 backdrop-blur-md border-b border-[#E2E8F0] dark:border-[#334155] px-2.5 sm:px-6 flex items-center justify-between sticky top-0 z-30 shrink-0 transition-colors font-body select-none">
       {/* Left side: Mobile Toggle, Workspace Context & Global Search */}
-      <div className="flex items-center gap-3 flex-1 max-w-2xl min-w-0">
+      <div className="flex items-center gap-1.5 sm:gap-3 flex-1 max-w-2xl min-w-0">
         {/* Mobile menu trigger */}
         <button
           id="btn-open-sidebar"
           type="button"
           onClick={onOpenMobileSidebar}
           aria-label="Open navigation sidebar"
-          className="w-9 h-9 rounded-xl flex items-center justify-center text-[#475569] dark:text-[#94A3B8] hover:bg-[#F1F5F4] dark:hover:bg-[#1E293B] lg:hidden transition-colors"
+          className="min-w-[44px] min-h-[44px] w-11 h-11 rounded-xl flex items-center justify-center text-[#475569] dark:text-[#94A3B8] hover:bg-[#F1F5F4] dark:hover:bg-[#1E293B] lg:hidden shrink-0 transition-colors"
         >
           <Menu className="w-5 h-5" />
         </button>
@@ -119,7 +138,7 @@ export const TopBar: React.FC<TopBarProps> = ({
       </div>
 
       {/* Right side: Actions, Theme, User Menu */}
-      <div className="flex items-center gap-2 sm:gap-3 ml-3 shrink-0">
+      <div className="flex items-center gap-1 sm:gap-2.5 ml-1.5 sm:ml-3 shrink-0">
         {/* Quick Call */}
         <Button
           id="btn-quick-call"
@@ -127,7 +146,7 @@ export const TopBar: React.FC<TopBarProps> = ({
           size="md"
           onClick={onQuickCall}
           leftIcon={<PhoneCall className="w-4 h-4" />}
-          className="hidden md:inline-flex"
+          className="hidden xl:inline-flex"
         >
           Quick Call
         </Button>
@@ -139,7 +158,7 @@ export const TopBar: React.FC<TopBarProps> = ({
           size="md"
           onClick={onOpenBulkImport}
           leftIcon={<Upload className="w-4 h-4 text-[#64748B] dark:text-[#94A3B8]" />}
-          className="hidden sm:inline-flex"
+          className="hidden lg:inline-flex"
         >
           Import CSV
         </Button>
@@ -151,9 +170,10 @@ export const TopBar: React.FC<TopBarProps> = ({
           size="md"
           onClick={onOpenAddLead}
           leftIcon={<Plus className="w-4 h-4" />}
+          className="min-h-[40px] sm:min-h-0 px-3 sm:px-4"
         >
-          <span className="hidden xs:inline">Add Lead</span>
-          <span className="xs:hidden">Add</span>
+          <span className="hidden sm:inline">Add Lead</span>
+          <span className="sm:hidden">Add</span>
         </Button>
 
         {/* Sync / Refresh Button */}
@@ -163,7 +183,7 @@ export const TopBar: React.FC<TopBarProps> = ({
           disabled={isRefreshing}
           aria-label="Synchronize data"
           title="Synchronize data"
-          className="w-9 h-9 rounded-xl flex items-center justify-center text-[#475569] dark:text-[#94A3B8] hover:bg-[#F1F5F4] dark:hover:bg-[#1E293B] hover:text-[#0F172A] dark:hover:text-[#F1F5F9] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00695C]"
+          className="min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center text-[#475569] dark:text-[#94A3B8] hover:bg-[#F1F5F4] dark:hover:bg-[#1E293B] hover:text-[#0F172A] dark:hover:text-[#F1F5F9] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00695C]"
         >
           <RefreshCw
             className={`w-4 h-4 ${isRefreshing ? 'animate-spin text-[#00695C] dark:text-[#80D5C4]' : ''}`}
@@ -177,7 +197,7 @@ export const TopBar: React.FC<TopBarProps> = ({
           onClick={toggleTheme}
           aria-label={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
           title={theme === 'dark' ? 'Switch to Light Theme' : 'Switch to Dark Theme'}
-          className="w-9 h-9 rounded-xl flex items-center justify-center text-[#475569] dark:text-[#94A3B8] hover:bg-[#F1F5F4] dark:hover:bg-[#1E293B] hover:text-[#0F172A] dark:hover:text-[#F1F5F9] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00695C]"
+          className="min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center text-[#475569] dark:text-[#94A3B8] hover:bg-[#F1F5F4] dark:hover:bg-[#1E293B] hover:text-[#0F172A] dark:hover:text-[#F1F5F9] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00695C]"
         >
           {theme === 'dark' ? (
             <Sun className="w-4 h-4 text-amber-400" />
@@ -187,7 +207,7 @@ export const TopBar: React.FC<TopBarProps> = ({
         </button>
 
         {/* User Account / Scope Menu */}
-        <div className="relative">
+        <div className="relative" ref={userMenuRef}>
           <button
             id="btn-user-role-dropdown"
             type="button"
@@ -195,7 +215,7 @@ export const TopBar: React.FC<TopBarProps> = ({
             aria-haspopup="menu"
             aria-expanded={showUserMenu}
             aria-label="User account and role menu"
-            className="flex items-center gap-2 p-1.5 pl-2 pr-3 rounded-full hover:bg-[#F1F5F4] dark:hover:bg-[#1E293B] border border-[#E2E8F0] dark:border-[#334155] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00695C]"
+            className="min-h-[44px] sm:min-h-0 flex items-center gap-2 p-1 sm:p-1.5 sm:pl-2 sm:pr-3 rounded-full hover:bg-[#F1F5F4] dark:hover:bg-[#1E293B] border border-[#E2E8F0] dark:border-[#334155] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00695C]"
           >
             <div className="w-7 h-7 rounded-full bg-[#00695C] dark:bg-[#80D5C4] text-white dark:text-[#003830] font-bold text-xs flex items-center justify-center shrink-0 overflow-hidden">
               {currentUser?.avatar ? (
@@ -219,13 +239,13 @@ export const TopBar: React.FC<TopBarProps> = ({
               </div>
             </div>
 
-            <ChevronDown className="w-3.5 h-3.5 text-[#94A3B8] dark:text-[#64748B]" />
+            <ChevronDown className="w-3.5 h-3.5 text-[#94A3B8] dark:text-[#64748B] hidden sm:block" />
           </button>
 
           {/* User Account Dropdown Dialog */}
           {showUserMenu && (
             <div
-              className="absolute right-0 mt-2 w-76 bg-[#FFFFFF] dark:bg-[#161A19] border border-[#E2E8F0] dark:border-[#334155] rounded-[24px] shadow-xl z-50 p-4 animate-in fade-in duration-150 font-body"
+              className="absolute right-0 mt-2 w-[min(19rem,calc(100vw-1rem))] bg-[#FFFFFF] dark:bg-[#161A19] border border-[#E2E8F0] dark:border-[#334155] rounded-[24px] shadow-xl z-50 p-4 animate-in fade-in duration-150 font-body"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-center gap-3 pb-3 border-b border-[#F1F5F4] dark:border-[#202726]">

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Compass,
   Table,
@@ -69,9 +69,20 @@ export const Sidebar: React.FC<SidebarProps> = ({
   openTicketsCount = 0,
   leadsCount = 0
 }) => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(() =>
+    typeof window !== 'undefined' ? window.innerWidth >= 1024 && window.innerWidth < 1280 : false
+  );
   const { currentUser } = useAuth();
   const { can } = usePolicy();
+
+  useEffect(() => {
+    if (!isOpenMobile) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onCloseMobile();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpenMobile, onCloseMobile]);
 
   const handleSelect = (viewId: NavView) => {
     onViewChange(viewId);
@@ -226,10 +237,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
           isOpenMobile ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         } ${
           isCollapsed ? 'w-20' : 'w-64'
-        } border-r border-[#E2E8F0] dark:border-[#334155] shadow-xs lg:shadow-none h-screen select-none font-body`}
+        } border-r border-[#E2E8F0] dark:border-[#334155] shadow-xs lg:shadow-none h-[100dvh] lg:h-full select-none font-body`}
       >
         {/* Brand & Organization Header */}
-        <div className="h-16 px-4 flex items-center justify-between border-b border-[#E2E8F0] dark:border-[#334155] bg-[#FFFFFF] dark:bg-[#111514] shrink-0">
+        <div className="h-14 sm:h-16 px-4 flex items-center justify-between border-b border-[#E2E8F0] dark:border-[#334155] bg-[#FFFFFF] dark:bg-[#111514] shrink-0">
           <div className="flex items-center gap-3 min-w-0">
             {/* Primary DialPulse Emblem */}
             <div className="w-9 h-9 rounded-full bg-[#00695C] dark:bg-[#80D5C4] flex items-center justify-center text-white dark:text-[#003830] shadow-xs shrink-0">
@@ -258,9 +269,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
             type="button"
             onClick={onCloseMobile}
             aria-label="Close navigation sidebar"
-            className="w-8 h-8 rounded-full flex items-center justify-center text-[#475569] hover:text-[#0F172A] dark:text-[#94A3B8] dark:hover:text-[#F1F5F9] hover:bg-[#F1F5F4] dark:hover:bg-[#1E293B] lg:hidden"
+            className="min-w-[44px] min-h-[44px] w-11 h-11 rounded-full flex items-center justify-center text-[#475569] hover:text-[#0F172A] dark:text-[#94A3B8] dark:hover:text-[#F1F5F9] hover:bg-[#F1F5F4] dark:hover:bg-[#1E293B] lg:hidden"
           >
-            <X className="w-4 h-4" />
+            <X className="w-5 h-5" />
           </button>
         </div>
 
@@ -298,7 +309,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       onClick={() => handleSelect(item.id)}
                       title={isCollapsed ? `${item.label} — ${item.desc}` : undefined}
                       aria-current={isActive ? 'page' : undefined}
-                      className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-full text-xs font-medium transition-all group relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00695C] ${
+                      className={`w-full min-h-[44px] flex items-center gap-3 px-3.5 py-2 rounded-full text-xs font-medium transition-all group relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00695C] ${
                         isActive
                           ? 'bg-[#CCE8E1] text-[#00201B] font-semibold dark:bg-[#004F46] dark:text-[#A3F2E4]'
                           : 'text-[#475569] dark:text-[#94A3B8] hover:bg-[#F1F5F4] dark:hover:bg-[#1E293B] hover:text-[#0F172A] dark:hover:text-[#F1F5F9]'
@@ -342,8 +353,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
           ))}
         </div>
 
-        {/* Sidebar Footer with Collapse Rail Toggle */}
-        <div className="p-3 border-t border-[#E2E8F0] dark:border-[#334155] bg-[#F8FAF9] dark:bg-[#111514] shrink-0">
+        {/* Sidebar Footer with Collapse Rail Toggle (Desktop only) */}
+        <div className="hidden lg:block p-3 border-t border-[#E2E8F0] dark:border-[#334155] bg-[#F8FAF9] dark:bg-[#111514] shrink-0">
           <button
             type="button"
             onClick={() => setIsCollapsed(!isCollapsed)}

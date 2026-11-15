@@ -342,26 +342,26 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onDataReset }) => {
       {/* Toast Notification */}
       {notification && (
         <div
-          className={`fixed top-4 right-4 z-50 px-4 py-2.5 rounded-xl shadow-lg border text-xs font-bold flex items-center space-x-2 animate-in fade-in slide-in-from-top-2 ${
+          className={`fixed top-4 right-4 left-4 sm:left-auto max-w-sm z-50 px-4 py-2.5 rounded-xl shadow-lg border text-xs font-bold flex items-center space-x-2 animate-in fade-in slide-in-from-top-2 ${
             notification.type === 'success'
               ? 'bg-emerald-50 text-emerald-900 border-emerald-300 dark:bg-emerald-950 dark:text-emerald-200'
               : 'bg-rose-50 text-rose-900 border-rose-300 dark:bg-rose-950 dark:text-rose-200'
           }`}
         >
-          <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+          <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
           <span>{notification.message}</span>
         </div>
       )}
 
       {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4 bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
-        <div className="flex items-center space-x-3">
-          <div className="w-9 h-9 rounded-xl bg-[#1E293B] text-white flex items-center justify-center font-bold">
+      <div className="flex flex-wrap items-center justify-between gap-4 bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
+        <div className="flex items-center space-x-3 min-w-0">
+          <div className="w-9 h-9 rounded-xl bg-[#1E293B] text-white flex items-center justify-center font-bold shrink-0">
             <Settings className="w-5 h-5 text-teal-300" />
           </div>
-          <div>
+          <div className="min-w-0">
             <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">
-              System Settings & CRM Configurations
+              System Settings &amp; CRM Configurations
             </h2>
             <p className="text-xs text-slate-500 dark:text-slate-400">
               Lead auto-assignment, custom fields, pipeline stages, RBAC permissions, and snapshots
@@ -371,7 +371,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onDataReset }) => {
 
         <button
           onClick={handleResetDefaults}
-          className="px-3 py-1.5 rounded-xl text-xs font-semibold text-rose-700 dark:text-rose-300 bg-rose-50 dark:bg-rose-950/50 hover:bg-rose-100 border border-rose-200 dark:border-rose-900 transition-colors flex items-center space-x-1"
+          className="px-3.5 py-2 min-h-[40px] rounded-xl text-xs font-semibold text-rose-700 dark:text-rose-300 bg-rose-50 dark:bg-rose-950/50 hover:bg-rose-100 border border-rose-200 dark:border-rose-900 transition-colors flex items-center space-x-1.5 whitespace-nowrap shrink-0"
         >
           <RotateCcw className="w-3.5 h-3.5" />
           <span>Reset Sample Indian Data</span>
@@ -379,24 +379,24 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onDataReset }) => {
       </div>
 
       {/* Tabs bar */}
-      <div className="flex border-b border-slate-200 dark:border-slate-800 space-x-6 overflow-x-auto">
+      <div className="flex border-b border-slate-200 dark:border-slate-800 space-x-5 sm:space-x-6 overflow-x-auto no-scrollbar">
         <button
           id="tab-automation"
           onClick={() => setActiveTab('automation')}
-          className={`pb-3 text-xs font-bold border-b-2 transition-all whitespace-nowrap flex items-center space-x-2 ${
+          className={`min-h-[44px] pb-3 text-xs font-bold border-b-2 transition-all whitespace-nowrap shrink-0 flex items-center space-x-2 ${
             activeTab === 'automation'
               ? 'border-[#00695C] text-[#00695C] dark:text-teal-400'
               : 'border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
           }`}
         >
           <Zap className="w-4 h-4 text-amber-500" />
-          <span>Auto-Assignment & Routing</span>
+          <span>Auto-Assignment &amp; Routing</span>
         </button>
 
         <button
           id="tab-pipeline"
           onClick={() => setActiveTab('pipeline')}
-          className={`pb-3 text-xs font-bold border-b-2 transition-all whitespace-nowrap flex items-center space-x-2 ${
+          className={`min-h-[44px] pb-3 text-xs font-bold border-b-2 transition-all whitespace-nowrap shrink-0 flex items-center space-x-2 ${
             activeTab === 'pipeline'
               ? 'border-[#00695C] text-[#00695C] dark:text-teal-400'
               : 'border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
@@ -409,7 +409,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onDataReset }) => {
         <button
           id="tab-fields"
           onClick={() => setActiveTab('fields')}
-          className={`pb-3 text-xs font-bold border-b-2 transition-all whitespace-nowrap flex items-center space-x-2 ${
+          className={`min-h-[44px] pb-3 text-xs font-bold border-b-2 transition-all whitespace-nowrap shrink-0 flex items-center space-x-2 ${
             activeTab === 'fields'
               ? 'border-[#00695C] text-[#00695C] dark:text-teal-400'
               : 'border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
@@ -422,7 +422,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onDataReset }) => {
         <button
           id="tab-rbac"
           onClick={() => setActiveTab('rbac')}
-          className={`pb-3 text-xs font-bold border-b-2 transition-all whitespace-nowrap flex items-center space-x-2 ${
+          className={`min-h-[44px] pb-3 text-xs font-bold border-b-2 transition-all whitespace-nowrap shrink-0 flex items-center space-x-2 ${
             activeTab === 'rbac'
               ? 'border-[#00695C] text-[#00695C] dark:text-teal-400'
               : 'border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
@@ -435,7 +435,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onDataReset }) => {
         <button
           id="tab-audit"
           onClick={() => setActiveTab('audit')}
-          className={`pb-3 text-xs font-bold border-b-2 transition-all whitespace-nowrap flex items-center space-x-2 ${
+          className={`min-h-[44px] pb-3 text-xs font-bold border-b-2 transition-all whitespace-nowrap shrink-0 flex items-center space-x-2 ${
             activeTab === 'audit'
               ? 'border-[#00695C] text-[#00695C] dark:text-teal-400'
               : 'border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
@@ -449,7 +449,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onDataReset }) => {
       {/* TAB 1: Auto-Assignment & Routing */}
       {activeTab === 'automation' && (
         <div className="space-y-5">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-xs">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 sm:p-6 border border-slate-200 dark:border-slate-800 shadow-xs">
             <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
               <div>
                 <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 flex items-center space-x-2">
@@ -465,13 +465,13 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onDataReset }) => {
                 id="btn-toggle-auto-assign-settings"
                 onClick={handleToggleAutoAssignment}
                 disabled={isSavingAutoAssign}
-                className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl font-bold text-xs transition-all shadow-xs ${
+                className={`flex items-center space-x-2 px-4 py-2.5 min-h-[44px] rounded-xl font-bold text-xs transition-all shadow-xs whitespace-nowrap shrink-0 ${
                   autoAssignment
                     ? 'bg-[#00695C] text-white hover:bg-[#245b4c]'
                     : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-300'
                 }`}
               >
-                <span className={`w-2.5 h-2.5 rounded-full ${autoAssignment ? 'bg-emerald-300 animate-ping' : 'bg-slate-400'}`} />
+                <CheckCircle2 className="w-4 h-4 shrink-0" />
                 <span>{autoAssignment ? 'Auto-Assignment: ACTIVE' : 'Auto-Assignment: PAUSED'}</span>
               </button>
             </div>
@@ -578,8 +578,8 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onDataReset }) => {
       {/* TAB 2: Pipeline Stages Configuration */}
       {activeTab === 'pipeline' && (
         <div className="space-y-5">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-xs">
-            <div className="flex items-center justify-between mb-4">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 sm:p-5 border border-slate-200 dark:border-slate-800 shadow-xs">
+            <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
               <div>
                 <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">
                   Custom Pipeline Stages
@@ -593,7 +593,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onDataReset }) => {
                 id="btn-save-pipeline-stages"
                 onClick={handleSavePipelineStages}
                 disabled={isSavingPipeline}
-                className="flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl bg-[#1E293B] text-white hover:bg-[#162A45] text-xs font-bold transition-all shadow-xs"
+                className="flex items-center space-x-1.5 px-4 py-2 min-h-[40px] rounded-xl bg-[#1E293B] text-white hover:bg-[#162A45] text-xs font-bold transition-all shadow-xs whitespace-nowrap shrink-0"
               >
                 <Save className="w-3.5 h-3.5" />
                 <span>{isSavingPipeline ? 'Saving...' : 'Save Stages'}</span>
@@ -606,11 +606,11 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onDataReset }) => {
                   key={stage.id}
                   className="flex items-center space-x-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700"
                 >
-                  <span className="w-6 h-6 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 font-mono text-xs flex items-center justify-center font-bold">
+                  <span className="w-6 h-6 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 font-mono text-xs flex items-center justify-center font-bold shrink-0">
                     {idx + 1}
                   </span>
-                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: stage.dotBg || '#00695C' }}></div>
-                  <div className="flex-1">
+                  <div className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: stage.dotBg || '#00695C' }}></div>
+                  <div className="flex-1 min-w-0">
                     <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider block">
                       ID: {stage.id}
                     </span>
@@ -618,7 +618,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onDataReset }) => {
                       type="text"
                       value={stage.title}
                       onChange={(e) => handleStageTitleChange(stage.id, e.target.value)}
-                      className="w-full mt-0.5 px-2.5 py-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-xs font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-[#00695C]"
+                      className="w-full mt-0.5 px-2.5 py-2 sm:py-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-base sm:text-xs font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-[#00695C]"
                     />
                   </div>
                 </div>
@@ -632,7 +632,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onDataReset }) => {
       {activeTab === 'fields' && (
         <div className="space-y-5">
           {/* Add Custom Field Form */}
-          <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-xs">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 sm:p-5 border border-slate-200 dark:border-slate-800 shadow-xs">
             <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 mb-1">
               Add Industry-Specific Custom Field
             </h3>
@@ -640,14 +640,14 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onDataReset }) => {
               Capture tailored information for Real Estate (Flat type, Carpet area), Lending (CIBIL score, Salary), Education (Course, Batch), or Insurance (Vehicle No).
             </p>
 
-            <form onSubmit={handleAddCustomField} className="grid grid-cols-1 sm:grid-cols-4 gap-3">
+            <form onSubmit={handleAddCustomField} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
               <input
                 type="text"
                 placeholder="Field Label (e.g. CIBIL Score, BHK Type)"
                 required
                 value={newFieldName}
                 onChange={(e) => setNewFieldName(e.target.value)}
-                className="px-3 py-1.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs"
+                className="min-h-[42px] sm:min-h-[38px] px-3 py-1.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-base sm:text-xs"
               />
               <MaterialDropdown
                 value={newFieldType}
@@ -666,10 +666,10 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onDataReset }) => {
                   placeholder="Options comma-separated (e.g. 1 BHK, 2 BHK, 3 BHK)"
                   value={newFieldOptions}
                   onChange={(e) => setNewFieldOptions(e.target.value)}
-                  className="px-3 py-1.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs"
+                  className="min-h-[42px] sm:min-h-[38px] px-3 py-1.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-base sm:text-xs"
                 />
               ) : (
-                <label className="flex items-center space-x-2 text-xs text-slate-600 dark:text-slate-300">
+                <label className="flex items-center space-x-2 text-xs text-slate-600 dark:text-slate-300 min-h-[40px]">
                   <input
                     type="checkbox"
                     checked={newFieldRequired}
@@ -682,7 +682,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onDataReset }) => {
               <button
                 type="submit"
                 disabled={isSavingFields || !newFieldName.trim()}
-                className="flex items-center justify-center space-x-1.5 px-3 py-1.5 bg-[#00695C] hover:bg-[#235849] disabled:opacity-50 text-white rounded-xl text-xs font-bold transition-all shadow-xs"
+                className="min-h-[42px] sm:min-h-[38px] flex items-center justify-center space-x-1.5 px-3 py-1.5 bg-[#00695C] hover:bg-[#235849] disabled:opacity-50 text-white rounded-xl text-xs font-bold transition-all shadow-xs"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Add Field</span>
@@ -768,39 +768,39 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onDataReset }) => {
             </div>
 
             {/* Scope Legend Badges */}
-            <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 mb-5 p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200/80 dark:border-slate-700/80 text-[11px]">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 mb-5 p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200/80 dark:border-slate-700/80 text-[11px]">
               <div className="flex items-center space-x-1.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
                 <span className="font-bold text-emerald-800 dark:text-emerald-300">SELF:</span>
                 <span className="text-slate-500">Own leads only</span>
               </div>
               <div className="flex items-center space-x-1.5">
-                <span className="w-2 h-2 rounded-full bg-blue-500" />
+                <span className="w-2 h-2 rounded-full bg-blue-500 shrink-0" />
                 <span className="font-bold text-blue-800 dark:text-blue-300">TEAM:</span>
                 <span className="text-slate-500">Own branch/team</span>
               </div>
               <div className="flex items-center space-x-1.5">
-                <span className="w-2 h-2 rounded-full bg-amber-500" />
+                <span className="w-2 h-2 rounded-full bg-amber-500 shrink-0" />
                 <span className="font-bold text-amber-800 dark:text-amber-300">ALL_TEAMS:</span>
                 <span className="text-slate-500">All sales teams</span>
               </div>
               <div className="flex items-center space-x-1.5">
-                <span className="w-2 h-2 rounded-full bg-cyan-500" />
+                <span className="w-2 h-2 rounded-full bg-cyan-500 shrink-0" />
                 <span className="font-bold text-cyan-800 dark:text-cyan-300">SYSTEM:</span>
-                <span className="text-slate-500">Accounts & IT</span>
+                <span className="text-slate-500">Accounts &amp; IT</span>
               </div>
               <div className="flex items-center space-x-1.5">
-                <span className="w-2 h-2 rounded-full bg-purple-500" />
+                <span className="w-2 h-2 rounded-full bg-purple-500 shrink-0" />
                 <span className="font-bold text-purple-800 dark:text-purple-300">COMPANY:</span>
                 <span className="text-slate-500">Full organization</span>
               </div>
             </div>
 
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs border-collapse">
+              <table className="w-full min-w-[760px] text-left text-xs border-collapse">
                 <thead>
                   <tr className="bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 font-semibold border-b border-slate-200 dark:border-slate-700">
-                    <th className="p-3 w-48">Role & Tier</th>
+                    <th className="p-3 w-48">Role &amp; Tier</th>
                     <th className="p-3 w-36">View Scope</th>
                     <th className="p-3">Permitted Actions</th>
                     <th className="p-3 w-48">Approval Gated</th>
@@ -852,7 +852,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onDataReset }) => {
                           />
                         </td>
 
-                        <td className="p-3 m3-select">
+                        <td className="p-3">
                           <div className="flex flex-wrap gap-1.5">
                             {ALL_AVAILABLE_ACTIONS.map((act) => {
                               const currentActions = rp.actions || (rp as any).permissions || [];
@@ -906,17 +906,17 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onDataReset }) => {
 
           {/* Team Members List */}
           <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs overflow-hidden">
-            <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+            <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
               <div>
                 <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">
-                  Registered Team Personnel & Credentials
+                  Registered Team Personnel &amp; Credentials
                 </h3>
                 <p className="text-[11px] text-slate-500">Manage user personas, team assignments, and security roles</p>
               </div>
 
               <button
                 onClick={() => setIsAddingUser(!isAddingUser)}
-                className="px-3 py-1.5 rounded-xl text-xs font-bold bg-[#00695C] text-white hover:bg-[#255e4e] flex items-center space-x-1"
+                className="px-3.5 py-2 min-h-[40px] rounded-xl text-xs font-bold bg-[#00695C] text-white hover:bg-[#255e4e] flex items-center space-x-1.5 whitespace-nowrap shrink-0"
               >
                 <UserPlus className="w-3.5 h-3.5" />
                 <span>{isAddingUser ? 'Close Form' : 'Add Team Member'}</span>
@@ -925,7 +925,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onDataReset }) => {
 
             {isAddingUser && (
               <form onSubmit={handleAddUser} className="p-4 bg-slate-50 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-700 space-y-3">
-                <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                   <div>
                     <label className="block text-[10px] font-bold text-slate-500 mb-1">Full Name *</label>
                     <input
@@ -934,7 +934,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onDataReset }) => {
                       required
                       value={newUserName}
                       onChange={(e) => setNewUserName(e.target.value)}
-                      className="w-full px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs"
+                      className="w-full min-h-[42px] sm:min-h-[38px] px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-base sm:text-xs"
                     />
                   </div>
                   <div>
@@ -945,7 +945,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onDataReset }) => {
                       required
                       value={newUserEmail}
                       onChange={(e) => setNewUserEmail(e.target.value)}
-                      className="w-full px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs"
+                      className="w-full min-h-[42px] sm:min-h-[38px] px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-base sm:text-xs"
                     />
                   </div>
                   <div>
@@ -971,7 +971,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onDataReset }) => {
                       placeholder="+91 98765 43210"
                       value={newUserPhone}
                       onChange={(e) => setNewUserPhone(e.target.value)}
-                      className="w-full px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs"
+                      className="w-full min-h-[42px] sm:min-h-[38px] px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-base sm:text-xs"
                     />
                   </div>
                 </div>
@@ -1031,21 +1031,21 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onDataReset }) => {
                       placeholder="Min 8 characters (auto if blank)"
                       value={newUserPassword}
                       onChange={(e) => setNewUserPassword(e.target.value)}
-                      className="w-full px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs"
+                      className="w-full min-h-[42px] sm:min-h-[38px] px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-base sm:text-xs"
                     />
                   </div>
 
                   <div className="flex items-end space-x-2">
                     <button
                       type="submit"
-                      className="flex-1 py-1.5 bg-[#1E293B] text-white rounded-xl text-xs font-bold hover:bg-[#162A45] shadow-xs"
+                      className="flex-1 min-h-[42px] sm:min-h-[38px] py-1.5 bg-[#1E293B] text-white rounded-xl text-xs font-bold hover:bg-[#162A45] shadow-xs"
                     >
                       Register Personnel
                     </button>
                     <button
                       type="button"
                       onClick={() => setIsAddingUser(false)}
-                      className="px-3 py-1.5 text-xs text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl"
+                      className="min-h-[42px] sm:min-h-[38px] px-3 py-1.5 text-xs text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl"
                     >
                       Cancel
                     </button>
@@ -1055,7 +1055,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onDataReset }) => {
             )}
 
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
+              <table className="w-full min-w-[680px] text-left text-xs">
                 <thead className="bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 font-semibold border-b border-slate-200 dark:border-slate-700">
                   <tr>
                     <th className="p-3">User / Identity</th>
@@ -1135,24 +1135,24 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onDataReset }) => {
       {activeTab === 'audit' && (
         <div className="space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
-            <div className="relative flex-1 max-w-sm">
+            <div className="relative min-w-0 w-full sm:flex-1 max-w-sm">
               <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
                 placeholder="Filter audit log by action or user..."
                 value={auditFilter}
                 onChange={(e) => setAuditFilter(e.target.value)}
-                className="w-full pl-8 pr-3 py-1.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs"
+                className="w-full min-h-[42px] sm:min-h-[36px] pl-8 pr-3 py-1.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-base sm:text-xs"
               />
             </div>
-            <div className="text-xs text-slate-500 font-medium">
+            <div className="text-xs text-slate-500 font-medium tabular-nums">
               Showing {filteredLogs.length} audit entries
             </div>
           </div>
 
           <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs overflow-hidden">
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
+              <table className="w-full min-w-[760px] text-left text-xs tabular-nums">
                 <thead className="bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 font-semibold border-b border-slate-200 dark:border-slate-700">
                   <tr>
                     <th className="p-3">Timestamp</th>

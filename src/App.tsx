@@ -24,7 +24,7 @@ import { Lead, Call, Message, LeadStage } from './types';
 import { useAuth, AuthProvider, AuthContext } from './context/AuthContext';
 import { ThemeProvider, ThemeContext } from './context/ThemeContext';
 import { api, setAppSecurityLocked } from './services/api';
-import { useIsMobile } from './utils/useBreakpoint';
+import { useIsDesktop } from './utils/useBreakpoint';
 import { useDevToolsDeterrence } from './utils/deterrence';
 import { useAutomationDetection } from './utils/automationDetection';
 import {
@@ -106,7 +106,7 @@ const AppContent: React.FC = () => {
   const [activeCallingLead, setActiveCallingLead] = useState<Lead | null>(null);
   const [activeChatLeadId, setActiveChatLeadId] = useState<string | null>(null);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
-  const isMobile = useIsMobile();
+  const isDesktop = useIsDesktop();
 
   // Real Data Fetcher
   const loadCrmData = useCallback(async () => {
@@ -203,7 +203,7 @@ const AppContent: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="flex h-screen w-screen items-center justify-center bg-slate-50 dark:bg-slate-950 font-sans text-slate-900 dark:text-slate-100">
+      <div className="flex h-[100dvh] w-full items-center justify-center bg-slate-50 dark:bg-slate-950 font-sans text-slate-900 dark:text-slate-100 px-4">
         <div className="flex flex-col items-center space-y-4">
           <div className="w-10 h-10 border-4 border-[#2E6E5C] border-t-transparent rounded-full animate-spin" />
           <p className="text-xs font-semibold tracking-wide uppercase text-slate-500 dark:text-slate-400">
@@ -232,7 +232,7 @@ const AppContent: React.FC = () => {
 
   return (
     <div
-      className="flex h-screen w-screen overflow-hidden bg-[#F8FAF9] dark:bg-[#111514] font-body text-[#0F172A] dark:text-[#F1F5F9] antialiased selection:bg-[#00695C] selection:text-white relative"
+      className="flex h-[100dvh] w-full overflow-hidden bg-[#F8FAF9] dark:bg-[#111514] font-body text-[#0F172A] dark:text-[#F1F5F9] antialiased selection:bg-[#00695C] selection:text-white relative"
     >
       {/* DevTools Deterrence Full-Screen Opaque Security Lock Screen */}
       <DevToolsWarningOverlay
@@ -287,7 +287,7 @@ const AppContent: React.FC = () => {
         <ImpersonationBanner />
 
         {/* View Router */}
-        <main className="flex-1 overflow-hidden relative flex flex-col">
+        <main className="flex-1 min-h-0 overflow-hidden relative flex flex-col">
           {selectedLeadForDetail ? (
             <LeadProfileView
               leadId={selectedLeadForDetail.id}
@@ -374,7 +374,7 @@ const AppContent: React.FC = () => {
 
           {/* Supplementary CRM Views */}
           {currentView === 'pipeline' && (
-            <div className="p-4 flex-1 overflow-y-auto">
+            <div className="p-3 sm:p-4 lg:p-6 flex-1 min-h-0 overflow-y-auto">
               <KanbanBoard
                 leads={leads}
                 users={users}
@@ -407,7 +407,7 @@ const AppContent: React.FC = () => {
           )}
 
           {currentView === 'calls' && (
-            <div className="p-4 flex-1 overflow-y-auto">
+            <div className="p-3 sm:p-4 lg:p-6 flex-1 min-h-0 overflow-y-auto">
               <CallsView
                 calls={calls}
                 leads={leads}
@@ -420,7 +420,7 @@ const AppContent: React.FC = () => {
           )}
 
           {currentView === 'whatsapp' && (
-            <div className="flex-1 overflow-hidden">
+            <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
               <WhatsAppView
                 leads={leads}
                 selectedLeadId={activeChatLeadId}
@@ -432,45 +432,58 @@ const AppContent: React.FC = () => {
           )}
 
           {currentView === 'support' && (
-            <div className="p-4 flex-1 overflow-y-auto">
+            <div className="p-3 sm:p-4 lg:p-6 flex-1 min-h-0 overflow-y-auto">
               <SupportView leads={leads} users={users} />
             </div>
           )}
 
           {currentView === 'compliance' && (
-            <div className="flex-1 overflow-hidden">
+            <div className="p-3 sm:p-4 lg:p-6 flex-1 min-h-0 overflow-y-auto">
               <TrustComplianceView />
             </div>
           )}
 
           {currentView === 'activity' && (
-            <div className="flex-1 overflow-hidden">
+            <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
               <ActivityLogsView />
             </div>
           )}
 
           {currentView === 'settings' && (
-            <div className="p-4 flex-1 overflow-y-auto">
+            <div className="p-3 sm:p-4 lg:p-6 flex-1 min-h-0 overflow-y-auto">
               <SettingsView onDataReset={handleRefreshAll} />
             </div>
           )}
 
           {currentView === 'reports' && (
-            <div className="p-4 flex-1 overflow-y-auto">
+            <div className="p-3 sm:p-4 lg:p-6 flex-1 min-h-0 overflow-y-auto">
               <ReportsView />
             </div>
           )}
             </>
           )}
         </main>
+
+        {/* Mobile & Tablet Bottom Navigation Bar */}
+        {!isDesktop && (
+          <BottomNavBar
+            currentView={currentView}
+            onViewChange={(view) => {
+              setSelectedLeadForDetail(null);
+              setCurrentView(view);
+            }}
+            onAddLead={() => setIsAddLeadOpen(true)}
+          />
+        )}
       </div>
 
       {/* Modals */}
       <AddLeadModal
         isOpen={isAddLeadOpen}
         onClose={() => setIsAddLeadOpen(false)}
-        onLeadAdded={(newLead) => {
-          setLeads((prev) => [newLead, ...prev]);
+        onSubmit={async (leadPayload) => {
+          const created = await api.createLead(leadPayload);
+          setLeads((prev) => [created, ...prev]);
         }}
         users={users}
       />
@@ -519,18 +532,6 @@ const AppContent: React.FC = () => {
           }
         }}
       />
-
-      {/* Mobile Bottom Navigation Bar */}
-      {isMobile && (
-        <BottomNavBar
-          currentView={currentView}
-          onViewChange={(view) => {
-            setSelectedLeadForDetail(null);
-            setCurrentView(view);
-          }}
-          onAddLead={() => setIsAddLeadOpen(true)}
-        />
-      )}
 
       </div>
     </div>

@@ -248,7 +248,7 @@ export const ActivityLogsView: React.FC = () => {
               onClick={() => fetchLogs(true)}
               disabled={isRefreshing}
               aria-label="Refresh activity logs"
-              className="touch-target-48 rounded-full border border-[#E2E8F0]/60 dark:border-[#334155]/60 bg-white dark:bg-[#161A19] text-[#475569] dark:text-[#94A3B8] hover:bg-[#F1F5F4] dark:hover:bg-[#1E293B] transition-colors flex items-center justify-center"
+              className="min-w-[44px] min-h-[44px] rounded-full border border-[#E2E8F0]/60 dark:border-[#334155]/60 bg-white dark:bg-[#161A19] text-[#475569] dark:text-[#94A3B8] hover:bg-[#F1F5F4] dark:hover:bg-[#1E293B] transition-colors flex items-center justify-center"
               title="Refresh Logs"
             >
               <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin text-[#00695C]' : ''}`} />
@@ -268,60 +268,60 @@ export const ActivityLogsView: React.FC = () => {
         </div>
 
         {/* Top 4 KPI Metrics Tiles */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <div className="p-3.5 rounded-2xl bg-white dark:bg-[#161A19] border border-[#E2E8F0]/30 dark:border-[#334155]/30 flex items-center justify-between">
-            <div>
-              <p className="text-[11px] text-[#475569] dark:text-[#94A3B8] uppercase font-semibold tracking-wider">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 tabular-nums">
+          <div className="p-3.5 rounded-2xl bg-white dark:bg-[#161A19] border border-[#E2E8F0]/30 dark:border-[#334155]/30 flex items-center justify-between gap-2">
+            <div className="min-w-0">
+              <p className="text-[11px] text-[#475569] dark:text-[#94A3B8] uppercase font-semibold tracking-wider truncate">
                 Total Events
               </p>
               <p className="text-xl font-bold font-mono text-[#0F172A] dark:text-[#F1F5F9] mt-0.5">
                 {metrics.total}
               </p>
             </div>
-            <Activity className="w-5 h-5 text-[#00695C] dark:text-[#80D5C4]" />
+            <Activity className="w-5 h-5 text-[#00695C] dark:text-[#80D5C4] shrink-0" />
           </div>
 
-          <div className="p-3.5 rounded-2xl bg-white dark:bg-[#161A19] border border-[#E2E8F0]/30 dark:border-[#334155]/30 flex items-center justify-between">
-            <div>
-              <p className="text-[11px] text-red-600 dark:text-red-400 uppercase font-semibold tracking-wider">
+          <div className="p-3.5 rounded-2xl bg-white dark:bg-[#161A19] border border-[#E2E8F0]/30 dark:border-[#334155]/30 flex items-center justify-between gap-2">
+            <div className="min-w-0">
+              <p className="text-[11px] text-red-600 dark:text-red-400 uppercase font-semibold tracking-wider truncate">
                 Access Denied
               </p>
               <p className="text-xl font-bold font-mono text-red-600 dark:text-red-400 mt-0.5">
                 {metrics.denied}
               </p>
             </div>
-            <Lock className="w-5 h-5 text-red-600 dark:text-red-400" />
+            <Lock className="w-5 h-5 text-red-600 dark:text-red-400 shrink-0" />
           </div>
 
-          <div className="p-3.5 rounded-2xl bg-white dark:bg-[#161A19] border border-[#E2E8F0]/30 dark:border-[#334155]/30 flex items-center justify-between">
-            <div>
-              <p className="text-[11px] text-amber-600 dark:text-amber-400 uppercase font-semibold tracking-wider">
+          <div className="p-3.5 rounded-2xl bg-white dark:bg-[#161A19] border border-[#E2E8F0]/30 dark:border-[#334155]/30 flex items-center justify-between gap-2">
+            <div className="min-w-0">
+              <p className="text-[11px] text-amber-600 dark:text-amber-400 uppercase font-semibold tracking-wider truncate">
                 Approval Gated
               </p>
               <p className="text-xl font-bold font-mono text-amber-600 dark:text-amber-400 mt-0.5">
                 {metrics.approvalGated}
               </p>
             </div>
-            <ShieldAlert className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+            <ShieldAlert className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0" />
           </div>
 
-          <div className="p-3.5 rounded-2xl bg-white dark:bg-[#161A19] border border-[#E2E8F0]/30 dark:border-[#334155]/30 flex items-center justify-between">
-            <div>
-              <p className="text-[11px] text-[#475569] dark:text-[#94A3B8] uppercase font-semibold tracking-wider">
+          <div className="p-3.5 rounded-2xl bg-white dark:bg-[#161A19] border border-[#E2E8F0]/30 dark:border-[#334155]/30 flex items-center justify-between gap-2">
+            <div className="min-w-0">
+              <p className="text-[11px] text-[#475569] dark:text-[#94A3B8] uppercase font-semibold tracking-wider truncate">
                 Active Actors
               </p>
               <p className="text-xl font-bold font-mono text-[#0F172A] dark:text-[#F1F5F9] mt-0.5">
                 {metrics.actors}
               </p>
             </div>
-            <UserCheck className="w-5 h-5 text-[#00695C] dark:text-[#80D5C4]" />
+            <UserCheck className="w-5 h-5 text-[#00695C] dark:text-[#80D5C4] shrink-0" />
           </div>
         </div>
 
         {/* Search and Filters Toolbar */}
         <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
           {/* Search bar */}
-          <div className="relative flex-1 min-w-[260px] max-w-md">
+          <div className="relative min-w-0 w-full sm:flex-1 max-w-md">
             <Search className="w-4 h-4 text-[#475569] dark:text-[#94A3B8] absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
@@ -331,13 +331,14 @@ export const ActivityLogsView: React.FC = () => {
                 setSearchQuery(e.target.value);
                 setCurrentPage(1);
               }}
-              className="w-full h-11 pl-10 pr-9 text-xs bg-[#F1F5F4] dark:bg-[#161A19] text-[#0F172A] dark:text-[#F1F5F9] rounded-full border border-transparent focus:border-[#00695C] focus:ring-2 focus:ring-[#00695C]/20 focus:outline-none placeholder-[#475569]"
+              className="w-full min-h-[44px] pl-10 pr-9 text-base sm:text-xs bg-[#F1F5F4] dark:bg-[#161A19] text-[#0F172A] dark:text-[#F1F5F9] rounded-full border border-transparent focus:border-[#00695C] focus:ring-2 focus:ring-[#00695C]/20 focus:outline-none placeholder-[#475569]"
             />
             {searchQuery && (
               <button
                 type="button"
                 onClick={() => setSearchQuery('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-[#475569] hover:text-[#0F172A] rounded-full"
+                aria-label="Clear search"
+                className="absolute right-2 top-1/2 -translate-y-1/2 min-w-[36px] min-h-[36px] flex items-center justify-center text-[#475569] hover:text-[#0F172A] rounded-full"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
@@ -345,7 +346,7 @@ export const ActivityLogsView: React.FC = () => {
           </div>
 
           {/* Quick Filter Selectors */}
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
             {/* Category selector */}
             <select
               value={categoryFilter}
@@ -354,7 +355,7 @@ export const ActivityLogsView: React.FC = () => {
                 setCurrentPage(1);
               }}
               aria-label="Filter by event category"
-              className="h-10 px-3 text-xs font-medium rounded-full dark:bg-[#161A19] border-[#E2E8F0]/50 dark:border-[#334155]/50 focus:ring-[#00695C]/30 m3-select-bare bg-transparent border-none"
+              className="min-h-[40px] px-3 text-base sm:text-xs font-medium rounded-full dark:bg-[#161A19] border-[#E2E8F0]/50 dark:border-[#334155]/50 focus:ring-[#00695C]/30 m3-select-bare bg-transparent border-none"
             >
               <option value="all">All Categories</option>
               <option value="security">Security &amp; Denials</option>
@@ -372,7 +373,7 @@ export const ActivityLogsView: React.FC = () => {
                 setCurrentPage(1);
               }}
               aria-label="Filter by user role"
-              className="h-10 px-3 text-xs font-medium rounded-full dark:bg-[#161A19] border-[#E2E8F0]/50 dark:border-[#334155]/50 focus:ring-[#00695C]/30 m3-select-bare bg-transparent border-none"
+              className="min-h-[40px] px-3 text-base sm:text-xs font-medium rounded-full dark:bg-[#161A19] border-[#E2E8F0]/50 dark:border-[#334155]/50 focus:ring-[#00695C]/30 m3-select-bare bg-transparent border-none"
             >
               <option value="all">All Roles</option>
               <option value="owner">Owner</option>
@@ -391,7 +392,7 @@ export const ActivityLogsView: React.FC = () => {
                 setCurrentPage(1);
               }}
               aria-label="Filter by authorization status"
-              className="h-10 px-3 text-xs font-medium rounded-full dark:bg-[#161A19] border-[#E2E8F0]/50 dark:border-[#334155]/50 focus:ring-[#00695C]/30 m3-select-bare bg-transparent border-none"
+              className="min-h-[40px] px-3 text-base sm:text-xs font-medium rounded-full dark:bg-[#161A19] border-[#E2E8F0]/50 dark:border-[#334155]/50 focus:ring-[#00695C]/30 m3-select-bare bg-transparent border-none"
             >
               <option value="all">All Statuses</option>
               <option value="denied">Access Denied Only</option>
@@ -403,7 +404,7 @@ export const ActivityLogsView: React.FC = () => {
       </div>
 
       {/* Main Table Content */}
-      <div className="flex-1 p-4 lg:p-6 overflow-hidden flex flex-col">
+      <div className="flex-1 min-h-0 p-4 lg:p-6 overflow-hidden flex flex-col">
         {isLoading ? (
           <div className="space-y-3 flex-1 overflow-hidden">
             <SkeletonBox className="h-12 w-full" rounded="rounded-2xl" />
@@ -454,7 +455,7 @@ export const ActivityLogsView: React.FC = () => {
           <div className="flex-1 flex flex-col bg-white dark:bg-[#161A19] rounded-3xl border border-[#E2E8F0]/40 dark:border-[#334155]/40 overflow-hidden shadow-xs">
             {/* Scrollable Table Container */}
             <div className="flex-1 overflow-auto">
-              <table className="w-full text-left border-collapse text-xs">
+              <table className="w-full min-w-[680px] text-left border-collapse text-xs tabular-nums">
                 {/* Table Header */}
                 <thead className="sticky top-0 z-10 bg-[#F1F5F4] dark:bg-[#1E293B] text-[#475569] dark:text-[#94A3B8] font-semibold border-b border-[#E2E8F0]/40 dark:border-[#334155]/40 uppercase text-[10px] tracking-wider">
                   <tr>
@@ -566,7 +567,7 @@ export const ActivityLogsView: React.FC = () => {
             </div>
 
             {/* Table Pagination Footer */}
-            <div className="p-3 px-4 bg-[#F8FAF9] dark:bg-[#161A19] border-t border-[#E2E8F0]/30 dark:border-[#334155]/30 flex items-center justify-between text-xs shrink-0">
+            <div className="p-3 px-4 bg-[#F8FAF9] dark:bg-[#161A19] border-t border-[#E2E8F0]/30 dark:border-[#334155]/30 flex flex-wrap items-center justify-between gap-2 text-xs shrink-0 tabular-nums">
               <span className="text-[#475569] dark:text-[#94A3B8]">
                 Showing {Math.min((currentPage - 1) * pageSize + 1, totalCount)} -{' '}
                 {Math.min(currentPage * pageSize, totalCount)} of {totalCount} events
@@ -577,7 +578,7 @@ export const ActivityLogsView: React.FC = () => {
                   type="button"
                   onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                   disabled={currentPage === 1}
-                  className="px-3 py-1 rounded-full border border-[#E2E8F0] dark:border-[#334155] text-xs font-medium disabled:opacity-40"
+                  className="min-h-[40px] px-3.5 py-1.5 rounded-full border border-[#E2E8F0] dark:border-[#334155] text-xs font-medium disabled:opacity-40"
                 >
                   Previous
                 </button>
@@ -588,7 +589,7 @@ export const ActivityLogsView: React.FC = () => {
                   type="button"
                   onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                   disabled={currentPage === totalPages}
-                  className="px-3 py-1 rounded-full border border-[#E2E8F0] dark:border-[#334155] text-xs font-medium disabled:opacity-40"
+                  className="min-h-[40px] px-3.5 py-1.5 rounded-full border border-[#E2E8F0] dark:border-[#334155] text-xs font-medium disabled:opacity-40"
                 >
                   Next
                 </button>

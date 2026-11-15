@@ -78,18 +78,18 @@ export const ReportsView: React.FC = () => {
 
         <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-xs text-slate-700 dark:text-slate-300 mb-6">
           <p className="font-semibold mb-2">Want to evaluate the Reports module?</p>
-          <div className="flex justify-center space-x-2">
+          <div className="flex flex-wrap justify-center gap-2">
             <button
               onClick={() => handleRoleSwitch('tl')}
               disabled={isSwitching}
-              className="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#1E293B] text-white hover:bg-[#162A45] disabled:opacity-50"
+              className="min-h-[44px] px-4 py-2 rounded-lg text-xs font-bold bg-[#1E293B] text-white hover:bg-[#162A45] disabled:opacity-50"
             >
               {isSwitching ? 'Switching...' : 'Switch to Team Lead'}
             </button>
             <button
               onClick={() => handleRoleSwitch('owner')}
               disabled={isSwitching}
-              className="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#00695C] text-white hover:bg-[#235b4c] disabled:opacity-50"
+              className="min-h-[44px] px-4 py-2 rounded-lg text-xs font-bold bg-[#00695C] text-white hover:bg-[#235b4c] disabled:opacity-50"
             >
               {isSwitching ? 'Switching...' : 'Switch to Owner'}
             </button>
@@ -139,7 +139,7 @@ export const ReportsView: React.FC = () => {
       </div>
 
       {/* KPI Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4 tabular-nums">
         {/* KPI 1: Total Leads */}
         <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
           <div className="flex items-center justify-between text-slate-500 text-xs mb-1">
@@ -192,9 +192,9 @@ export const ReportsView: React.FC = () => {
       {/* Charts Section: Bar Chart & Line Chart */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Chart 1: Bar Chart of Calls per Rep */}
-        <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs flex flex-col">
-          <div className="flex items-center justify-between mb-4">
-            <div>
+        <div className="bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs flex flex-col min-w-0">
+          <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+            <div className="min-w-0">
               <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">
                 Calls Made per Telecalling Rep
               </h3>
@@ -202,12 +202,12 @@ export const ReportsView: React.FC = () => {
                 Comparison of outbound calls and converted deals per sales executive
               </p>
             </div>
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 whitespace-nowrap shrink-0">
               Live Data
             </span>
           </div>
 
-          <div className="h-64 w-full">
+          <div className="h-56 sm:h-64 w-full min-w-0">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={stats.callsPerRep} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" opacity={0.15} />
@@ -231,9 +231,9 @@ export const ReportsView: React.FC = () => {
         </div>
 
         {/* Chart 2: Line Chart of Leads by Stage Over Time */}
-        <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs flex flex-col">
-          <div className="flex items-center justify-between mb-4">
-            <div>
+        <div className="bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs flex flex-col min-w-0">
+          <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+            <div className="min-w-0">
               <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">
                 Pipeline Growth Over Time (Last 7 Days)
               </h3>
@@ -241,12 +241,12 @@ export const ReportsView: React.FC = () => {
                 Daily volume of new leads entering stages
               </p>
             </div>
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 whitespace-nowrap shrink-0">
               Daily Trend
             </span>
           </div>
 
-          <div className="h-64 w-full">
+          <div className="h-56 sm:h-64 w-full min-w-0">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={stats.leadsOverTime} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" opacity={0.15} />
@@ -291,7 +291,7 @@ export const ReportsView: React.FC = () => {
             </div>
           </div>
 
-          <div className="h-64 w-full">
+          <div className="h-56 sm:h-64 w-full min-w-0">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={stats.hourlyCallActivity} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" opacity={0.15} />
@@ -335,7 +335,7 @@ export const ReportsView: React.FC = () => {
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs border-collapse">
+            <table className="w-full min-w-[680px] text-left text-xs border-collapse tabular-nums">
               <thead>
                 <tr className="bg-slate-50 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 font-semibold border-b border-slate-200 dark:border-slate-800">
                   <th className="py-3 px-4 w-16 text-center">Rank</th>

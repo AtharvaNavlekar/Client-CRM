@@ -47,7 +47,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ view, setView }) => {
     <div className="flex flex-col justify-between h-full w-full max-w-md mx-auto py-2">
       {/* Top Header: Brand Identity & Nav Tabs */}
       <div>
-        <div className="flex items-center justify-between pb-8">
+        <div className="flex flex-wrap items-center justify-between gap-3 pb-6 sm:pb-8">
           <AuthBrand />
           
             {/* Top Navigation Tabs: Sign Up / Log In */}
@@ -55,7 +55,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ view, setView }) => {
             <button
               type="button"
               onClick={() => setView('signup')}
-              className={`px-4 sm:px-5 py-1.5 sm:py-2 rounded-full font-medium text-xs sm:text-sm transition-all duration-200 motion-reduce:transition-none cursor-pointer ${
+              className={`min-h-[40px] px-4 sm:px-5 py-1.5 sm:py-2 rounded-full font-medium text-xs sm:text-sm transition-all duration-200 motion-reduce:transition-none cursor-pointer ${
                 view === 'signup'
                   ? 'bg-black text-white shadow-sm'
                   : 'bg-white border border-slate-300 text-slate-700 hover:border-slate-500'
@@ -66,7 +66,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ view, setView }) => {
             <button
               type="button"
               onClick={() => setView('login')}
-              className={`px-4 sm:px-5 py-1.5 sm:py-2 rounded-full font-medium text-xs sm:text-sm transition-all duration-200 motion-reduce:transition-none cursor-pointer ${
+              className={`min-h-[40px] px-4 sm:px-5 py-1.5 sm:py-2 rounded-full font-medium text-xs sm:text-sm transition-all duration-200 motion-reduce:transition-none cursor-pointer ${
                 view === 'login'
                   ? 'bg-black text-white shadow-sm'
                   : 'bg-white border border-slate-300 text-slate-700 hover:border-slate-500'
@@ -118,7 +118,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ view, setView }) => {
                 placeholder="Enter your work email"
                 autoComplete="email"
                 required
-                className="w-full pl-4 pr-11 py-3 text-xs sm:text-sm rounded-xl border border-cyan-400/80 bg-white text-slate-900 placeholder-slate-400 hover:border-cyan-500 hover:shadow-xs focus:outline-none focus:ring-2 focus:ring-[#075B65]/20 focus:border-[#075B65] focus:shadow-sm origin-center motion-safe:transition-all motion-safe:duration-200 motion-safe:ease-in-out motion-safe:focus:scale-[1.012] motion-reduce:transition-none motion-reduce:transform-none shadow-xs login-input"
+                className="w-full min-h-[44px] pl-4 pr-11 py-3 text-base sm:text-sm rounded-xl border border-cyan-400/80 bg-white text-slate-900 placeholder-slate-400 hover:border-cyan-500 hover:shadow-xs focus:outline-none focus:ring-2 focus:ring-[#075B65]/20 focus:border-[#075B65] focus:shadow-sm origin-center motion-safe:transition-all motion-safe:duration-200 motion-safe:ease-in-out motion-safe:focus:scale-[1.012] motion-reduce:transition-none motion-reduce:transform-none shadow-xs login-input"
               />
               <Mail className="w-4 h-4 text-cyan-600 absolute right-3.5 pointer-events-none transition-colors duration-200 motion-reduce:transition-none" />
             </div>
@@ -138,12 +138,12 @@ export const LoginForm: React.FC<LoginFormProps> = ({ view, setView }) => {
                 placeholder="Enter your password"
                 autoComplete="current-password"
                 required
-                className="w-full pl-4 pr-11 py-3 text-xs sm:text-sm rounded-xl border border-cyan-400/80 bg-white text-slate-900 placeholder-slate-400 hover:border-cyan-500 hover:shadow-xs focus:outline-none focus:ring-2 focus:ring-[#075B65]/20 focus:border-[#075B65] focus:shadow-sm origin-center motion-safe:transition-all motion-safe:duration-200 motion-safe:ease-in-out motion-safe:focus:scale-[1.012] motion-reduce:transition-none motion-reduce:transform-none shadow-xs login-input"
+                className="w-full min-h-[44px] pl-4 pr-12 py-3 text-base sm:text-sm rounded-xl border border-cyan-400/80 bg-white text-slate-900 placeholder-slate-400 hover:border-cyan-500 hover:shadow-xs focus:outline-none focus:ring-2 focus:ring-[#075B65]/20 focus:border-[#075B65] focus:shadow-sm origin-center motion-safe:transition-all motion-safe:duration-200 motion-safe:ease-in-out motion-safe:focus:scale-[1.012] motion-reduce:transition-none motion-reduce:transform-none shadow-xs login-input"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3.5 text-slate-400 hover:text-slate-600 focus:outline-none p-1 cursor-pointer transition-colors duration-150 motion-reduce:transition-none"
+                className="absolute right-2 min-w-[40px] min-h-[40px] flex items-center justify-center text-slate-400 hover:text-slate-600 focus:outline-none p-1 cursor-pointer transition-colors duration-150 motion-reduce:transition-none"
                 aria-label={showPassword ? 'Hide password' : 'Show password'}
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -153,7 +153,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ view, setView }) => {
 
           {/* Remember Me and Forgot Password */}
           <div className="flex items-center justify-between pt-1">
-            <label className="flex items-center space-x-2.5 cursor-pointer select-none group">
+            <label className="flex items-center space-x-2.5 min-h-[40px] cursor-pointer select-none group">
               <input
                 type="checkbox"
                 checked={rememberMe}
@@ -167,7 +167,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ view, setView }) => {
             <button
               type="button"
               onClick={() => setView('forgot')}
-              className="text-xs text-[#075B65] hover:text-[#053e45] font-semibold transition-colors duration-150 motion-reduce:transition-none cursor-pointer"
+              className="min-h-[40px] inline-flex items-center text-xs text-[#075B65] hover:text-[#053e45] font-semibold transition-colors duration-150 motion-reduce:transition-none cursor-pointer"
             >
               Forgot password?
             </button>

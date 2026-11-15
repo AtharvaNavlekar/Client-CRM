@@ -66,7 +66,7 @@ export const LeadsTableSkeleton: React.FC = () => {
               style={{ opacity: 1 - i * 0.08 }}
             >
               <SkeletonBox className="h-4 w-4 shrink-0" rounded="rounded-sm" />
-              <div className="flex items-center space-x-3 min-w-[200px] flex-1 sm:flex-none">
+              <div className="flex items-center space-x-3 min-w-0 sm:min-w-[200px] flex-1 sm:flex-none">
                 <SkeletonBox className="h-9 w-9 shrink-0" rounded="rounded-full" />
                 <div className="space-y-1.5 flex-1">
                   <SkeletonBox className="h-3.5 w-28" rounded="rounded-full" />
@@ -125,9 +125,9 @@ export const CallsViewSkeleton: React.FC = () => {
 
       {/* Calls List Skeleton */}
       <div className="flex-1 bg-white dark:bg-[#161A19] rounded-[24px] border border-[#E2E8F0] dark:border-[#334155] p-4 flex flex-col overflow-hidden space-y-3 shadow-xs">
-        <div className="flex items-center justify-between pb-3 border-b border-[#E2E8F0] dark:border-[#334155] shrink-0">
+        <div className="flex items-center justify-between gap-2 pb-3 border-b border-[#E2E8F0] dark:border-[#334155] shrink-0">
           <SkeletonBox className="h-5 w-36" rounded="rounded-full" />
-          <SkeletonBox className="h-9 w-64" rounded="rounded-full" />
+          <SkeletonBox className="h-9 w-32 sm:w-64" rounded="rounded-full" />
         </div>
 
         <div className="space-y-2.5 flex-1 overflow-hidden">
@@ -162,10 +162,10 @@ export const KanbanBoardSkeleton: React.FC = () => {
   return (
     <div className="flex-1 flex flex-col h-full bg-[#F8FAF9] dark:bg-[#111514] p-4 lg:p-6 overflow-hidden space-y-4 select-none">
       {/* Header controls skeleton */}
-      <div className="flex items-center justify-between shrink-0">
-        <div className="space-y-1">
+      <div className="flex items-center justify-between gap-2 shrink-0">
+        <div className="space-y-1 min-w-0">
           <SkeletonBox className="h-6 w-44" rounded="rounded-full" />
-          <SkeletonBox className="h-3 w-64" rounded="rounded-full" />
+          <SkeletonBox className="h-3 w-40 sm:w-64" rounded="rounded-full" />
         </div>
         <div className="flex items-center space-x-2">
           <SkeletonBox className="h-10 w-32" rounded="rounded-full" />

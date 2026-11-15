@@ -201,39 +201,39 @@ Bhavna Mehra,+91 98444 55667,Google Ads,Health insurance plan for senior citizen
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-xs animate-in fade-in">
       <div
         id="modal-bulk-import"
         ref={modalRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-bulk-import-title"
-        className="bg-white dark:bg-slate-900 w-full max-w-2xl rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden flex flex-col max-h-[90vh] outline-none"
+        className="bg-white dark:bg-slate-900 w-full max-w-2xl rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden flex flex-col max-h-[90dvh] outline-none"
         tabIndex={-1}
       >
         {/* Header */}
-        <div className="px-6 py-4 bg-[#1E293B] text-white flex items-center justify-between">
-          <div className="flex items-center space-x-2.5">
-            <div className="w-8 h-8 rounded-lg bg-[#00695C] flex items-center justify-center text-white">
+        <div className="px-4 sm:px-6 py-4 bg-[#1E293B] text-white flex items-center justify-between shrink-0">
+          <div className="flex items-center space-x-2.5 min-w-0">
+            <div className="w-8 h-8 rounded-lg bg-[#00695C] flex items-center justify-center text-white shrink-0">
               <FileSpreadsheet className="w-4 h-4" />
             </div>
-            <div>
-              <h2 id="modal-bulk-import-title" className="text-base font-bold">Bulk CSV Lead Importer</h2>
-              <p className="text-xs text-slate-300">Map columns and import hundreds of Indian SMB prospects</p>
+            <div className="min-w-0">
+              <h2 id="modal-bulk-import-title" className="text-base font-bold truncate">Bulk CSV Lead Importer</h2>
+              <p className="text-xs text-slate-300 truncate">Map columns and import hundreds of Indian SMB prospects</p>
             </div>
           </div>
           <button
             type="button"
             onClick={onClose}
             aria-label="Close bulk import dialog"
-            className="p-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white transition-colors"
+            className="min-w-[40px] min-h-[40px] flex items-center justify-center rounded-lg text-slate-300 hover:text-white hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white transition-colors shrink-0"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Body */}
-        <div className="p-6 overflow-y-auto space-y-4 flex-1">
+        <div className="p-4 sm:p-6 overflow-y-auto space-y-4 flex-1">
           {error && (
             <div className="p-4 rounded-xl bg-rose-50 text-rose-700 dark:bg-rose-950/50 dark:text-rose-300 border border-rose-200 dark:border-rose-900 flex items-start space-x-3 text-sm">
               <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
@@ -306,7 +306,7 @@ Bhavna Mehra,+91 98444 55667,Google Ads,Health insurance plan for senior citizen
                   parseCsv(e.target.value);
                 }
               }}
-              className="w-full p-3 font-mono text-xs bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#00695C]"
+              className="w-full p-3 font-mono text-base sm:text-xs bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#00695C]"
             />
           </div>
 
@@ -316,7 +316,7 @@ Bhavna Mehra,+91 98444 55667,Google Ads,Health insurance plan for senior citizen
               <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-3">
                 Map CSV Columns to Lead Fields
               </h3>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
                   <label className="block text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1">
                     Customer Name *
@@ -418,11 +418,11 @@ Bhavna Mehra,+91 98444 55667,Google Ads,Health insurance plan for senior citizen
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-4 bg-slate-50 dark:bg-slate-800/80 border-t border-slate-200 dark:border-slate-700 flex items-center justify-end space-x-2.5">
+        <div className="px-4 sm:px-6 py-3.5 sm:py-4 bg-slate-50 dark:bg-slate-800/80 border-t border-slate-200 dark:border-slate-700 flex flex-wrap items-center justify-end gap-2.5 shrink-0">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 transition-colors"
+            className="min-h-[44px] px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 transition-colors"
           >
             Cancel
           </button>
@@ -431,7 +431,7 @@ Bhavna Mehra,+91 98444 55667,Google Ads,Health insurance plan for senior citizen
             type="button"
             onClick={handleExecuteImport}
             disabled={isProcessing || !csvText}
-            className="px-5 py-2 rounded-xl text-xs font-bold text-white bg-[#00695C] hover:bg-[#255e4e] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00695C] focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 disabled:opacity-50 transition-all flex items-center space-x-1.5 shadow-xs"
+            className="min-h-[44px] px-5 py-2 rounded-xl text-xs font-bold text-white bg-[#00695C] hover:bg-[#255e4e] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00695C] focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 disabled:opacity-50 transition-all flex items-center space-x-1.5 shadow-xs"
           >
             <Check className="w-4 h-4" />
             <span>{isProcessing ? 'Importing Leads...' : 'Import Leads to Pipeline'}</span>

@@ -425,13 +425,13 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
       {/* Loading Skeleton */}
       {isLoading && (
-        <div className="p-4 sm:p-6 space-y-6 max-w-7xl mx-auto w-full">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        <div className="p-3 sm:p-4 lg:p-6 space-y-5 sm:space-y-6 max-w-7xl mx-auto w-full">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 sm:gap-4">
             {[1, 2, 3, 4, 5].map((i) => (
               <div key={i} className="h-28 bg-[#F1F5F4] dark:bg-[#161A19] rounded-2xl animate-pulse" />
             ))}
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
             <div className="lg:col-span-5 h-72 bg-[#F1F5F4] dark:bg-[#161A19] rounded-2xl animate-pulse" />
             <div className="lg:col-span-7 h-72 bg-[#F1F5F4] dark:bg-[#161A19] rounded-2xl animate-pulse" />
           </div>
@@ -440,9 +440,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
       {/* Main Dashboard Canvas */}
       {!isLoading && (
-        <div className="p-4 sm:p-6 space-y-6 max-w-7xl mx-auto w-full">
+        <div className="p-3 sm:p-4 lg:p-6 space-y-5 sm:space-y-6 max-w-7xl mx-auto w-full">
           {/* 2. Primary KPI Row */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 sm:gap-4">
             <StatCard
               label="Total Leads"
               value={pipelineMetrics.totalLeads}
@@ -595,7 +595,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                     No rep activity recorded for {activityRange.toLowerCase()}.
                   </div>
                 ) : (
-                  <table className="w-full text-left text-xs border-collapse">
+                  <table className="w-full min-w-[460px] text-left text-xs border-collapse tabular-nums">
                     <thead>
                       <tr className="border-b border-[#E2E8F0] dark:border-[#334155] text-[#475569] dark:text-[#94A3B8] font-semibold uppercase tracking-wider text-[11px]">
                         <th className="pb-2.5 px-2">Assignee</th>
@@ -667,7 +667,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                   <CardDescription>Upcoming, late, completed and cancelled callbacks</CardDescription>
                 </div>
 
-                <div className="w-48">
+                <div className="w-full sm:w-48">
                   <SearchInput
                     value={followUpSearch}
                     onChange={setFollowUpSearch}
@@ -683,7 +683,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                     No follow-ups or callbacks scheduled.
                   </div>
                 ) : (
-                  <table className="w-full text-left text-xs border-collapse">
+                  <table className="w-full min-w-[440px] text-left text-xs border-collapse tabular-nums">
                     <thead>
                       <tr className="border-b border-[#E2E8F0] dark:border-[#334155] text-[#475569] dark:text-[#94A3B8] font-semibold uppercase tracking-wider text-[11px]">
                         <th className="pb-2.5 px-2">Assignee</th>
@@ -762,10 +762,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               </CardHeader>
 
               <CardContent className="space-y-3.5">
-                <div className="p-3 rounded-xl bg-[#F8FAF9] dark:bg-[#111514] border border-[#E2E8F0] dark:border-[#334155] flex items-center justify-between">
-                  <div className="flex items-center gap-2.5">
-                    <ShieldCheck className="w-4 h-4 text-[#00695C] dark:text-[#80D5C4]" />
-                    <div>
+                <div className="p-3 rounded-xl bg-[#F8FAF9] dark:bg-[#111514] border border-[#E2E8F0] dark:border-[#334155] flex flex-wrap items-center justify-between gap-2">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <ShieldCheck className="w-4 h-4 text-[#00695C] dark:text-[#80D5C4] shrink-0" />
+                    <div className="min-w-0">
                       <div className="text-xs font-semibold text-[#0F172A] dark:text-[#F1F5F9]">
                         Quiet Hours Window
                       </div>
@@ -777,10 +777,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                   <StatusBadge status="COMPLIANT" tone="success" size="sm" />
                 </div>
 
-                <div className="p-3 rounded-xl bg-[#F8FAF9] dark:bg-[#111514] border border-[#E2E8F0] dark:border-[#334155] flex items-center justify-between">
-                  <div className="flex items-center gap-2.5">
-                    <Clock className="w-4 h-4 text-[#00695C] dark:text-[#80D5C4]" />
-                    <div>
+                <div className="p-3 rounded-xl bg-[#F8FAF9] dark:bg-[#111514] border border-[#E2E8F0] dark:border-[#334155] flex flex-wrap items-center justify-between gap-2">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <Clock className="w-4 h-4 text-[#00695C] dark:text-[#80D5C4] shrink-0" />
+                    <div className="min-w-0">
                       <div className="text-xs font-semibold text-[#0F172A] dark:text-[#F1F5F9]">
                         Contact Frequency Limits
                       </div>
@@ -792,10 +792,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                   <StatusBadge status="ENFORCED" tone="info" size="sm" />
                 </div>
 
-                <div className="p-3 rounded-xl bg-[#F8FAF9] dark:bg-[#111514] border border-[#E2E8F0] dark:border-[#334155] flex items-center justify-between">
-                  <div className="flex items-center gap-2.5">
-                    <CheckCircle2 className="w-4 h-4 text-[#00695C] dark:text-[#80D5C4]" />
-                    <div>
+                <div className="p-3 rounded-xl bg-[#F8FAF9] dark:bg-[#111514] border border-[#E2E8F0] dark:border-[#334155] flex flex-wrap items-center justify-between gap-2">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <CheckCircle2 className="w-4 h-4 text-[#00695C] dark:text-[#80D5C4] shrink-0" />
+                    <div className="min-w-0">
                       <div className="text-xs font-semibold text-[#0F172A] dark:text-[#F1F5F9]">
                         DND / Fatigue Cap Blocks
                       </div>
@@ -804,7 +804,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                       </div>
                     </div>
                   </div>
-                  <span className="font-mono text-xs font-bold text-[#00695C] dark:text-[#80D5C4]">
+                  <span className="font-mono tabular-nums text-xs font-bold text-[#00695C] dark:text-[#80D5C4]">
                     0 Violations
                   </span>
                 </div>
@@ -890,9 +890,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                     return (
                       <div
                         key={lead.id}
-                        className="p-3 rounded-xl bg-[#F8FAF9] dark:bg-[#111514] border border-[#E2E8F0] dark:border-[#334155] flex items-center justify-between gap-3 text-xs"
+                        className="p-3 rounded-xl bg-[#F8FAF9] dark:bg-[#111514] border border-[#E2E8F0] dark:border-[#334155] flex flex-wrap sm:flex-nowrap items-center justify-between gap-2.5 sm:gap-3 text-xs"
                       >
-                        <div className="min-w-0">
+                        <div className="min-w-0 flex-1">
                           <div className="font-semibold text-[#0F172A] dark:text-[#F1F5F9] truncate">
                             {lead.name}
                           </div>

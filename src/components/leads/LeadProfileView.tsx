@@ -350,34 +350,34 @@ export const LeadProfileView: React.FC<LeadProfileViewProps> = ({
   return (
     <div className="flex-1 flex flex-col h-full min-w-0 bg-[#F8FAF9] dark:bg-[#111514] overflow-hidden">
       {/* 1. Profile Top Breadcrumb & Quick Actions Bar */}
-      <header className="shrink-0 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 sm:px-6 py-3">
-        <div className="flex flex-wrap items-center justify-between gap-3">
+      <header className="shrink-0 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-3 sm:px-6 py-2.5 sm:py-3">
+        <div className="flex flex-wrap items-center justify-between gap-2.5 sm:gap-3">
           {/* Breadcrumbs and Lead Identification */}
-          <div className="flex items-center space-x-3 min-w-0">
+          <div className="flex items-center space-x-2 sm:space-x-3 min-w-0">
             <button
               type="button"
               onClick={onBack}
               aria-label="Back to Leads list"
-              className="p-1.5 rounded-lg text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00695C]"
+              className="min-w-[40px] min-h-[40px] p-1.5 rounded-lg flex items-center justify-center text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00695C] shrink-0"
             >
               <ArrowLeft className="w-5 h-5" />
             </button>
 
-            <nav aria-label="Breadcrumb" className="flex items-center space-x-1.5 text-xs">
+            <nav aria-label="Breadcrumb" className="flex items-center space-x-1.5 text-xs min-w-0">
               <button
                 type="button"
                 onClick={onBack}
-                className="font-medium text-slate-500 dark:text-slate-400 hover:text-[#00695C] dark:hover:text-teal-400 transition-colors"
+                className="font-medium text-slate-500 dark:text-slate-400 hover:text-[#00695C] dark:hover:text-teal-400 transition-colors shrink-0"
               >
                 Leads
               </button>
-              <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-              <span className="font-bold text-slate-900 dark:text-slate-100 truncate max-w-[200px] sm:max-w-[320px]">
+              <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+              <span className="font-bold text-slate-900 dark:text-slate-100 truncate max-w-[130px] sm:max-w-[260px] md:max-w-[340px]">
                 {lead.name}
               </span>
             </nav>
 
-            <span className="hidden sm:inline-block px-2 py-0.5 text-[10px] font-mono font-semibold rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
+            <span className="hidden md:inline-block px-2 py-0.5 text-[10px] font-mono font-semibold rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700 shrink-0">
               ID: {lead.id}
             </span>
           </div>
@@ -388,7 +388,7 @@ export const LeadProfileView: React.FC<LeadProfileViewProps> = ({
               type="button"
               onClick={() => onStartCall(lead)}
               aria-label={`Call ${lead.name}`}
-              className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-[#00695C] text-white hover:bg-[#004D40] shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00695C] transition-colors"
+              className="min-h-[40px] inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-[#00695C] text-white hover:bg-[#004D40] shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00695C] transition-colors whitespace-nowrap shrink-0"
             >
               <Phone className="w-3.5 h-3.5" />
               <span>Call</span>
@@ -398,7 +398,7 @@ export const LeadProfileView: React.FC<LeadProfileViewProps> = ({
               type="button"
               onClick={() => onOpenWhatsApp(lead)}
               aria-label={`Open WhatsApp chat with ${lead.name}`}
-              className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-[#25D366] text-white hover:bg-[#1EBE5D] shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#25D366] transition-colors"
+              className="min-h-[40px] inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-[#25D366] text-white hover:bg-[#1EBE5D] shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#25D366] transition-colors whitespace-nowrap shrink-0"
             >
               <MessageSquare className="w-3.5 h-3.5" />
               <span>WhatsApp</span>
@@ -409,7 +409,7 @@ export const LeadProfileView: React.FC<LeadProfileViewProps> = ({
               onClick={loadFreshLead}
               title="Refresh lead record"
               aria-label="Refresh lead record"
-              className="p-1.5 rounded-xl text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+              className="min-w-[40px] min-h-[40px] p-1.5 rounded-xl flex items-center justify-center text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
             >
               <RefreshCw className="w-4 h-4" />
             </button>
@@ -620,7 +620,7 @@ export const LeadProfileView: React.FC<LeadProfileViewProps> = ({
               key={tab.id}
               type="button"
               onClick={() => setActiveTab(tab.id as any)}
-              className={`flex items-center space-x-1.5 py-3 px-2 border-b-2 text-xs font-bold whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00695C] ${
+              className={`flex items-center space-x-1.5 min-h-[44px] py-2.5 px-2.5 border-b-2 text-xs font-bold whitespace-nowrap shrink-0 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00695C] ${
                 isActive
                   ? 'border-[#00695C] text-[#00695C] dark:text-teal-400'
                   : 'border-transparent text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 hover:border-slate-300'
@@ -643,7 +643,7 @@ export const LeadProfileView: React.FC<LeadProfileViewProps> = ({
       </nav>
 
       {/* 4. Tab Content Body (Scrollable Container) */}
-      <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
+      <div className="flex-1 overflow-y-auto p-3 sm:p-6 pb-8 sm:pb-10 space-y-6">
         {/* ========================================================================= */}
         {/* TAB 1: OVERVIEW */}
         {/* ========================================================================= */}
@@ -1259,7 +1259,7 @@ export const LeadProfileView: React.FC<LeadProfileViewProps> = ({
                 value={notesInput}
                 onChange={(e) => setNotesInput(e.target.value)}
                 placeholder="Enter client talking points, product interests, budget objections, or follow-up notes..."
-                className="w-full p-4 text-xs bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-2xl text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#00695C] leading-relaxed"
+                className="w-full p-4 text-base sm:text-xs bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-2xl text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#00695C] leading-relaxed"
               />
 
               <div className="flex items-center justify-end space-x-3">
@@ -1332,7 +1332,7 @@ export const LeadProfileView: React.FC<LeadProfileViewProps> = ({
                 type="datetime-local"
                 value={callbackInput}
                 onChange={(e) => setCallbackInput(e.target.value)}
-                className="w-full text-xs p-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-[#00695C]"
+                className="w-full min-h-[44px] text-base sm:text-xs p-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-[#00695C]"
               />
 
               <div className="flex items-center space-x-2 pt-2">

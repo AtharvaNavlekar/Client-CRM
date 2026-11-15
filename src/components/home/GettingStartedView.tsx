@@ -57,7 +57,7 @@ export const GettingStartedView: React.FC<GettingStartedViewProps> = ({
   return (
     <div className="flex-1 flex flex-col lg:flex-row h-full bg-slate-50 dark:bg-slate-950 overflow-y-auto">
       {/* Main Content Area */}
-      <div className="flex-1 p-5 space-y-6 max-w-6xl">
+      <div className="flex-1 min-w-0 p-4 sm:p-5 space-y-6 max-w-6xl">
         {/* Welcome Header */}
         <div className="space-y-1">
           <div className="inline-flex items-center space-x-1.5 text-xs font-bold text-[#00695C] dark:text-emerald-400 uppercase tracking-wider bg-emerald-50 dark:bg-emerald-950 px-2.5 py-1 rounded-md border border-emerald-200 dark:border-emerald-800/60">
@@ -82,7 +82,8 @@ export const GettingStartedView: React.FC<GettingStartedViewProps> = ({
               <button
                 type="button"
                 onClick={scrollPrev}
-                className="p-1 rounded-md border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500"
+                aria-label="Scroll Left"
+                className="min-w-[40px] min-h-[40px] sm:min-w-0 sm:min-h-0 p-2 sm:p-1 rounded-md border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 flex items-center justify-center"
                 title="Scroll Left"
               >
                 <ChevronLeft className="w-4 h-4" />
@@ -90,7 +91,8 @@ export const GettingStartedView: React.FC<GettingStartedViewProps> = ({
               <button
                 type="button"
                 onClick={scrollNext}
-                className="p-1 rounded-md border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500"
+                aria-label="Scroll Right"
+                className="min-w-[40px] min-h-[40px] sm:min-w-0 sm:min-h-0 p-2 sm:p-1 rounded-md border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 flex items-center justify-center"
                 title="Scroll Right"
               >
                 <ChevronRight className="w-4 h-4" />
@@ -103,7 +105,7 @@ export const GettingStartedView: React.FC<GettingStartedViewProps> = ({
             className="flex items-stretch space-x-3.5 overflow-x-auto pb-2 scrollbar-none snap-x"
           >
             {/* Card 1: Excel Upload */}
-            <div className="w-72 shrink-0 p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xs flex flex-col justify-between snap-start">
+            <div className="w-[min(18rem,82vw)] sm:w-72 shrink-0 p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xs flex flex-col justify-between snap-start">
               <div>
                 <div className="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 flex items-center justify-center mb-3 border border-emerald-200 dark:border-emerald-800/60">
                   <FileSpreadsheet className="w-5 h-5" />
@@ -114,7 +116,7 @@ export const GettingStartedView: React.FC<GettingStartedViewProps> = ({
               <button
                 type="button"
                 onClick={() => setModalType('excel')}
-                className="mt-4 w-full py-2 px-3 text-xs font-bold rounded-lg bg-[#00695C] text-white hover:bg-[#255a4b] transition-colors flex items-center justify-center space-x-1.5"
+                className="mt-4 w-full min-h-[40px] py-2 px-3 text-xs font-bold rounded-lg bg-[#00695C] text-white hover:bg-[#255a4b] transition-colors flex items-center justify-center space-x-1.5"
               >
                 <span>Import Leads</span>
                 <ChevronRight className="w-3.5 h-3.5" />
@@ -122,7 +124,7 @@ export const GettingStartedView: React.FC<GettingStartedViewProps> = ({
             </div>
 
             {/* Card 2: Reports */}
-            <div className="w-72 shrink-0 p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xs flex flex-col justify-between snap-start">
+            <div className="w-[min(18rem,82vw)] sm:w-72 shrink-0 p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xs flex flex-col justify-between snap-start">
               <div>
                 <div className="w-10 h-10 rounded-xl bg-sky-100 dark:bg-sky-950/60 text-sky-700 dark:text-sky-400 flex items-center justify-center mb-3 border border-sky-200 dark:border-sky-800/60">
                   <BarChart2 className="w-5 h-5" />
@@ -133,7 +135,7 @@ export const GettingStartedView: React.FC<GettingStartedViewProps> = ({
               <button
                 type="button"
                 onClick={onNavigateToDashboard}
-                className="mt-4 w-full py-2 px-3 text-xs font-bold rounded-lg bg-slate-800 text-white dark:bg-slate-100 dark:text-slate-900 hover:bg-slate-900 transition-colors flex items-center justify-center space-x-1.5"
+                className="mt-4 w-full min-h-[40px] py-2 px-3 text-xs font-bold rounded-lg bg-slate-800 text-white dark:bg-slate-100 dark:text-slate-900 hover:bg-slate-900 transition-colors flex items-center justify-center space-x-1.5"
               >
                 <span>View Dashboard</span>
                 <ChevronRight className="w-3.5 h-3.5" />
@@ -141,7 +143,7 @@ export const GettingStartedView: React.FC<GettingStartedViewProps> = ({
             </div>
 
             {/* Card 3: Lead Fields */}
-            <div className="w-72 shrink-0 p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xs flex flex-col justify-between snap-start">
+            <div className="w-[min(18rem,82vw)] sm:w-72 shrink-0 p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xs flex flex-col justify-between snap-start">
               <div>
                 <div className="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-400 flex items-center justify-center mb-3 border border-purple-200 dark:border-purple-800/60">
                   <Sliders className="w-5 h-5" />
@@ -152,7 +154,7 @@ export const GettingStartedView: React.FC<GettingStartedViewProps> = ({
               <button
                 type="button"
                 onClick={() => setModalType('fields')}
-                className="mt-4 w-full py-2 px-3 text-xs font-bold rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 text-slate-800 dark:text-slate-200 transition-colors flex items-center justify-center space-x-1.5"
+                className="mt-4 w-full min-h-[40px] py-2 px-3 text-xs font-bold rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 text-slate-800 dark:text-slate-200 transition-colors flex items-center justify-center space-x-1.5"
               >
                 <span>Configure Fields</span>
                 <ChevronRight className="w-3.5 h-3.5" />
@@ -160,7 +162,7 @@ export const GettingStartedView: React.FC<GettingStartedViewProps> = ({
             </div>
 
             {/* Card 4: Team Quotas & Leaderboard */}
-            <div className="w-72 shrink-0 p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xs flex flex-col justify-between snap-start">
+            <div className="w-[min(18rem,82vw)] sm:w-72 shrink-0 p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xs flex flex-col justify-between snap-start">
               <div>
                 <div className="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-400 flex items-center justify-center mb-3 border border-amber-200 dark:border-amber-800/60">
                   <Users2 className="w-5 h-5" />
@@ -171,7 +173,7 @@ export const GettingStartedView: React.FC<GettingStartedViewProps> = ({
               <button
                 type="button"
                 onClick={onNavigateToLeaderboard}
-                className="mt-4 w-full py-2 px-3 text-xs font-bold rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 text-slate-800 dark:text-slate-200 transition-colors flex items-center justify-center space-x-1.5"
+                className="mt-4 w-full min-h-[40px] py-2 px-3 text-xs font-bold rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 text-slate-800 dark:text-slate-200 transition-colors flex items-center justify-center space-x-1.5"
               >
                 <span>Leaderboard</span>
                 <ChevronRight className="w-3.5 h-3.5" />
@@ -182,14 +184,14 @@ export const GettingStartedView: React.FC<GettingStartedViewProps> = ({
 
         {/* Section 2: Integrations (Two-up cards for Facebook & Google Sheets) */}
         <div className="space-y-3">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-wrap items-center justify-between gap-2">
             <h2 className="text-xs font-bold uppercase tracking-wider text-slate-500">
               Lead Generation &amp; Spreadsheet Integrations
             </h2>
             <button
               type="button"
               onClick={() => alert('Viewing all 15+ integrations (IndiaMART, Justdial, Zapier, TradeIndia, Meta & Webhook APIs)')}
-              className="text-xs font-bold text-[#00695C] hover:underline flex items-center space-x-1"
+              className="text-xs font-bold text-[#00695C] hover:underline flex items-center space-x-1 whitespace-nowrap"
             >
               <span>Explore All Integrations</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -199,7 +201,7 @@ export const GettingStartedView: React.FC<GettingStartedViewProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Facebook Lead Ads Card */}
             <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xs space-y-3">
-              <div className="flex items-start justify-between">
+              <div className="flex items-start justify-between gap-2">
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 flex items-center justify-center border border-blue-200 dark:border-blue-800/60 font-black text-base">
                     f
@@ -238,7 +240,7 @@ export const GettingStartedView: React.FC<GettingStartedViewProps> = ({
                 <button
                   type="button"
                   onClick={() => setFbConnected(!fbConnected)}
-                  className={`px-3.5 py-1.5 text-xs font-bold rounded-lg transition-colors ${
+                  className={`min-h-[40px] sm:min-h-0 px-3.5 py-1.5 text-xs font-bold rounded-lg transition-colors ${
                     fbConnected
                       ? 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200'
                       : 'bg-[#00695C] text-white hover:bg-[#255a4b]'
@@ -251,7 +253,7 @@ export const GettingStartedView: React.FC<GettingStartedViewProps> = ({
 
             {/* Google Sheets Card */}
             <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xs space-y-3">
-              <div className="flex items-start justify-between">
+              <div className="flex items-start justify-between gap-2">
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 flex items-center justify-center border border-emerald-200 dark:border-emerald-800/60">
                     <Table className="w-5 h-5" />
@@ -290,7 +292,7 @@ export const GettingStartedView: React.FC<GettingStartedViewProps> = ({
                 <button
                   type="button"
                   onClick={() => setSheetsConnected(!sheetsConnected)}
-                  className={`px-3.5 py-1.5 text-xs font-bold rounded-lg transition-colors ${
+                  className={`min-h-[40px] sm:min-h-0 px-3.5 py-1.5 text-xs font-bold rounded-lg transition-colors ${
                     sheetsConnected
                       ? 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200'
                       : 'bg-[#00695C] text-white hover:bg-[#255a4b]'
@@ -305,7 +307,7 @@ export const GettingStartedView: React.FC<GettingStartedViewProps> = ({
       </div>
 
       {/* Side Panel: Native Apps & Proactive Support */}
-      <div className="w-full lg:w-80 border-t lg:border-t-0 lg:border-l border-slate-200 dark:border-slate-800 p-5 bg-white dark:bg-slate-900 shrink-0 space-y-5">
+      <div className="w-full lg:w-80 border-t lg:border-t-0 lg:border-l border-slate-200 dark:border-slate-800 p-4 sm:p-5 bg-white dark:bg-slate-900 shrink-0 space-y-5">
         {/* Native Apps Promotion Panel */}
         <div className="space-y-3">
           <div className="flex items-center space-x-2">
@@ -330,7 +332,7 @@ export const GettingStartedView: React.FC<GettingStartedViewProps> = ({
             <button
               type="button"
               onClick={() => setModalType('app_download')}
-              className="w-full py-1.5 px-2 text-xs font-bold rounded-lg bg-slate-900 text-white dark:bg-white dark:text-slate-900 hover:bg-black transition-colors"
+              className="w-full min-h-[40px] py-1.5 px-2 text-xs font-bold rounded-lg bg-slate-900 text-white dark:bg-white dark:text-slate-900 hover:bg-black transition-colors"
             >
               Download for Android
             </button>
@@ -348,7 +350,7 @@ export const GettingStartedView: React.FC<GettingStartedViewProps> = ({
             <button
               type="button"
               onClick={() => setModalType('app_download')}
-              className="w-full py-1.5 px-2 text-xs font-bold rounded-lg bg-slate-900 text-white dark:bg-white dark:text-slate-900 hover:bg-black transition-colors"
+              className="w-full min-h-[40px] py-1.5 px-2 text-xs font-bold rounded-lg bg-slate-900 text-white dark:bg-white dark:text-slate-900 hover:bg-black transition-colors"
             >
               Download for iOS
             </button>
@@ -373,7 +375,7 @@ export const GettingStartedView: React.FC<GettingStartedViewProps> = ({
           <button
             type="button"
             onClick={() => setModalType('support')}
-            className="w-full py-2 px-3 text-xs font-bold rounded-lg bg-[#00695C] text-white hover:bg-[#255a4b] transition-colors shadow-2xs"
+            className="w-full min-h-[42px] py-2 px-3 text-xs font-bold rounded-lg bg-[#00695C] text-white hover:bg-[#255a4b] transition-colors shadow-2xs"
           >
             Request Support
           </button>
@@ -382,9 +384,9 @@ export const GettingStartedView: React.FC<GettingStartedViewProps> = ({
 
       {/* Interactive Modals */}
       {modalType && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 text-xs">
-            <div className="p-4 bg-slate-50 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
+          <div className="w-full max-w-md max-h-[90dvh] flex flex-col bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 text-xs">
+            <div className="p-4 shrink-0 bg-slate-50 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between gap-2">
               <h3 className="font-bold text-slate-900 dark:text-slate-100">
                 {modalType === 'excel' && 'Excel / CSV Lead Import'}
                 {modalType === 'fields' && 'Custom Lead Fields Configuration'}
@@ -396,13 +398,14 @@ export const GettingStartedView: React.FC<GettingStartedViewProps> = ({
               <button
                 type="button"
                 onClick={() => setModalType(null)}
-                className="text-slate-400 hover:text-slate-600"
+                aria-label="Close modal"
+                className="min-w-[40px] min-h-[40px] flex items-center justify-center rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 shrink-0"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            <div className="p-5 space-y-3">
+            <div className="p-4 sm:p-5 space-y-3 overflow-y-auto flex-1">
               {modalType === 'excel' && (
                 <div className="space-y-3">
                   <div className="border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl p-6 text-center space-y-2">
@@ -481,11 +484,11 @@ export const GettingStartedView: React.FC<GettingStartedViewProps> = ({
               )}
             </div>
 
-            <div className="p-4 bg-slate-50 dark:bg-slate-800/60 border-t border-slate-200 dark:border-slate-800 flex justify-end">
+            <div className="p-4 shrink-0 bg-slate-50 dark:bg-slate-800/60 border-t border-slate-200 dark:border-slate-800 flex justify-end">
               <button
                 type="button"
                 onClick={() => setModalType(null)}
-                className="px-4 py-1.5 text-xs font-bold rounded-lg bg-[#00695C] text-white hover:bg-[#255a4b]"
+                className="min-h-[42px] px-4 py-1.5 text-xs font-bold rounded-lg bg-[#00695C] text-white hover:bg-[#255a4b]"
               >
                 Done
               </button>

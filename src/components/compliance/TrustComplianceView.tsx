@@ -147,17 +147,17 @@ export const TrustComplianceView: React.FC<TrustComplianceViewProps> = () => {
   };
 
   return (
-    <div className="space-y-6 pb-12">
+    <div className="space-y-5 sm:space-y-6 pb-8 sm:pb-10">
       {/* Top Header Banner */}
-      <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center space-x-2.5">
-            <div className="p-2 rounded-xl bg-teal-50 dark:bg-teal-950/60 border border-teal-200 dark:border-teal-800 text-teal-700 dark:text-teal-300">
+      <div className="bg-white dark:bg-slate-900 p-4 sm:p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div className="min-w-0">
+          <div className="flex items-start sm:items-center space-x-2.5">
+            <div className="p-2 rounded-xl bg-teal-50 dark:bg-teal-950/60 border border-teal-200 dark:border-teal-800 text-teal-700 dark:text-teal-300 shrink-0">
               <ShieldCheck className="w-6 h-6" />
             </div>
-            <div>
-              <div className="flex items-center space-x-2">
-                <h1 className="text-xl font-bold text-slate-900 dark:text-white">Trust & Compliance Engine</h1>
+            <div className="min-w-0">
+              <div className="flex flex-wrap items-center gap-2">
+                <h1 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">Trust &amp; Compliance Engine</h1>
                 <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800">
                   Enforcing
                 </span>
@@ -169,17 +169,17 @@ export const TrustComplianceView: React.FC<TrustComplianceViewProps> = () => {
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2.5">
+        <div className="flex flex-wrap items-center gap-2.5 w-full md:w-auto">
           <button
             onClick={() => setIsPortalModalOpen(true)}
-            className="px-3.5 py-2 rounded-xl text-xs font-bold bg-[#1E293B] hover:bg-[#182f4d] text-white flex items-center space-x-2 shadow-xs transition-all"
+            className="min-h-[40px] px-3.5 py-2 rounded-xl text-xs font-bold bg-[#1E293B] hover:bg-[#182f4d] text-white flex items-center space-x-2 shadow-xs transition-all whitespace-nowrap shrink-0"
           >
             <Eye className="w-3.5 h-3.5 text-teal-300" />
-            <span>Preview Lead Preference Portal</span>
+            <span>Preview Lead Portal</span>
           </button>
           <button
             onClick={handleTriggerAuditExport}
-            className="px-3.5 py-2 rounded-xl text-xs font-bold bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-750 flex items-center space-x-2 shadow-xs transition-all"
+            className="min-h-[40px] px-3.5 py-2 rounded-xl text-xs font-bold bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-750 flex items-center space-x-2 shadow-xs transition-all whitespace-nowrap shrink-0"
           >
             <Download className="w-3.5 h-3.5 text-slate-500" />
             <span>Export for Audit</span>
@@ -188,7 +188,7 @@ export const TrustComplianceView: React.FC<TrustComplianceViewProps> = () => {
       </div>
 
       {/* Lift Highlight Callout Banner (Twilio research: 62% vs 20% answer rate) */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4 tabular-nums">
         <div className="p-4 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-700 text-white shadow-xs">
           <div className="flex items-center justify-between text-xs font-medium text-emerald-100">
             <span>Verified Caller ID Answer Rate</span>
@@ -256,7 +256,7 @@ export const TrustComplianceView: React.FC<TrustComplianceViewProps> = () => {
       </div>
 
       {/* Tabs Navigation Bar */}
-      <div className="flex border-b border-slate-200 dark:border-slate-800 overflow-x-auto scrollbar-none gap-2">
+      <div className="flex border-b border-slate-200 dark:border-slate-800 overflow-x-auto no-scrollbar gap-2">
         {[
           { id: 'verified_id', label: '1. Verified Caller ID & Setup', icon: PhoneCall },
           { id: 'frequency_rules', label: '2. Contact Rules & Fatigue Caps', icon: Sliders },
@@ -270,13 +270,13 @@ export const TrustComplianceView: React.FC<TrustComplianceViewProps> = () => {
             <button
               key={t.id}
               onClick={() => setActiveTab(t.id as any)}
-              className={`pb-3 px-4 text-xs font-bold flex items-center space-x-2 border-b-2 whitespace-nowrap transition-colors ${
+              className={`min-h-[44px] pb-3 px-3.5 sm:px-4 text-xs font-bold flex items-center space-x-2 border-b-2 whitespace-nowrap shrink-0 transition-colors ${
                 isActive
                   ? 'border-[#00695C] text-[#00695C] dark:text-emerald-400'
                   : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
               }`}
             >
-              <Icon className="w-4 h-4" />
+              <Icon className="w-4 h-4 shrink-0" />
               <span>{t.label}</span>
             </button>
           );
@@ -311,7 +311,7 @@ export const TrustComplianceView: React.FC<TrustComplianceViewProps> = () => {
                   type="text"
                   value={callerIdentity.legalBusinessName}
                   onChange={(e) => setCallerIdentity({ ...callerIdentity, legalBusinessName: e.target.value })}
-                  className="w-full text-xs p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium"
+                  className="w-full min-h-[42px] sm:min-h-[38px] text-base sm:text-xs p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium"
                 />
               </div>
 
@@ -323,7 +323,7 @@ export const TrustComplianceView: React.FC<TrustComplianceViewProps> = () => {
                   type="text"
                   value={callerIdentity.displayName}
                   onChange={(e) => setCallerIdentity({ ...callerIdentity, displayName: e.target.value })}
-                  className="w-full text-xs p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium"
+                  className="w-full min-h-[42px] sm:min-h-[38px] text-base sm:text-xs p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium"
                 />
               </div>
 
@@ -335,7 +335,7 @@ export const TrustComplianceView: React.FC<TrustComplianceViewProps> = () => {
                   type="text"
                   value={callerIdentity.registrationNumber}
                   onChange={(e) => setCallerIdentity({ ...callerIdentity, registrationNumber: e.target.value })}
-                  className="w-full text-xs p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium font-mono"
+                  className="w-full min-h-[42px] sm:min-h-[38px] text-base sm:text-xs p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium font-mono"
                 />
               </div>
 
@@ -347,7 +347,7 @@ export const TrustComplianceView: React.FC<TrustComplianceViewProps> = () => {
                   type="text"
                   value={callerIdentity.businessWebsite}
                   onChange={(e) => setCallerIdentity({ ...callerIdentity, businessWebsite: e.target.value })}
-                  className="w-full text-xs p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium"
+                  className="w-full min-h-[42px] sm:min-h-[38px] text-base sm:text-xs p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium"
                 />
               </div>
             </div>
@@ -1099,7 +1099,7 @@ export const TrustComplianceView: React.FC<TrustComplianceViewProps> = () => {
                       </div>
                     </div>
 
-                    <div className="flex items-center space-x-5">
+                    <div className="flex flex-wrap items-center gap-4 sm:gap-5 shrink-0">
                       {/* Trend Points Visualization */}
                       <div className="flex items-end space-x-1 h-8 px-2 py-1 bg-white/60 dark:bg-slate-800/60 rounded-lg border border-slate-200 dark:border-slate-700">
                         {cat.trendPoints.map((pt, idx) => {
@@ -1118,12 +1118,12 @@ export const TrustComplianceView: React.FC<TrustComplianceViewProps> = () => {
                         })}
                       </div>
 
-                      <div className="text-right">
+                      <div className="text-left sm:text-right tabular-nums">
                         <div className="text-base font-extrabold text-slate-900 dark:text-white">
                           {cat.volumeCount} calls
                         </div>
                         <div
-                          className={`text-xs font-bold flex items-center justify-end space-x-0.5 ${
+                          className={`text-xs font-bold flex items-center sm:justify-end space-x-0.5 ${
                             cat.volumeChangePercent > 0
                               ? cat.isHighScrutiny
                                 ? 'text-rose-600 dark:text-rose-400'
@@ -1156,22 +1156,27 @@ export const TrustComplianceView: React.FC<TrustComplianceViewProps> = () => {
 
       {/* Export for Audit Modal Dialog */}
       {isAuditModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in">
-          <div className="bg-white dark:bg-slate-900 w-full max-w-md rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 p-6 space-y-4">
-            <div className="flex items-center justify-between">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-xs animate-in fade-in">
+          <div className="bg-white dark:bg-slate-900 w-full max-w-md max-h-[90dvh] flex flex-col overflow-hidden rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 p-4 sm:p-6 space-y-4">
+            <div className="flex items-center justify-between shrink-0">
               <div className="flex items-center space-x-2">
                 <FileSpreadsheet className="w-5 h-5 text-teal-600" />
                 <h3 className="text-sm font-bold text-slate-900 dark:text-white">Compliance Audit Package</h3>
               </div>
-              <button onClick={() => setIsAuditModalOpen(false)} className="text-slate-400 hover:text-slate-600">
+              <button
+                onClick={() => setIsAuditModalOpen(false)}
+                className="min-w-[40px] min-h-[40px] flex items-center justify-center rounded-lg text-slate-400 hover:text-slate-600"
+                aria-label="Close audit export dialog"
+              >
                 <XCircle className="w-5 h-5" />
               </button>
             </div>
 
+            <div className="overflow-y-auto flex-1">
             {auditExportStatus === 'generating' ? (
               <div className="py-8 flex flex-col items-center justify-center space-y-3">
                 <div className="w-8 h-8 border-3 border-teal-600 border-t-transparent rounded-full animate-spin" />
-                <div className="text-xs font-semibold text-slate-600 dark:text-slate-300">
+                <div className="text-xs font-semibold text-slate-600 dark:text-slate-300 text-center">
                   Compiling verified call logs, STIR/SHAKEN certificates &amp; opt-out records...
                 </div>
               </div>
@@ -1190,13 +1195,14 @@ export const TrustComplianceView: React.FC<TrustComplianceViewProps> = () => {
                 <div className="pt-3 flex justify-end space-x-2">
                   <button
                     onClick={() => setIsAuditModalOpen(false)}
-                    className="px-4 py-2 rounded-xl text-xs font-bold bg-[#1E293B] text-white hover:bg-[#182f4d]"
+                    className="min-h-[44px] px-4 py-2 rounded-xl text-xs font-bold bg-[#1E293B] text-white hover:bg-[#182f4d]"
                   >
                     Download Archive (Simulated)
                   </button>
                 </div>
               </div>
             )}
+            </div>
           </div>
         </div>
       )}

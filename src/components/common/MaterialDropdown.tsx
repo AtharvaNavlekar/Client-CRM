@@ -176,7 +176,7 @@ export const MaterialDropdown: React.FC<MaterialDropdownProps> = ({
       'w-full flex items-center justify-between gap-2 min-h-[44px] px-4 py-2.5 text-xs font-medium bg-[#FFFFFF] dark:bg-[#161A19] text-[#0F172A] dark:text-[#F1F5F9] border border-[#E2E8F0] dark:border-[#334155] rounded-full hover:border-[#94A3B8] focus-visible:ring-2 focus-visible:ring-[#00695C] cursor-pointer outline-none transition-all';
 
   const menuBase =
-    'absolute z-50 mt-1.5 min-w-[180px] max-h-[240px] overflow-y-auto rounded-[20px] bg-white dark:bg-[#161A19] border border-[#E2E8F0] dark:border-[#334155] shadow-xl py-1.5 focus:outline-none';
+    'absolute z-50 mt-1.5 min-w-[180px] max-w-[calc(100vw-1.5rem)] max-h-[240px] overflow-y-auto rounded-[20px] bg-white dark:bg-[#161A19] border border-[#E2E8F0] dark:border-[#334155] shadow-xl py-1.5 focus:outline-none';
 
   const menuPosition = isChip ? 'left-0' : 'left-0 right-0';
 

@@ -8,7 +8,7 @@ export const LoginModal: React.FC = () => {
   const [view, setView] = useState<AuthView>('login');
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#075B65] p-3 sm:p-6 lg:p-8 overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center bg-[#075B65] p-3 sm:p-6 lg:p-8 py-4 sm:py-6 overflow-y-auto">
       {/* Decorative Geometric Wave & Curve Background Pattern */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden select-none">
         <svg
@@ -65,11 +65,11 @@ export const LoginModal: React.FC = () => {
       </div>
 
       {/* Main Centered Authentication Container */}
-      <div className="relative z-10 flex flex-col lg:flex-row w-[94%] sm:w-[90%] max-w-[1450px] min-h-[580px] lg:h-[750px] max-h-[94vh] bg-white rounded-3xl lg:rounded-[36px] overflow-hidden shadow-2xl shadow-teal-950/40 border border-white/20">
+      <div className="relative z-10 flex flex-col lg:flex-row w-full sm:w-[92%] max-w-[1450px] min-h-0 lg:min-h-[600px] lg:h-[min(740px,90dvh)] lg:max-h-[92dvh] bg-white rounded-3xl lg:rounded-[36px] overflow-hidden shadow-2xl shadow-teal-950/40 border border-white/20 my-auto">
         
         {/* Left Section: Authentication Form (~53% Desktop Width) */}
         <section 
-          className="w-full lg:w-[53%] bg-white p-6 sm:p-10 lg:p-12 flex flex-col justify-between overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          className="w-full lg:w-[53%] bg-white p-5 sm:p-8 lg:p-10 xl:p-12 flex flex-col justify-between overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           aria-label="User Authentication Form"
         >
           {view === 'login' && <LoginForm view={view} setView={setView} />}
@@ -97,13 +97,13 @@ const SignUpForm: React.FC<{ view: AuthView; setView: (v: AuthView) => void }> =
     <div className="flex flex-col justify-between h-full w-full max-w-md mx-auto py-2 animate-in fade-in zoom-in-95 motion-reduce:animate-none duration-300">
       <div>
         {/* Top Header with Brand and Navigation Tabs */}
-        <div className="flex items-center justify-between pb-8">
+        <div className="flex flex-wrap items-center justify-between gap-3 pb-6 sm:pb-8">
           <AuthBrand />
           <nav className="flex items-center space-x-2" aria-label="Authentication Options">
             <button
               type="button"
               onClick={() => setView('signup')}
-              className={`px-4 sm:px-5 py-1.5 sm:py-2 rounded-full font-medium text-xs sm:text-sm transition-all duration-200 motion-reduce:transition-none cursor-pointer ${
+              className={`min-h-[40px] px-4 sm:px-5 py-1.5 sm:py-2 rounded-full font-medium text-xs sm:text-sm transition-all duration-200 motion-reduce:transition-none cursor-pointer ${
                 view === 'signup'
                   ? 'bg-black text-white shadow-sm'
                   : 'bg-white border border-slate-300 text-slate-700 hover:border-slate-500'
@@ -114,7 +114,7 @@ const SignUpForm: React.FC<{ view: AuthView; setView: (v: AuthView) => void }> =
             <button
               type="button"
               onClick={() => setView('login')}
-              className={`px-4 sm:px-5 py-1.5 sm:py-2 rounded-full font-medium text-xs sm:text-sm transition-all duration-200 motion-reduce:transition-none cursor-pointer ${
+              className={`min-h-[40px] px-4 sm:px-5 py-1.5 sm:py-2 rounded-full font-medium text-xs sm:text-sm transition-all duration-200 motion-reduce:transition-none cursor-pointer ${
                 view === 'login'
                   ? 'bg-black text-white shadow-sm'
                   : 'bg-white border border-slate-300 text-slate-700 hover:border-slate-500'
@@ -148,7 +148,7 @@ const SignUpForm: React.FC<{ view: AuthView; setView: (v: AuthView) => void }> =
               <input
                 type="text"
                 placeholder="e.g. Priya Iyer"
-                className="w-full px-4 py-2.5 text-xs sm:text-sm rounded-xl border border-cyan-400/80 bg-white text-slate-900 placeholder-slate-400 hover:border-cyan-500 hover:shadow-xs focus:outline-none focus:ring-2 focus:ring-[#075B65]/20 focus:border-[#075B65] focus:shadow-sm transition-all duration-200 ease-in-out motion-reduce:transition-none"
+                className="w-full min-h-[44px] px-4 py-2.5 text-base sm:text-sm rounded-xl border border-cyan-400/80 bg-white text-slate-900 placeholder-slate-400 hover:border-cyan-500 hover:shadow-xs focus:outline-none focus:ring-2 focus:ring-[#075B65]/20 focus:border-[#075B65] focus:shadow-sm transition-all duration-200 ease-in-out motion-reduce:transition-none"
               />
             </div>
             <div className="space-y-1">
@@ -156,7 +156,7 @@ const SignUpForm: React.FC<{ view: AuthView; setView: (v: AuthView) => void }> =
               <input
                 type="email"
                 placeholder="priya@company.in"
-                className="w-full px-4 py-2.5 text-xs sm:text-sm rounded-xl border border-cyan-400/80 bg-white text-slate-900 placeholder-slate-400 hover:border-cyan-500 hover:shadow-xs focus:outline-none focus:ring-2 focus:ring-[#075B65]/20 focus:border-[#075B65] focus:shadow-sm transition-all duration-200 ease-in-out motion-reduce:transition-none"
+                className="w-full min-h-[44px] px-4 py-2.5 text-base sm:text-sm rounded-xl border border-cyan-400/80 bg-white text-slate-900 placeholder-slate-400 hover:border-cyan-500 hover:shadow-xs focus:outline-none focus:ring-2 focus:ring-[#075B65]/20 focus:border-[#075B65] focus:shadow-sm transition-all duration-200 ease-in-out motion-reduce:transition-none"
               />
             </div>
             <div className="space-y-1">
@@ -164,7 +164,7 @@ const SignUpForm: React.FC<{ view: AuthView; setView: (v: AuthView) => void }> =
               <input
                 type="text"
                 placeholder="e.g. Sales Team Lead — Mumbai Branch"
-                className="w-full px-4 py-2.5 text-xs sm:text-sm rounded-xl border border-cyan-400/80 bg-white text-slate-900 placeholder-slate-400 hover:border-cyan-500 hover:shadow-xs focus:outline-none focus:ring-2 focus:ring-[#075B65]/20 focus:border-[#075B65] focus:shadow-sm transition-all duration-200 ease-in-out motion-reduce:transition-none"
+                className="w-full min-h-[44px] px-4 py-2.5 text-base sm:text-sm rounded-xl border border-cyan-400/80 bg-white text-slate-900 placeholder-slate-400 hover:border-cyan-500 hover:shadow-xs focus:outline-none focus:ring-2 focus:ring-[#075B65]/20 focus:border-[#075B65] focus:shadow-sm transition-all duration-200 ease-in-out motion-reduce:transition-none"
               />
             </div>
           </div>
@@ -197,12 +197,12 @@ const ForgotForm: React.FC<{ setView: (v: AuthView) => void }> = ({ setView }) =
   return (
     <div className="flex flex-col justify-between h-full w-full max-w-md mx-auto py-2 animate-in fade-in zoom-in-95 motion-reduce:animate-none duration-300">
       <div>
-        <div className="flex items-center justify-between pb-8">
+        <div className="flex flex-wrap items-center justify-between gap-3 pb-6 sm:pb-8">
           <AuthBrand />
           <button
             type="button"
             onClick={() => setView('login')}
-            className="px-4 sm:px-5 py-1.5 sm:py-2 rounded-full font-medium text-xs sm:text-sm bg-white border border-slate-300 text-slate-700 hover:border-slate-500 transition-all duration-200 motion-reduce:transition-none cursor-pointer"
+            className="min-h-[40px] px-4 sm:px-5 py-1.5 sm:py-2 rounded-full font-medium text-xs sm:text-sm bg-white border border-slate-300 text-slate-700 hover:border-slate-500 transition-all duration-200 motion-reduce:transition-none cursor-pointer"
           >
             Log In
           </button>
@@ -231,7 +231,7 @@ const ForgotForm: React.FC<{ setView: (v: AuthView) => void }> = ({ setView }) =
               type="email"
               placeholder="name@company.in"
               required
-              className="w-full px-4 py-3 text-xs sm:text-sm rounded-xl border border-cyan-400/80 bg-white text-slate-900 placeholder-slate-400 hover:border-cyan-500 hover:shadow-xs focus:outline-none focus:ring-2 focus:ring-[#075B65]/20 focus:border-[#075B65] focus:shadow-sm transition-all duration-200 ease-in-out motion-reduce:transition-none"
+              className="w-full min-h-[44px] px-4 py-3 text-base sm:text-sm rounded-xl border border-cyan-400/80 bg-white text-slate-900 placeholder-slate-400 hover:border-cyan-500 hover:shadow-xs focus:outline-none focus:ring-2 focus:ring-[#075B65]/20 focus:border-[#075B65] focus:shadow-sm transition-all duration-200 ease-in-out motion-reduce:transition-none"
             />
           </div>
 
